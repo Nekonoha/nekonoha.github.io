@@ -10,9 +10,9 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
     <script>
         $(function() {
-            $('#res').attr('src', './miss.jpg');
             $('#b1,#b3').click(function(e) {
                 $('#res').attr('src', './miss.jpg');
+                $('#res').text("aaaaaaaaa");
             });
 
             $('#b2').click(function(e) {
@@ -29,7 +29,7 @@
         </a-marker>
 
         <a-marker preset="kanji">
-            <a-box src="./yet.jpg" position='0 0.5 0' color='blue' id='res'></a-box>
+            <a-box src="./yet.jpg" position='0 0.5 0' color='blue' id="res">aaaaa</a-box>
         </a-marker>
 
         <a-entity camera></a-entity>
