@@ -8,17 +8,6 @@
     <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
     <script src="./aframe-ar.js"></script>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
-    <script>
-        $(function() {
-            $('#b1,#b3').click(function(e) {
-                $('#res').attr('src', 'https://nekonoha.hithub.io/ar/miss.jpg');
-            });
-
-            $('#b2').click(function(e) {
-                $('#res').attr('src', 'https://nekonoha.hithub.io/ar/correct.jpg');
-            });
-        });
-    </script>
 </head>
 
 <body style='margin : 0px; overflow: hidden;'>
@@ -41,5 +30,16 @@
         <button type="button" id="b3">フランスパン</button>
     </div>
 </body>
+<script>
+    $(function() {
+        $('#b1,#b3').click(function(e) {
+            $('#res').attr('src', './miss.jpg');
+        });
+
+        $('#b2').click(function(e) {
+            $('#res').attr('src', './correct.jpg');
+        });
+    });
+</script>
 
 </html>
