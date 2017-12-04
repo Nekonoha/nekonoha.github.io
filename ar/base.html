@@ -12,7 +12,6 @@
         $(function() {
             $('#b1,#b3').click(function(e) {
                 $('#res').attr('src', './miss.jpg');
-                $('#res').text("aaaaaaaaa");
             });
 
             $('#b2').click(function(e) {
@@ -29,7 +28,7 @@
         </a-marker>
 
         <a-marker preset="kanji">
-            <a-box src="./yet.jpg" position='0 0.5 0' color='blue' id="res">aaaaa</a-box>
+            <a-box src="./yet.jpg" position='0 0.5 0' color='blue' id="res"></a-box>
         </a-marker>
 
         <a-entity camera></a-entity>
@@ -37,7 +36,6 @@
 
 
     <div style="position: fixed; bottom: 100px;">
-        <p>tes</p>
         <button type="button" id="b1">たこ焼き</button>
         <button type="button" id="b2">フライパン</button>
         <button type="button" id="b3">フランスパン</button>
