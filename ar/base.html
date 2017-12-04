@@ -11,12 +11,13 @@
     <script>
         $(function() {
             $('#b1,#b3').click(function(e) {
-                $('#res').attr('src', './miss.jpg');
-                $('#res').attr('href', './miss.jpg');
+                var url = $('img').attr('src').replace('yet.jpg', 'miss.jpg');
+                $('#res').attr('src', url);
             });
 
             $('#b2').click(function(e) {
-                $('#res').attr('src', './correct.jpg');
+                var url = $('img').attr('src').replace('yet.jpg', 'correct.jpg');
+                $('#res').attr('src', url);
             });
         });
     </script>
@@ -37,7 +38,6 @@
 
 
     <div style="position: fixed; bottom: 100px;">
-        <a href="./yet.jpg" id='res'>aaaa</a>
         <button type="button" id="b1">たこ焼き</button>
         <button type="button" id="b2">フライパン</button>
         <button type="button" id="b3">フランスパン</button>
