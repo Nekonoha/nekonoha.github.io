@@ -11,13 +11,11 @@
     <script>
         $(function() {
             $('#b1,#b3').click(function(e) {
-                var url = $('img').attr('src').replace('yet.jpg', 'miss.jpg');
-                $('#res').attr('src', url);
+                $('#res').setAttribute('src', './miss.jpg');
             });
 
             $('#b2').click(function(e) {
-                var url = $('img').attr('src').replace('yet.jpg', 'correct.jpg');
-                $('#res').attr('src', url);
+                $('#res').setAttribute('src', './correct.jpg');
             });
         });
     </script>
