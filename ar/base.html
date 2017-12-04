@@ -11,11 +11,11 @@
     <script>
         $(function() {
             $('#b1,#b3').click(function(e) {
-                $('#res').setAttribute('src', './miss.jpg');
+                $('#res').attr('src', 'https://nekonoha.hithub.io/ar/miss.jpg');
             });
 
             $('#b2').click(function(e) {
-                $('#res').setAttribute('src', './correct.jpg');
+                $('#res').attr('src', 'https://nekonoha.hithub.io/ar/correct.jpg');
             });
         });
     </script>
@@ -28,7 +28,7 @@
         </a-marker>
 
         <a-marker preset="kanji">
-            <a-box src="./correct.jpg" position='0 0.5 0' color='blue' id='res'></a-box>
+            <a-box src="./yet.jpg" position='0 0.5 0' color='blue' id='res'></a-box>
         </a-marker>
 
         <a-entity camera></a-entity>
