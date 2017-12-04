@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>AR de Quiz</title>
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+    <script src="./aframe-ar.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+    <script>
+        $(function() {
+            $('#b1,#b3').click(function(e) {
+                $('#res').attr("src", "./miss.jpg");
+            });
+
+            $('#b2').click(function(e) {
+                $('#res').attr("src", "./correct.jpg");
+            });
+        });
+    </script>
+</head>
+
+<body style='margin : 0px; overflow: hidden;'>
+    <a-scene embedded arjs="debugUIEnabled:false;">
+        <a-marker preset='hiro'>
+            <a-box src="./quiz1.jpg" position='0 0.5 0' color='white'></a-box>
+        </a-marker>
+
+        <a-marker preset="kanji">
+            <a-box src="./yet.jpg" position='0 0.5 0' color='blue' id="res"></a-box>
+        </a-marker>
+
+        <a-entity camera></a-entity>
+    </a-scene>
+
+
+    <div style="position: fixed; bottom: 100px;">
+        <button type="button" id="b1">たこ焼き</button>
+        <button type="button" id="b2">フライパン</button>
+        <button type="button" id="b3">フランスパン</button>
+    </div>
+</body>
+
+</html>
