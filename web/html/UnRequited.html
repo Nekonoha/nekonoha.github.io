@@ -1,0 +1,166 @@
+<html style="height: 100%">
+
+<head>
+    <meta charset="utf-8">
+    <title>針の筵-UnRequited</title>
+    <meta name="description" content="ネコノハのサイト">
+    <meta name="author" content="Nekonoha">
+    <meta http-equiv="content-language" content="ja" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+
+
+    <!--CSS-->
+    <link rel="stylesheet" type="text/css" href="../css/unrequited.css" />
+    <link rel="stylesheet" href="../css/slider-pro.min.css" />
+
+    <!--JS-->
+    <script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="../js/smooth-scroll.js"></script>
+    <script type="text/javascript" src="../js/jquery.sliderPro.min.js"></script>
+
+
+</head>
+<header>
+
+    <a class="button" href="#about">
+        ABOUT
+    </a>
+    <a class="button" href="#download">
+        DOWNLOAD
+    </a>
+    <a class="button" href="#ss">
+        SS
+    </a>
+</header>
+
+<body lang="ja">
+
+    <article id="about">
+
+        <h1>
+            ▼作品情報
+        </h1>
+        <p>現在の実装エフェクト数は12/18個です。</p>
+        <p>EDは現在0/0個実装されています。</p>
+        <p></p>
+        <h1>
+            ▼遊び方
+        </h1>
+        <p>夢の中を歩き回るゲームです。</p>
+        <p>ベッドを調べると夢に入ることが出来ます。</p>
+        <p>セーブは机のパソコンから。</p>
+        <p>夢の中で特定のオブジェクトを調べることで、Scar（エフェクト）を入手することができます。</p>
+
+        <table>
+            <tr>
+                <th>　＋操作方法＋　</th>
+            </tr>
+            <tr>
+                <td>　移動　</td>
+                <td>　方向キー、またはテンキー　</td>
+            </tr>
+            <tr>
+                <td>　決定　</td>
+                <td>　Zキー、スペースキー、またはエンターキー　</td>
+            </tr>
+            <tr>
+                <td>　キャンセル、メニュー　</td>
+                <td>　Xキー、またはEscキー　</td>
+            </tr>
+            <tr>
+                <td>　お気に入りエフェクト　</td>
+                <td>　Fキー　</td>
+            </tr>
+            <tr>
+                <td>　エフェクト動作　</td>
+                <td>　サブキー（Cキー、Shiftキー）　</td>
+            </tr>
+            <tr>
+                <td>　エフェクト解除　</td>
+                <td>　Aキー、またはエフェクトを再選択　</td>
+            </tr>
+            <tr>
+                <td>　エフェクト廃棄　</td>
+                <td>　未実装　</td>
+            </tr>
+        </table>
+
+
+    </article>
+
+    <article id="download">
+
+        <h1>
+            ▼ダウンロード
+        </h1>
+        <p>現在の最新バージョンは0.0.3 aとなっております。</p>
+        <p>ダウンロードは下のリンクから。</p>
+        <p><a href="https://www.axfc.net/u/3820732">ver.0.0.3a</a></p>
+        <!--<p><a href="http://www1.axfc.net/uploader/so/3710931">ver.0.0.2a</a></p>-->
+        <!---<p><a href="http://www1.axfc.net/u/3623767.zip">ver.0.0.1a</a></p> -->
+        <!--<p><a href="http://www1.axfc.net/u/3509953">ver.0.0.0b</a></p> -->
+
+    </article>
+
+    <article id="ss">
+
+        <h1>
+            SS
+        </h1>
+        <br>
+        <br>
+        <div class="slider-pro" id="slider">
+            <div class="sp-slides">
+                <div class="sp-slide">
+                    <img class="sp-image" src="../img/unrequited/1.png" />
+                </div>
+                <div class="sp-slide">
+                    <img class="sp-image" src="../img/unrequited/2.png" />
+                </div>
+                <div class="sp-slide">
+                    <img class="sp-image" src="../img/unrequited/3.png" />
+                </div>
+                <div class="sp-slide">
+                    <img class="sp-image" src="../img/unrequited/4.png" />
+                </div>
+            </div>
+
+            <div class="sp-thumbnails">
+                <img class="sp-thumbnail" src="../img/unrequited/1.png" />
+                <img class="sp-thumbnail" src="../img/unrequited/2.png" />
+                <img class="sp-thumbnail" src="../img/unrequited/3.png" />
+                <img class="sp-thumbnail" src="../img/unrequited/4.png" />
+
+            </div>
+        </div>
+
+    </article>
+    <script>
+        $(document).ready(function($) {
+            $('#slider').sliderPro({
+                responsive: true,
+                width: 640, //横幅
+                height: 480,
+                buttons: false, //ナビゲーションボタン
+                shuffle: true, //スライドのシャッフル
+                thumbnailWidth: 160, //サムネイルの横幅
+                thumbnailHeight: 120, //サムネイルの縦幅
+                slideDistance: 0, //スライド同士の距離
+                breakpoints: {
+                    480: { //表示方法を変えるサイズ
+                        thumbnailWidth: 110,
+                        thumbnailHeight: 40
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+<footer>
+    <a class="button" href="./index.html">
+        TOP
+    </a>
+    <br> Copyright © 2011 Nekonoha All Rights Reserved.
+</footer>
+
+</html>

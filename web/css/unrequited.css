@@ -18,7 +18,11 @@ header {
 
 body {
     height: 100%;
-    background: #282121;
+    background: #172029;
+    background-image: url(../img/unrequited/back.png);
+    background-position: center top;
+    -moz-background-size: cover;
+    background-size: cover;
     color: #CCC;
     padding-top: 60px;
     padding-bottom: 120px;
