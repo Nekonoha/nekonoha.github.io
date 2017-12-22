@@ -99,7 +99,9 @@
         <br>
         <p>現在の最新バージョンは0.8.0 aとなっております。</p>
         <p>ダウンロードは下のリンクから。</p>
-        <p><a href="http://www1.axfc.net/u/3511483">ver.0.8.0a</a></p>
+        <p>
+            <a href="http://www1.axfc.net/u/3511483">ver.0.8.0a</a>
+        </p>
 
 
 
@@ -146,6 +148,24 @@
 
     </article>
     <script>
+        $(function() {
+            function resize() {
+                getHeight = $('body').height(); //変数を関数外でも使うのでvarは付けません。
+                windowHeight = window.innerHeight;
+                scrollHeight = getHeight - windowHeight; //最大スクロール値の計算
+            }
+            resize(); //読み込み時の処理
+            window.onresize = resize; //リサイズのイベントハンドラ
+
+            $(window).on('scroll', function() {
+                scrollpx = $(this).scrollTop(); //スクロール量観測
+                bgPosition = (scrollpx　 / getHeight);
+                $('body').css({
+                    backgroundPositionY: bgPosition + "%"
+                });
+            });
+        });
+
         $(document).ready(function($) {
             $('#slider').sliderPro({
                 responsive: true,

@@ -20,13 +20,15 @@ body {
     height: 100%;
     background: #172029;
     background-image: url(../img/unrequited/back.png);
-    background-position: center top;
-    -moz-background-size: cover;
+    background-repeat: no-repeat;
     background-size: cover;
+    background-position: center top;
+    background-attachment: fixed;
     color: #CCC;
     padding-top: 60px;
     padding-bottom: 120px;
     font-family: しねきゃぷしょん;
+    text-shadow: 1px 2px 3px #262525;
     overflow: hidden;
 }
 
