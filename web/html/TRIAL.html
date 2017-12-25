@@ -17,6 +17,7 @@
     <script type="text/javascript" src="../js/jquery-3.2.1.min.js"></script>
     <script type="text/javascript" src="../js/smooth-scroll.js"></script>
     <script type="text/javascript" src="../js/jquery.sliderPro.min.js"></script>
+    <script type="text/javascript" src="../js/loading.js"></script>
 
 
 </head>
@@ -37,156 +38,166 @@
 
 <body lang="ja">
 
-    <article id="about">
-
-        <h1>
-            ▼作品情報
-        </h1>
-        <br>
-        <p>現在の実装エフェクト数は22/28個です。</p>
-        <p>EDは現在6/8個実装されています。</p>
-        <p></p>
-        <h1>
-            ▼遊び方
-        </h1>
-        <br>
-        <p>夢の中を歩き回るゲームです。</p>
-        <p>ベッドを調べると夢に入ることが出来ます。</p>
-        <p>セーブは机のパソコンから。</p>
-        <p>夢の中で特定のオブジェクトを調べることで、落し物（エフェクト）を入手することができます。</p>
-
-        <table>
-            <tr>
-                <th>　＋操作方法＋　</th>
-            </tr>
-            <tr>
-                <td>　移動　</td>
-                <td>　方向キー、またはテンキー　</td>
-            </tr>
-            <tr>
-                <td>　決定　</td>
-                <td>　Zキー、スペースキー、またはエンターキー　</td>
-            </tr>
-            <tr>
-                <td>　キャンセル、メニュー　</td>
-                <td>　Xキー、またはEscキー　</td>
-            </tr>
-            <tr>
-                <td>　お気に入りエフェクト　</td>
-                <td>　サブキー（Cキー、Shiftキー）　</td>
-            </tr>
-            <tr>
-                <td>　エフェクト動作　</td>
-                <td>　Aキー　</td>
-            </tr>
-            <tr>
-                <td>　エフェクト解除　</td>
-                <td>　Sキー、またはエフェクトを再選択　</td>
-            </tr>
-            <tr>
-                <td>　エフェクト廃棄　</td>
-                <td>　扉部屋でDキー　</td>
-            </tr>
-        </table>
-
-
-
-    </article>
-
-    <article id="download">
-
-        <h1>
-            ▼ダウンロード
-        </h1>
-        <br>
-        <p>現在の最新バージョンは0.8.0 aとなっております。</p>
-        <p>ダウンロードは下のリンクから。</p>
-        <p>
-            <a href="http://www1.axfc.net/u/3511483">ver.0.8.0a</a>
-        </p>
-
-
-
-    </article>
-
-    <article id="ss">
-
-        <h1>
-            SS
-        </h1>
-        <br>
-        <br>
-        <div class="slider-pro" id="slider">
-            <div class="sp-slides">
-                <div class="sp-slide">
-                    <img class="sp-image" src="../img/trial/1.png" />
-                </div>
-                <div class="sp-slide">
-                    <img class="sp-image" src="../img/trial/2.png" />
-                </div>
-                <div class="sp-slide">
-                    <img class="sp-image" src="../img/trial/3.png" />
-                </div>
-                <div class="sp-slide">
-                    <img class="sp-image" src="../img/trial/4.png" />
-                </div>
-                <div class="sp-slide">
-                    <img class="sp-image" src="../img/trial/5.png" />
-                </div>
-                <div class="sp-slide">
-                    <img class="sp-image" src="../img/trial/6.png" />
-                </div>
-            </div>
-
-            <div class="sp-thumbnails">
-                <img class="sp-thumbnail" src="../img/trial/1.png" />
-                <img class="sp-thumbnail" src="../img/trial/2.png" />
-                <img class="sp-thumbnail" src="../img/trial/3.png" />
-                <img class="sp-thumbnail" src="../img/trial/4.png" />
-                <img class="sp-thumbnail" src="../img/trial/5.png" />
-                <img class="sp-thumbnail" src="../img/trial/6.png" />
-            </div>
+    <div id="loader-bg">
+        <div id="loader">
+            <img src="../img/img-loading.gif" width="80" height="80" alt="Now Loading..." />
+            <p>Now Loading...</p>
         </div>
+    </div>
 
-    </article>
-    <script>
-        $(function() {
-            function resize() {
-                getHeight = $('body').height(); //変数を関数外でも使うのでvarは付けません。
-                windowHeight = window.innerHeight;
-                scrollHeight = getHeight - windowHeight; //最大スクロール値の計算
-            }
-            resize(); //読み込み時の処理
-            window.onresize = resize; //リサイズのイベントハンドラ
+    <div id="wrap">
+        <article id="about">
 
-            $(window).on('scroll', function() {
-                scrollpx = $(this).scrollTop(); //スクロール量観測
-                bgPosition = (scrollpx　 / getHeight);
-                $('body').css({
-                    backgroundPositionY: bgPosition + "%"
+            <h1>
+                ▼作品情報
+            </h1>
+            <br>
+            <p>現在の実装エフェクト数は22/28個です。</p>
+            <p>EDは現在6/8個実装されています。</p>
+            <p></p>
+            <h1>
+                ▼遊び方
+            </h1>
+            <br>
+            <p>夢の中を歩き回るゲームです。</p>
+            <p>ベッドを調べると夢に入ることが出来ます。</p>
+            <p>セーブは机のパソコンから。</p>
+            <p>夢の中で特定のオブジェクトを調べることで、落し物（エフェクト）を入手することができます。</p>
+
+            <table>
+                <tr>
+                    <th>　＋操作方法＋　</th>
+                </tr>
+                <tr>
+                    <td>　移動　</td>
+                    <td>　方向キー、またはテンキー　</td>
+                </tr>
+                <tr>
+                    <td>　決定　</td>
+                    <td>　Zキー、スペースキー、またはエンターキー　</td>
+                </tr>
+                <tr>
+                    <td>　キャンセル、メニュー　</td>
+                    <td>　Xキー、またはEscキー　</td>
+                </tr>
+                <tr>
+                    <td>　お気に入りエフェクト　</td>
+                    <td>　サブキー（Cキー、Shiftキー）　</td>
+                </tr>
+                <tr>
+                    <td>　エフェクト動作　</td>
+                    <td>　Aキー　</td>
+                </tr>
+                <tr>
+                    <td>　エフェクト解除　</td>
+                    <td>　Sキー、またはエフェクトを再選択　</td>
+                </tr>
+                <tr>
+                    <td>　エフェクト廃棄　</td>
+                    <td>　扉部屋でDキー　</td>
+                </tr>
+            </table>
+
+
+
+        </article>
+
+        <article id="download">
+
+            <h1>
+                ▼ダウンロード
+            </h1>
+            <br>
+            <p>現在の最新バージョンは0.8.0 aとなっております。</p>
+            <p>ダウンロードは下のリンクから。</p>
+            <p>
+                <a href="http://www1.axfc.net/u/3511483">ver.0.8.0a</a>
+            </p>
+
+
+
+        </article>
+
+        <article id="ss">
+
+            <h1>
+                SS
+            </h1>
+            <br>
+            <br>
+            <div class="slider-pro" id="slider">
+                <div class="sp-slides">
+                    <div class="sp-slide">
+                        <img class="sp-image" src="../img/trial/1.png" />
+                    </div>
+                    <div class="sp-slide">
+                        <img class="sp-image" src="../img/trial/2.png" />
+                    </div>
+                    <div class="sp-slide">
+                        <img class="sp-image" src="../img/trial/3.png" />
+                    </div>
+                    <div class="sp-slide">
+                        <img class="sp-image" src="../img/trial/4.png" />
+                    </div>
+                    <div class="sp-slide">
+                        <img class="sp-image" src="../img/trial/5.png" />
+                    </div>
+                    <div class="sp-slide">
+                        <img class="sp-image" src="../img/trial/6.png" />
+                    </div>
+                </div>
+
+                <div class="sp-thumbnails">
+                    <img class="sp-thumbnail" src="../img/trial/1.png" />
+                    <img class="sp-thumbnail" src="../img/trial/2.png" />
+                    <img class="sp-thumbnail" src="../img/trial/3.png" />
+                    <img class="sp-thumbnail" src="../img/trial/4.png" />
+                    <img class="sp-thumbnail" src="../img/trial/5.png" />
+                    <img class="sp-thumbnail" src="../img/trial/6.png" />
+                </div>
+            </div>
+
+        </article>
+        <script>
+            $(function() {
+                function resize() {
+                    getHeight = $('body').height(); //変数を関数外でも使うのでvarは付けません。
+                    windowHeight = window.innerHeight;
+                    scrollHeight = getHeight - windowHeight; //最大スクロール値の計算
+                }
+                resize(); //読み込み時の処理
+                window.onresize = resize; //リサイズのイベントハンドラ
+
+                $(window).on('scroll', function() {
+                    scrollpx = $(this).scrollTop(); //スクロール量観測
+                    bgPosition = (scrollpx　 / getHeight);
+                    $('body').css({
+                        backgroundPositionY: bgPosition + "%"
+                    });
                 });
             });
-        });
 
-        $(document).ready(function($) {
-            $('#slider').sliderPro({
-                responsive: true,
-                width: 480, //横幅
-                height: 360,
-                buttons: false, //ナビゲーションボタン
-                shuffle: true, //スライドのシャッフル
-                thumbnailWidth: 160, //サムネイルの横幅
-                thumbnailHeight: 120, //サムネイルの縦幅
-                slideDistance: 0, //スライド同士の距離
-                breakpoints: {
-                    480: { //表示方法を変えるサイズ
-                        thumbnailWidth: 110,
-                        thumbnailHeight: 40
+            $(document).ready(function($) {
+                $('#slider').sliderPro({
+                    responsive: true,
+                    width: 480, //横幅
+                    height: 360,
+                    buttons: false, //ナビゲーションボタン
+                    shuffle: true, //スライドのシャッフル
+                    thumbnailWidth: 160, //サムネイルの横幅
+                    thumbnailHeight: 120, //サムネイルの縦幅
+                    slideDistance: 0, //スライド同士の距離
+                    breakpoints: {
+                        480: { //表示方法を変えるサイズ
+                            thumbnailWidth: 110,
+                            thumbnailHeight: 40
+                        }
                     }
-                }
+                });
             });
-        });
-    </script>
+        </script>
+    </div>
+
 </body>
 <footer>
     <a class="button" href="./index.html">

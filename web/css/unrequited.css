@@ -39,6 +39,7 @@ header {
     left: 0px;
     font-family: しねきゃぷしょん;
     text-align: center;
+    z-index: 2;
 }
 
 body {
@@ -69,6 +70,7 @@ footer {
     left: 0px;
     font-family: しねきゃぷしょん;
     text-align: center;
+    z-index: 2;
 }
 
 article {
