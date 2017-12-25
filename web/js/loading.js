@@ -6,6 +6,7 @@ $(function() {
 $(window).on("load", function() { //全ての読み込みが完了したら実行
     $('#wrap').css('display', 'block');
     $('#loader-bg').delay(900).fadeOut(800);
+    console.log("LOADED");
     stopload();
 });
 
