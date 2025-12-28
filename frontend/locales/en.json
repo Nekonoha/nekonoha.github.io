@@ -1,0 +1,111 @@
+{
+  "header": {
+    "top": "TOP",
+    "about": "ABOUT",
+    "product": "PRODUCT",
+    "link": "LINK"
+  },
+  "index": {
+    "title": "Nekonoha Web",
+    "subtitle": "Portfolio site for an artist, 3D modeler, and music creator",
+    "about": "ABOUT",
+    "product": "PRODUCT",
+    "link": "LINK"
+  },
+  "about": {
+    "title": "ABOUT",
+    "intro": "My name is Nekonoha.",
+    "description": "I draw pictures, make 3D models, create games, and compose music.",
+    "hobbies": "Hobbies & Likes",
+    "hobby1": "Yume Nikki",
+    "hobby2": "Horror",
+    "hobby3": "Fantasy",
+    "hobby4": "Cute things",
+    "hobby5": "Pink color",
+    "contact": "Contact",
+    "twitter": "Twitter: @tan_fantazma"
+  },
+  "product": {
+    "title": "PRODUCT",
+    "games": "Fan Games",
+    "trial": "TRIAL",
+    "unrequited": "UnRequited",
+    "shop": "Shop",
+    "booth": "Booth",
+    "music": "Music",
+    "musicDescription": "I publish my music on SoundCloud.",
+    "soundcloudLink": "Listen on SoundCloud"
+  },
+  "link": {
+    "title": "LINK",
+    "twitter": "Twitter",
+    "twitterDescription": "Tweeting at @tan_fantazma.",
+    "blog": "Blog",
+    "blogDescription": "Occasionally updated.",
+    "pixiv": "Pixiv",
+    "pixivDescription": "Posting illustrations.",
+    "booth": "Booth",
+    "boothDescription": "Selling goods and more."
+  },
+  "trial": {
+    "title": "TRIAL",
+    "description": "A game where you walk around in a dream",
+    "story": "Story",
+    "storyText": "A game where you explore dreams and collect various effects.",
+    "controls": "Controls",
+    "move": "Move",
+    "moveKey": "Arrow keys or Numpad",
+    "decide": "Confirm",
+    "decideKey": "Z key, Space key, or Enter key",
+    "cancel": "Cancel/Menu",
+    "cancelKey": "X key or Esc key",
+    "favorite": "Favorite Effect",
+    "favoriteKey": "Sub key (C key, Shift key)",
+    "action": "Effect Action",
+    "actionKey": "A key",
+    "release": "Release Effect",
+    "releaseKey": "S key or reselect effect",
+    "discard": "Discard Effect",
+    "discardKey": "D key in door room",
+    "screenshots": "Screenshots",
+    "download": "Download",
+    "downloadButton": "Download ver.0.8.0a"
+  },
+  "unrequited": {
+    "title": "UnRequited",
+    "description": "A game where you walk around in a dream",
+    "story": "Story",
+    "storyText": "A game currently in development as a sequel to TRIAL.",
+    "controls": "Controls",
+    "move": "Move",
+    "moveKey": "Arrow keys or Numpad",
+    "decide": "Confirm",
+    "decideKey": "Z key, Space key, or Enter key",
+    "cancel": "Cancel/Menu",
+    "cancelKey": "X key or Esc key",
+    "favorite": "Favorite Effect",
+    "favoriteKey": "F key",
+    "action": "Effect Action",
+    "actionKey": "Sub key (C key, Shift key)",
+    "release": "Release Effect",
+    "releaseKey": "A key or reselect effect",
+    "discard": "Discard Effect",
+    "discardKey": "Not implemented",
+    "screenshots": "Screenshots",
+    "download": "Download",
+    "downloadButtonJp": "ver.0.0.6a (Japanese)",
+    "downloadButtonEn": "ver.0.0.4b ENG (English)"
+  },
+  "footer": {
+    "copyright": "Copyright © 2011 Nekonoha All Rights Reserved."
+  },
+  "gallery": {
+    "title": "GALLERY",
+    "twitter": "Twitter",
+    "pixiv": "Pixiv",
+    "pixivDescription": "Check out my latest illustrations on Pixiv.",
+    "visitPixiv": "Visit Pixiv",
+    "soundcloud": "SoundCloud",
+    "soundcloudDescription": "Listen to my latest music works."
+  }
+}
