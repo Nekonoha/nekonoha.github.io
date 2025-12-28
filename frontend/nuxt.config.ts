@@ -19,7 +19,7 @@ export default defineNuxtConfig({
         {
           rel: 'icon',
           type: 'image/svg+xml',
-          href: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="%23f4a6c3"/></svg>'
+          href: '/images/mat_favicon.svg'
         }
       ]
     },

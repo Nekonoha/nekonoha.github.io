@@ -15,6 +15,7 @@ import BackgroundAnimation from '~/components/BackgroundAnimation.vue'
 
 // Google Fontsを読み込み
 useHead({
+  title: '針の筵 - nekonoha',
   link: [
     {
       rel: 'preconnect',
