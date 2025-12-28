@@ -9,7 +9,7 @@ export default defineNuxtConfig({
     port: 3000
   },
   app: {
-    baseURL: process.env.NODE_ENV === 'production' ? '/nekonoha-web/' : '/',
+    baseURL: '/', // ユーザーページの場合は常に '/'
     head: {
       link: [
         {
