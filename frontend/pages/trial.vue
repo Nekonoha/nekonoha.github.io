@@ -57,12 +57,23 @@
       <div class="info-card">
         <h2>▼{{ t('trial.screenshots') }}</h2>
         <div class="screenshot-grid">
-          <img src="https://nekonoha.github.io/web/img/trial/1.png" alt="Screenshot 1" />
-          <img src="https://nekonoha.github.io/web/img/trial/2.png" alt="Screenshot 2" />
-          <img src="https://nekonoha.github.io/web/img/trial/3.png" alt="Screenshot 3" />
-          <img src="https://nekonoha.github.io/web/img/trial/4.png" alt="Screenshot 4" />
-          <img src="https://nekonoha.github.io/web/img/trial/5.png" alt="Screenshot 5" />
-          <img src="https://nekonoha.github.io/web/img/trial/6.png" alt="Screenshot 6" />
+          <img src="/images/trial/1.png" alt="Screenshot 1" @click="openLightbox(0)" class="clickable" />
+          <img src="/images/trial/2.png" alt="Screenshot 2" @click="openLightbox(1)" class="clickable" />
+          <img src="/images/trial/3.png" alt="Screenshot 3" @click="openLightbox(2)" class="clickable" />
+          <img src="/images/trial/4.png" alt="Screenshot 4" @click="openLightbox(3)" class="clickable" />
+          <img src="/images/trial/5.png" alt="Screenshot 5" @click="openLightbox(4)" class="clickable" />
+          <img src="/images/trial/6.png" alt="Screenshot 6" @click="openLightbox(5)" class="clickable" />
+        </div>
+      </div>
+
+      <!-- ライトボックスモーダル -->
+      <div v-if="lightboxOpen" class="lightbox-overlay" @click="closeLightbox">
+        <div class="lightbox-content" @click.stop>
+          <button class="lightbox-close" @click="closeLightbox">×</button>
+          <button class="lightbox-nav lightbox-prev" @click="prevImage" v-if="currentImageIndex > 0">‹</button>
+          <img :src="screenshots[currentImageIndex]" :alt="`Screenshot ${currentImageIndex + 1}`" class="lightbox-image" />
+          <button class="lightbox-nav lightbox-next" @click="nextImage" v-if="currentImageIndex < screenshots.length - 1">›</button>
+          <div class="lightbox-counter">{{ currentImageIndex + 1 }} / {{ screenshots.length }}</div>
         </div>
       </div>
 
@@ -84,7 +95,7 @@
   animation: fadeIn 1s ease-out;
   background: 
     linear-gradient(180deg, rgba(45, 35, 70, 0.85) 0%, rgba(60, 45, 85, 0.85) 50%, rgba(75, 50, 95, 0.9) 100%),
-    url('https://nekonoha.github.io/web/img/trial/back.png');
+    url('/images/trial/back.png');
   background-size: cover, cover;
   background-position: center, center;
   background-repeat: no-repeat;
@@ -396,7 +407,8 @@
 </style>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+
 const { t } = useLocale()
 
 // ページタイトル設定
@@ -404,20 +416,20 @@ useHead({
   title: 'TRIAL - 針の筜'
 })
 
+// 画像データ
+const SCREENSHOT_COUNT = 6
+const screenshots = Array.from({ length: SCREENSHOT_COUNT }, (_, i) => `/images/trial/${i + 1}.png`)
+
 // ライトボックス関連
 const lightboxOpen = ref(false)
 const currentImageIndex = ref(0)
-const screenshots = [
-  'https://nekonoha.github.io/web/img/trial/1.png',
-  'https://nekonoha.github.io/web/img/trial/2.png',
-  'https://nekonoha.github.io/web/img/trial/3.png',
-  'https://nekonoha.github.io/web/img/trial/4.png'
-]
 
 const openLightbox = (index: number) => {
-  currentImageIndex.value = index
-  lightboxOpen.value = true
-  document.body.style.overflow = 'hidden'
+  if (index >= 0 && index < screenshots.length) {
+    currentImageIndex.value = index
+    lightboxOpen.value = true
+    document.body.style.overflow = 'hidden'
+  }
 }
 
 const closeLightbox = () => {
@@ -426,15 +438,11 @@ const closeLightbox = () => {
 }
 
 const nextImage = () => {
-  if (currentImageIndex.value < screenshots.length - 1) {
-    currentImageIndex.value++
-  }
+  currentImageIndex.value = Math.min(currentImageIndex.value + 1, screenshots.length - 1)
 }
 
 const prevImage = () => {
-  if (currentImageIndex.value > 0) {
-    currentImageIndex.value--
-  }
+  currentImageIndex.value = Math.max(currentImageIndex.value - 1, 0)
 }
 
 // キーボードナビゲーション

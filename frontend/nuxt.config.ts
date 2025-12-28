@@ -1,3 +1,4 @@
+// https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   ssr: false,
   nitro: {
@@ -19,7 +20,7 @@ export default defineNuxtConfig({
         {
           rel: 'icon',
           type: 'image/svg+xml',
-          href: '/images/mat_favicon.svg'
+          href: '/mat_favicon.svg'
         }
       ]
     },

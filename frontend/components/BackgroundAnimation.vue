@@ -49,15 +49,28 @@ const eerieImages = ref<Array<{
 
 // 不気味な画像のソース（実際のゲーム背景画像）
 const eerieImageSources = [
-  'https://nekonoha.github.io/web/img/trial/back.png',
-  'https://nekonoha.github.io/web/img/unrequited/back.png',
-  'https://nekonoha.github.io/web/img/trial/1.png',
-  'https://nekonoha.github.io/web/img/unrequited/1.png',
-  'https://nekonoha.github.io/web/img/trial/2.png',
-  'https://nekonoha.github.io/web/img/unrequited/2.png'
+  '/images/trial/back.png',
+  '/images/unrequited/back.png',
+  '/images/trial/1.png',
+  '/images/unrequited/1.png',
+  '/images/trial/2.png',
+  '/images/unrequited/2.png'
 ]
 
 let imageIdCounter = 0
+
+// レスポンシブ対応のためのスケールファクター計算
+const getScaleFactor = () => {
+  const baseWidth = 1920 // 基準解像度
+  const baseHeight = 1080
+  const scaleX = canvasWidth.value / baseWidth
+  const scaleY = canvasHeight.value / baseHeight
+  return Math.min(scaleX, scaleY, 1) // 1を超えないように制限
+}
+
+const getResponsiveValue = (baseValue: number) => {
+  return baseValue * getScaleFactor()
+}
 
 class ShootingStar {
   x: number
@@ -73,19 +86,22 @@ class ShootingStar {
   particles: Particle[]
   
   constructor() {
+    const scaleFactor = getScaleFactor()
+    
     // ランダムな開始位置（画面外から）
     const side = Math.random()
+    const margin = getResponsiveValue(20)
     if (side < 0.25) { // 上から
       this.x = Math.random() * canvasWidth.value
-      this.y = -20
+      this.y = -margin
     } else if (side < 0.5) { // 右から
-      this.x = canvasWidth.value + 20
+      this.x = canvasWidth.value + margin
       this.y = Math.random() * canvasHeight.value
     } else if (side < 0.75) { // 下から
       this.x = Math.random() * canvasWidth.value
-      this.y = canvasHeight.value + 20
+      this.y = canvasHeight.value + margin
     } else { // 左から
-      this.x = -20
+      this.x = -margin
       this.y = Math.random() * canvasHeight.value
     }
     
@@ -93,11 +109,11 @@ class ShootingStar {
     const centerX = canvasWidth.value / 2
     const centerY = canvasHeight.value / 2
     const angle = Math.atan2(centerY - this.y, centerX - this.x) + (Math.random() - 0.5) * 0.8
-    const speed = 1 + Math.random() * 2
-    this.vx = Math.cos(angle) * speed
-    this.vy = Math.sin(angle) * speed
+    const baseSpeed = (1 + Math.random() * 2) * scaleFactor
+    this.vx = Math.cos(angle) * baseSpeed
+    this.vy = Math.sin(angle) * baseSpeed
     
-    this.length = 20 + Math.random() * 30
+    this.length = getResponsiveValue(20 + Math.random() * 30)
     this.opacity = 0.3 + Math.random() * 0.4
     this.life = 0
     this.maxLife = 200 + Math.random() * 300
@@ -116,9 +132,11 @@ class ShootingStar {
   explode() {
     this.exploding = true
     // 爆発時の粒子を生成
-    for (let i = 0; i < 8; i++) {
-      const angle = (Math.PI * 2 / 8) * i + Math.random() * 0.5
-      const speed = 0.5 + Math.random() * 1.5
+    const particleCount = Math.max(4, Math.floor(8 * getScaleFactor()))
+    for (let i = 0; i < particleCount; i++) {
+      const angle = (Math.PI * 2 / particleCount) * i + Math.random() * 0.5
+      const baseSpeed = 0.5 + Math.random() * 1.5
+      const speed = baseSpeed * getScaleFactor()
       this.particles.push(new Particle(
         this.x, this.y,
         Math.cos(angle) * speed,
@@ -146,9 +164,10 @@ class ShootingStar {
     }
     
     // 画面外に出たか寿命が尽きたら削除
+    const margin = getResponsiveValue(50)
     return this.life >= this.maxLife || 
-           this.x < -50 || this.x > canvasWidth.value + 50 || 
-           this.y < -50 || this.y > canvasHeight.value + 50
+           this.x < -margin || this.x > canvasWidth.value + margin || 
+           this.y < -margin || this.y > canvasHeight.value + margin
   }
   
   draw(ctx: CanvasRenderingContext2D) {
@@ -157,10 +176,12 @@ class ShootingStar {
       return
     }
     
+    const scaleFactor = getScaleFactor()
+    
     ctx.save()
     ctx.globalAlpha = this.opacity * 0.6 // 薄めに設定
     ctx.strokeStyle = this.color
-    ctx.lineWidth = 2
+    ctx.lineWidth = Math.max(1, 2 * scaleFactor)
     ctx.lineCap = 'round'
     
     // 尻尾の描画
@@ -178,11 +199,11 @@ class ShootingStar {
     ctx.stroke()
     
     // 先端の光る点
-    ctx.shadowBlur = 10
+    ctx.shadowBlur = 10 * scaleFactor
     ctx.shadowColor = this.color
     ctx.fillStyle = this.color
     ctx.beginPath()
-    ctx.arc(this.x, this.y, 2, 0, Math.PI * 2)
+    ctx.arc(this.x, this.y, Math.max(1, 2 * scaleFactor), 0, Math.PI * 2)
     ctx.fill()
     
     ctx.restore()
@@ -204,12 +225,13 @@ class EerieParticle {
   constructor() {
     this.x = Math.random() * canvasWidth.value
     this.y = Math.random() * canvasHeight.value
-    this.vx = (Math.random() - 0.5) * 0.3
-    this.vy = (Math.random() - 0.5) * 0.3
+    const scaleFactor = getScaleFactor()
+    this.vx = (Math.random() - 0.5) * 0.3 * scaleFactor
+    this.vy = (Math.random() - 0.5) * 0.3 * scaleFactor
     this.opacity = 0.2 + Math.random() * 0.3
     this.life = 0
     this.maxLife = 300 + Math.random() * 500
-    this.size = 1 + Math.random() * 3
+    this.size = getResponsiveValue(1 + Math.random() * 3)
     this.pulseSpeed = 0.02 + Math.random() * 0.03
     
     // 不気味な色合い
@@ -231,8 +253,9 @@ class EerieParticle {
     
     // ランダムな方向変更
     if (Math.random() < 0.01) {
-      this.vx += (Math.random() - 0.5) * 0.1
-      this.vy += (Math.random() - 0.5) * 0.1
+      const scaleFactor = getScaleFactor()
+      this.vx += (Math.random() - 0.5) * 0.1 * scaleFactor
+      this.vy += (Math.random() - 0.5) * 0.1 * scaleFactor
     }
     
     // 境界で跳ね返り
@@ -376,22 +399,70 @@ const animate = () => {
 }
 
 const handleResize = () => {
-  canvasWidth.value = window.innerWidth
-  canvasHeight.value = window.innerHeight
+  // document.documentElementを使用してより信頼性の高いサイズ取得
+  const width = Math.min(window.innerWidth, document.documentElement.clientWidth)
+  const height = Math.min(window.innerHeight, document.documentElement.clientHeight)
+  
+  const oldWidth = canvasWidth.value
+  const oldHeight = canvasHeight.value
+  
+  canvasWidth.value = width
+  canvasHeight.value = height
+  
+  // キャンバス要素が存在する場合、スタイルも更新
+  if (canvas.value) {
+    canvas.value.style.width = width + 'px'
+    canvas.value.style.height = height + 'px'
+  }
+  
+  // 画面サイズが大幅に変わった場合、アニメーション要素をリセット
+  if (oldWidth > 0 && oldHeight > 0) {
+    const scaleChangeX = width / oldWidth
+    const scaleChangeY = height / oldHeight
+    
+    // 大幅なサイズ変更の場合は要素をリセット
+    if (Math.abs(scaleChangeX - 1) > 0.2 || Math.abs(scaleChangeY - 1) > 0.2) {
+      // 既存の要素をクリア
+      stars.length = 0
+      particles.length = 0
+      eerieParticles.length = 0
+      eerieImages.value = []
+    }
+  }
 }
 
 onMounted(() => {
   handleResize()
   window.addEventListener('resize', handleResize)
+  
+  // ResizeObserver を使用してより精密なサイズ調整
+  let resizeObserver: ResizeObserver | null = null
+  if (canvas.value) {
+    resizeObserver = new ResizeObserver((entries) => {
+      for (const entry of entries) {
+        const { width, height } = entry.contentRect
+        canvasWidth.value = Math.floor(width)
+        canvasHeight.value = Math.floor(height)
+      }
+    })
+    resizeObserver.observe(canvas.value.parentElement!)
+  }
+  
   animate()
+  
+  // cleanup
+  onUnmounted(() => {
+    if (resizeObserver) {
+      resizeObserver.disconnect()
+    }
+    if (animationId) {
+      cancelAnimationFrame(animationId)
+    }
+    window.removeEventListener('resize', handleResize)
+  })
 })
 
-onUnmounted(() => {
-  if (animationId) {
-    cancelAnimationFrame(animationId)
-  }
-  window.removeEventListener('resize', handleResize)
-})
+// 元のonUnmountedは削除
 </script>
 
 <style scoped>
@@ -403,6 +474,7 @@ onUnmounted(() => {
   height: 100%;
   pointer-events: none;
   z-index: -1;
+  overflow: hidden;
 }
 
 .eerie-background {
@@ -428,5 +500,8 @@ canvas {
   display: block;
   width: 100%;
   height: 100%;
+  max-width: 100vw;
+  max-height: 100vh;
+  object-fit: cover;
 }
 </style>

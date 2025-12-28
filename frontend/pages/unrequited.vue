@@ -57,10 +57,10 @@
       <div class="info-card">
         <h2>▼{{ t('unrequited.screenshots') }}</h2>
         <div class="screenshot-grid">
-          <img src="https://nekonoha.github.io/web/img/unrequited/1.png" alt="Screenshot 1" @click="openLightbox(0)" class="clickable" />
-          <img src="https://nekonoha.github.io/web/img/unrequited/2.png" alt="Screenshot 2" @click="openLightbox(1)" class="clickable" />
-          <img src="https://nekonoha.github.io/web/img/unrequited/3.png" alt="Screenshot 3" @click="openLightbox(2)" class="clickable" />
-          <img src="https://nekonoha.github.io/web/img/unrequited/4.png" alt="Screenshot 4" @click="openLightbox(3)" class="clickable" />
+          <img src="/images/unrequited/1.png" alt="Screenshot 1" @click="openLightbox(0)" class="clickable" />
+          <img src="/images/unrequited/2.png" alt="Screenshot 2" @click="openLightbox(1)" class="clickable" />
+          <img src="/images/unrequited/3.png" alt="Screenshot 3" @click="openLightbox(2)" class="clickable" />
+          <img src="/images/unrequited/4.png" alt="Screenshot 4" @click="openLightbox(3)" class="clickable" />
         </div>
       </div>
 
@@ -99,7 +99,7 @@
   animation: fadeIn 1s ease-out;
   background: 
     linear-gradient(180deg, rgba(15, 25, 45, 0.9) 0%, rgba(25, 35, 60, 0.9) 50%, rgba(10, 20, 40, 0.95) 100%),
-    url('https://nekonoha.github.io/web/img/unrequited/back.png');
+    url('/images/unrequited/back.png');
   background-size: cover, cover;
   background-position: center, center;
   background-repeat: no-repeat;
@@ -423,7 +423,8 @@
 </style>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
+
 const { t } = useLocale()
 
 // ページタイトル設定
@@ -431,20 +432,20 @@ useHead({
   title: 'UnRequited - 針の筜'
 })
 
+// 画像データ
+const SCREENSHOT_COUNT = 4
+const screenshots = Array.from({ length: SCREENSHOT_COUNT }, (_, i) => `/images/unrequited/${i + 1}.png`)
+
 // ライトボックス関連
 const lightboxOpen = ref(false)
 const currentImageIndex = ref(0)
-const screenshots = [
-  'https://nekonoha.github.io/web/img/unrequited/1.png',
-  'https://nekonoha.github.io/web/img/unrequited/2.png',
-  'https://nekonoha.github.io/web/img/unrequited/3.png',
-  'https://nekonoha.github.io/web/img/unrequited/4.png'
-]
 
 const openLightbox = (index: number) => {
-  currentImageIndex.value = index
-  lightboxOpen.value = true
-  document.body.style.overflow = 'hidden'
+  if (index >= 0 && index < screenshots.length) {
+    currentImageIndex.value = index
+    lightboxOpen.value = true
+    document.body.style.overflow = 'hidden'
+  }
 }
 
 const closeLightbox = () => {
@@ -453,15 +454,11 @@ const closeLightbox = () => {
 }
 
 const nextImage = () => {
-  if (currentImageIndex.value < screenshots.length - 1) {
-    currentImageIndex.value++
-  }
+  currentImageIndex.value = Math.min(currentImageIndex.value + 1, screenshots.length - 1)
 }
 
 const prevImage = () => {
-  if (currentImageIndex.value > 0) {
-    currentImageIndex.value--
-  }
+  currentImageIndex.value = Math.max(currentImageIndex.value - 1, 0)
 }
 
 // キーボードナビゲーション

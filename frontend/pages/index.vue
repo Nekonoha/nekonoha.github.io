@@ -36,16 +36,18 @@ class Dot {
   radius: number
   opacity: number
   color: string
+  scaleFactor: number
   
-  constructor(x: number, y: number, targetX: number, targetY: number) {
+  constructor(x: number, y: number, targetX: number, targetY: number, scaleFactor = 1) {
     this.x = x
     this.y = y
     this.targetX = targetX
     this.targetY = targetY
     this.vx = 0
     this.vy = 0
-    this.radius = 2
+    this.radius = Math.max(1, 2 * scaleFactor)
     this.opacity = 0
+    this.scaleFactor = scaleFactor
     
     // やさしい星空配色のパステルカラー（いろいろな色を使用）
     const pastelColors = [
@@ -70,7 +72,7 @@ class Dot {
   update(mouseX: number, mouseY: number) {
     // マウスとの距離を計算
     const mouseDistance = Math.sqrt((this.x - mouseX) ** 2 + (this.y - mouseY) ** 2)
-    const repelRadius = 80 // 反発半径
+    const repelRadius = 80 * this.scaleFactor // 反発半径をスケール対応
     
     let targetX = this.targetX
     let targetY = this.targetY
@@ -132,8 +134,11 @@ const initDots = () => {
   
   // 隠しキャンバスにテキストを描画
   const title = t('index.title')
-  // 英語の場合はフォントサイズを少し小さくして調整
-  const fontSize = title.length > 6 ? 56 : 72
+  // キャンバスサイズに応じて文字サイズを調整
+  const baseFontSize = title.length > 6 ? 56 : 72
+  const scaleFactor = Math.min(canvasWidth.value / 800, canvasHeight.value / 400)
+  const fontSize = Math.floor(baseFontSize * scaleFactor)
+  
   hiddenCtx.font = `bold ${fontSize}px "Hiragino Kaku Gothic Pro", "Meiryo", Arial, sans-serif`
   hiddenCtx.fillStyle = '#000'
   hiddenCtx.textAlign = 'center'
@@ -151,8 +156,9 @@ const initDots = () => {
   dots = []
   
   // ピクセルをサンプリングしてドットを作成
-  for (let y = 0; y < canvasHeight.value; y += 4) {
-    for (let x = 0; x < canvasWidth.value; x += 4) {
+  const samplingRate = Math.max(2, Math.floor(4 * scaleFactor))
+  for (let y = 0; y < canvasHeight.value; y += samplingRate) {
+    for (let x = 0; x < canvasWidth.value; x += samplingRate) {
       const index = (y * canvasWidth.value + x) * 4
       const alpha = pixels[index + 3]
       
@@ -160,7 +166,7 @@ const initDots = () => {
         // ランダムな初期位置
         const startX = Math.random() * canvasWidth.value
         const startY = Math.random() * canvasHeight.value
-        dots.push(new Dot(startX, startY, x, y))
+        dots.push(new Dot(startX, startY, x, y, scaleFactor))
       }
     }
   }
@@ -212,8 +218,12 @@ const handleResize = () => {
   const container = document.querySelector('.hero') as HTMLElement
   if (!container) return
   
-  canvasWidth.value = Math.min(800, container.clientWidth - 40)
-  canvasHeight.value = 400
+  // コンテナの幅に基づいてキャンバスサイズを動的に調整
+  const containerWidth = container.clientWidth - 40
+  const scaleFactor = Math.min(1, containerWidth / 800)
+  
+  canvasWidth.value = Math.min(800, containerWidth)
+  canvasHeight.value = Math.floor(400 * scaleFactor)
   
   nextTick(() => {
     initDots()
@@ -273,16 +283,43 @@ onUnmounted(() => {
 canvas {
   display: block;
   margin: 0 auto;
+  max-width: 100%;
+  height: auto;
 }
 
 @media (max-width: 768px) {
-  canvas {
-    max-width: 100%;
-    height: auto;
+  .hero {
+    padding: 2rem 0;
+    min-height: 60vh;
   }
   
   .subtitle-text .subtitle {
     font-size: 1rem;
+    padding: 0 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .hero {
+    padding: 1.5rem 0;
+  }
+  
+  .subtitle-text {
+    margin-top: 1rem;
+  }
+  
+  .subtitle-text .subtitle {
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 320px) {
+  .hero {
+    padding: 1rem 0;
+  }
+  
+  .subtitle-text .subtitle {
+    font-size: 0.8rem;
   }
 }
 </style>
