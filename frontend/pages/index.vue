@@ -238,7 +238,10 @@ onMounted(() => {
   
   setTimeout(() => {
     animate()
-    mouseEventCleanup = setupMouseEvents()
+    const cleanup = setupMouseEvents()
+    if (cleanup) {
+      mouseEventCleanup = cleanup
+    }
   }, 500)
 })
 

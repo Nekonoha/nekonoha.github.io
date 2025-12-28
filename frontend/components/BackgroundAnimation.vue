@@ -424,7 +424,6 @@ const handleResize = () => {
     if (Math.abs(scaleChangeX - 1) > 0.2 || Math.abs(scaleChangeY - 1) > 0.2) {
       // 既存の要素をクリア
       stars.length = 0
-      particles.length = 0
       eerieParticles.length = 0
       eerieImages.value = []
     }
