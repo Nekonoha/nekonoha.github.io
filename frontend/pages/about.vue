@@ -28,31 +28,31 @@ const { t } = useLocale()
   font-size: 2.5rem;
   font-family: 'Inter', 'Noto Sans JP', sans-serif;
   font-weight: 700;
-  background: linear-gradient(135deg, #B8A5C1 0%, #8B7A9F 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  border-bottom: 3px solid #A695B1;
+  border-bottom: 3px solid rgba(182, 141, 64, 0.8);
   padding-bottom: 0.8rem;
-  text-shadow: 0 0 8px rgba(184, 165, 193, 0.3);
+  text-shadow: 0 0 8px rgba(182, 141, 64, 0.35);
 }
 .content {
   line-height: 1.8;
-  background: rgba(45, 43, 74, 0.7);
+  background: rgba(44, 35, 35, 0.82);
   padding: 2rem;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(200, 181, 209, 0.25);
-  border: 1px solid rgba(200, 181, 209, 0.3);
+  box-shadow: var(--shadow-soft);
+  border: 1px solid rgba(182, 141, 64, 0.35);
 }
 .content p {
   margin-bottom: 1rem;
-  color: #E8E5F0;
+  color: var(--color-text);
 }
 .content h3 {
   margin-top: 2.5rem;
   margin-bottom: 1rem;
   font-size: 1.5rem;
-  color: #C8B5D1;
+  color: var(--color-accent);
 }
 .content ul {
   list-style: none;
@@ -62,7 +62,7 @@ const { t } = useLocale()
   margin-bottom: 0.8rem;
   position: relative;
   padding-left: 1.5rem;
-  color: #E8E5F0;
+  color: var(--color-sub);
   transition: all 0.2s ease;
 }
 .content li::before {
@@ -71,10 +71,10 @@ const { t } = useLocale()
   font-weight: 900;
   position: absolute;
   left: 0;
-  color: #A695B1;
+  color: var(--color-accent);
 }
 .content li:hover {
-  background: rgba(166, 149, 177, 0.2);
+  background: rgba(182, 141, 64, 0.12);
   transform: translateX(5px);
 }
 @keyframes fadeIn {

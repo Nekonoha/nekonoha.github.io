@@ -33,15 +33,15 @@ const switchLanguage = () => {
 </script>
 <style scoped>
 .header {
-  background: #1E1B2E;
-  color: #F8F6F0;
+  background: linear-gradient(180deg, rgba(60, 47, 47, 0.96) 0%, rgba(44, 35, 35, 0.92) 100%);
+  color: var(--color-text);
   padding: 1rem 2rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-strong);
   position: sticky;
   top: 0;
   z-index: 1000;
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(200, 181, 209, 0.2);
+  border-bottom: 1px solid rgba(182, 141, 64, 0.35);
 }
 nav {
   display: flex;
@@ -54,18 +54,18 @@ nav {
 .logo {
   font-weight: bold;
   font-size: 1.5rem;
-  background: linear-gradient(135deg, #C8B5D1 0%, #A695B1 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   animation: fadeIn 0.8s ease-in;
   text-decoration: none;
   transition: transform 0.2s ease;
-  filter: drop-shadow(0 0 8px rgba(200, 181, 209, 0.3));
+  filter: drop-shadow(0 0 8px rgba(182, 141, 64, 0.25));
 }
 .logo:hover {
   transform: scale(1.05);
-  filter: drop-shadow(0 0 12px rgba(200, 181, 209, 0.5));
+  filter: drop-shadow(0 0 12px rgba(182, 141, 64, 0.4));
 }
 .menu-btn {
   display: none;
@@ -79,13 +79,13 @@ nav {
 .menu-btn .bar {
   width: 28px;
   height: 3px;
-  background: #C8B5D1;
+  background: var(--color-sub);
   border-radius: 3px;
   transition: all 0.3s ease;
 }
 .menu-btn:hover .bar {
-  background: #A695B1;
-  box-shadow: 0 0 8px rgba(200, 181, 209, 0.4);
+  background: var(--color-accent);
+  box-shadow: 0 0 8px rgba(182, 141, 64, 0.45);
 }
 ul {
   display: flex;
@@ -96,7 +96,7 @@ ul {
   transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 ul li a {
-  color: #F8F6F0;
+  color: var(--color-text);
   text-decoration: none;
   font-weight: 600;
   position: relative;
@@ -110,21 +110,21 @@ ul li a::after {
   left: 0;
   width: 0;
   height: 2px;
-  background: linear-gradient(90deg, #C8B5D1, #A695B1);
+  background: linear-gradient(90deg, var(--color-accent), var(--color-sub));
   transition: width 0.3s ease;
-  box-shadow: 0 0 4px rgba(200, 181, 209, 0.4);
+  box-shadow: 0 0 4px rgba(182, 141, 64, 0.35);
 }
 ul li a:hover {
-  color: #C8B5D1;
+  color: var(--color-sub);
   transform: translateY(-2px);
-  text-shadow: 0 0 8px rgba(200, 181, 209, 0.3);
+  text-shadow: 0 0 8px rgba(182, 141, 64, 0.35);
 }
 ul li a:hover::after {
   width: 100%;
 }
 ul li a.router-link-active {
-  color: #C8B5D1;
-  text-shadow: 0 0 8px rgba(200, 181, 209, 0.3);
+  color: var(--color-sub);
+  text-shadow: 0 0 8px rgba(182, 141, 64, 0.35);
 }
 ul li a.router-link-active::after {
   width: 100%;
@@ -134,9 +134,9 @@ ul li a.router-link-active::after {
   align-items: center;
 }
 .lang-btn {
-  background: linear-gradient(135deg, #B8A5C1 0%, #A695B1 100%);
-  color: #F8F6F0;
-  border: 1px solid rgba(200, 181, 209, 0.3);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
+  color: var(--color-main-strong);
+  border: 1px solid rgba(182, 141, 64, 0.45);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
@@ -145,10 +145,10 @@ ul li a.router-link-active::after {
   font-size: 0.9rem;
 }
 .lang-btn:hover {
-  background: linear-gradient(135deg, #C8B5D1 0%, #B8A5C1 100%);
-  color: #2D2B4A;
+  background: linear-gradient(135deg, var(--color-sub) 0%, var(--color-accent) 100%);
+  color: var(--color-main-strong);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(244, 194, 194, 0.4);
+  box-shadow: 0 4px 12px rgba(182, 141, 64, 0.35);
 }
 .lang-btn i {
   margin-right: 0.3rem;
@@ -175,11 +175,11 @@ ul li a.router-link-active::after {
     position: absolute;
     top: 60px;
     right: -250px;
-    background: linear-gradient(135deg, #3A3859 0%, #2D2B4A 100%);
+    background: linear-gradient(135deg, rgba(60, 47, 47, 0.95) 0%, rgba(44, 35, 35, 0.95) 100%);
     width: 200px;
     padding: 1.5rem 0;
     gap: 0;
-    box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.3);
+    box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.35);
     border-radius: 8px 0 0 8px;
   }
   ul.open {
@@ -191,7 +191,7 @@ ul li a.router-link-active::after {
   ul li a {
     display: block;
     padding: 1rem 0;
-    border-bottom: 1px solid rgba(244, 166, 195, 0.1);
+    border-bottom: 1px solid rgba(234, 219, 200, 0.12);
   }
   ul li:last-child a {
     border-bottom: none;

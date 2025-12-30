@@ -120,13 +120,11 @@ class ShootingStar {
     this.exploding = false
     this.particles = []
     
-    // やさしい星空配色のパステルカラー
-    const pastelColors = [
-      '#F4C2C2', '#E6B3B3', '#D8A4A4', '#C8B5D1', '#B8A5C1', 
-      '#A695B1', '#F8F6F0', '#E8D5E8', '#D6C9E3', '#B8E6B8',
-      '#A8D8EA', '#FFD93D', '#FFAAA5'
+    const warmGlowColors = [
+      '#B68D40', '#EADBC8', '#D7C2A1', '#F5EFE6', '#A37B4F',
+      '#8C6B3F', '#6B4A38', '#c7a56a'
     ]
-    this.color = pastelColors[Math.floor(Math.random() * pastelColors.length)]
+    this.color = warmGlowColors[Math.floor(Math.random() * warmGlowColors.length)]
   }
   
   explode() {
@@ -234,10 +232,9 @@ class EerieParticle {
     this.size = getResponsiveValue(1 + Math.random() * 3)
     this.pulseSpeed = 0.02 + Math.random() * 0.03
     
-    // 不気味な色合い
     const eerieColors = [
-      '#4a4a7a', '#5a5a8a', '#3a3a6a', '#6a4a7a',
-      '#7a6a8a', '#5a6a7a', '#6a7a8a', '#4a6a7a'
+      '#5c4033', '#6d4a3d', '#4f3a2f', '#7b5847',
+      '#8c6b3f', '#443026', '#3b2720', '#a37b4f'
     ]
     this.color = eerieColors[Math.floor(Math.random() * eerieColors.length)]
   }

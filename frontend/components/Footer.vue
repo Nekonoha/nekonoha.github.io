@@ -10,14 +10,14 @@ const { t } = useLocale()
 </script>
 <style scoped>
 .footer {
-  background: #1E1B2E;
-  color: #F8F6F0;
+  background: linear-gradient(180deg, rgba(44, 35, 35, 0.95) 0%, rgba(36, 28, 28, 0.95) 100%);
+  color: var(--color-text);
   text-align: center;
   padding: 2rem 1rem;
   font-size: 0.9rem;
   margin-top: 4rem;
-  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.3);
-  border-top: 1px solid rgba(200, 181, 209, 0.2);
+  box-shadow: var(--shadow-strong);
+  border-top: 1px solid rgba(182, 141, 64, 0.25);
 }
 .content {
   max-width: 1200px;
@@ -26,7 +26,7 @@ const { t } = useLocale()
 .content p {
   margin: 0;
   opacity: 0.9;
-  color: #C8B5D1;
+  color: var(--color-sub);
 }
 @keyframes twinkle {
   0%, 100% { opacity: 0.6; }

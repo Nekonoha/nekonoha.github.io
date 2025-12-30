@@ -49,24 +49,16 @@ class Dot {
     this.opacity = 0
     this.scaleFactor = scaleFactor
     
-    // やさしい星空配色のパステルカラー（いろいろな色を使用）
-    const pastelColors = [
-      '#F4C2C2', // ペールピンク
-      '#E6B3B3', // ペールピンク薄
-      '#D8A4A4', // ペールピンク濃
-      '#C8B5D1', // くすみラベンダー
-      '#B8A5C1', // くすみラベンダー薄
-      '#A695B1', // くすみラベンダー濃
-      '#F8F6F0', // ミルキーホワイト
-      '#FFF9F5', // ミルキーホワイト薄
-      '#E8D5E8', // 薄紫
-      '#D6C9E3', // 薄ラベンダー
-      '#B8E6B8', // ペールグリーン
-      '#A8D8EA', // ペールブルー
-      '#FFD93D', // ペールイエロー
-      '#FFAAA5'  // ペールコーラル
+    const themeDots = [
+      '#B68D40', // accent gold
+      '#EADBC8', // beige
+      '#F5EFE6', // soft light
+      '#D7C2A1', // warm sand
+      '#A37B4F', // mid gold-brown
+      '#8C6B3F', // deep accent
+      '#6B4A38'  // shadowed brown
     ]
-    this.color = pastelColors[Math.floor(Math.random() * pastelColors.length)]
+    this.color = themeDots[Math.floor(Math.random() * themeDots.length)]
   }
   
   update(mouseX: number, mouseY: number) {
@@ -277,7 +269,7 @@ onUnmounted(() => {
 
 .subtitle-text .subtitle {
   font-size: 1.2rem;
-  color: rgba(248, 246, 240, 0.8);
+  color: var(--color-muted);
   margin: 0;
   font-weight: 400;
   font-family: 'Inter', 'Noto Sans JP', sans-serif;

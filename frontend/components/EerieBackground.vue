@@ -41,9 +41,9 @@ class WaterDrop {
     
     // 水滴のグラデーション
     const gradient = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.length)
-    gradient.addColorStop(0, 'rgba(100, 120, 150, 0.8)')
-    gradient.addColorStop(0.3, 'rgba(80, 100, 130, 0.6)')
-    gradient.addColorStop(1, 'rgba(60, 80, 110, 0.2)')
+    gradient.addColorStop(0, 'rgba(182, 141, 64, 0.85)')
+    gradient.addColorStop(0.3, 'rgba(160, 123, 56, 0.7)')
+    gradient.addColorStop(1, 'rgba(110, 82, 50, 0.25)')
     
     ctx.strokeStyle = gradient
     ctx.lineWidth = this.width
@@ -110,9 +110,9 @@ class ShadowBlob {
       this.x, this.y, 0,
       this.x, this.y, this.size
     )
-    gradient.addColorStop(0, 'rgba(20, 25, 35, 0.8)')
-    gradient.addColorStop(0.4, 'rgba(30, 35, 50, 0.4)')
-    gradient.addColorStop(1, 'rgba(40, 45, 60, 0)')
+    gradient.addColorStop(0, 'rgba(40, 30, 24, 0.85)')
+    gradient.addColorStop(0.4, 'rgba(60, 45, 36, 0.45)')
+    gradient.addColorStop(1, 'rgba(75, 55, 44, 0)')
     
     ctx.fillStyle = gradient
     
@@ -186,9 +186,9 @@ class DarkOrb {
       this.x, this.y, 0,
       this.x, this.y, this.size
     )
-    gradient.addColorStop(0, 'rgba(60, 70, 90, 0.6)')
-    gradient.addColorStop(0.6, 'rgba(40, 50, 70, 0.3)')
-    gradient.addColorStop(1, 'rgba(20, 30, 50, 0)')
+    gradient.addColorStop(0, 'rgba(150, 115, 70, 0.6)')
+    gradient.addColorStop(0.6, 'rgba(115, 85, 55, 0.35)')
+    gradient.addColorStop(1, 'rgba(55, 40, 30, 0)')
     
     ctx.fillStyle = gradient
     ctx.beginPath()
@@ -211,7 +211,7 @@ const animate = () => {
   if (!ctx) return
   
   // 暗い背景で前フレームを薄く残す（軌跡効果）
-  ctx.fillStyle = 'rgba(10, 15, 25, 0.1)'
+  ctx.fillStyle = 'rgba(34, 26, 22, 0.12)'
   ctx.fillRect(0, 0, canvasWidth.value, canvasHeight.value)
   
   // 水滴を追加
@@ -284,7 +284,7 @@ onUnmounted(() => {
   height: 100%;
   pointer-events: none;
   z-index: -1;
-  background: radial-gradient(circle at center, rgba(15, 20, 30, 0.8) 0%, rgba(5, 10, 20, 0.9) 100%);
+  background: radial-gradient(circle at center, rgba(44, 35, 35, 0.82) 0%, rgba(28, 21, 20, 0.9) 100%);
 }
 
 canvas {

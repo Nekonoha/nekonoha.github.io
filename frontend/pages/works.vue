@@ -62,7 +62,7 @@
             scrolling="no" 
             frameborder="no" 
             allow="autoplay"
-            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/cmu6elwlkgep/battle1-astralhowl&color=%23f4a6c3&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true">
+            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/cmu6elwlkgep/battle1-astralhowl&color=%23B68D40&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true">
           </iframe>
           <iframe 
             width="100%" 
@@ -70,7 +70,7 @@
             scrolling="no" 
             frameborder="no" 
             allow="autoplay"
-            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/cmu6elwlkgep/noname-1&color=%23f4a6c3&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true">
+            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/cmu6elwlkgep/noname-1&color=%23B68D40&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true">
           </iframe>
           <iframe 
             width="100%" 
@@ -78,7 +78,7 @@
             scrolling="no" 
             frameborder="no" 
             allow="autoplay"
-            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/cmu6elwlkgep/ksmppmd1aivq&color=%23f4a6c3&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true">
+            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/cmu6elwlkgep/ksmppmd1aivq&color=%23B68D40&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true">
           </iframe>
         </div>
         <div class="external-link-container">
@@ -143,13 +143,13 @@ onMounted(async () => {
   font-size: 2.5rem;
   font-family: 'Inter', 'Noto Sans JP', sans-serif;
   font-weight: 700;
-  background: linear-gradient(135deg, #B8A5C1 0%, #8B7A9F 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
-  border-bottom: 3px solid #A695B1;
+  border-bottom: 3px solid rgba(182, 141, 64, 0.75);
   padding-bottom: 0.8rem;
-  text-shadow: 0 0 8px rgba(184, 165, 193, 0.3);
+  text-shadow: 0 0 8px rgba(182, 141, 64, 0.35);
 }
 
 .content {
@@ -158,32 +158,32 @@ onMounted(async () => {
 }
 
 .works-section {
-  background: rgba(45, 43, 74, 0.8);
+  background: linear-gradient(180deg, rgba(44, 35, 35, 0.88) 0%, rgba(36, 28, 28, 0.94) 100%);
   backdrop-filter: blur(10px);
   padding: 1.5rem;
   border-radius: 12px;
   margin-bottom: 1.5rem;
-  box-shadow: 0 2px 12px rgba(200, 181, 209, 0.3);
-  border: 1px solid rgba(200, 181, 209, 0.4);
+  box-shadow: var(--shadow-strong);
+  border: 1px solid rgba(182, 141, 64, 0.35);
   transition: all 0.3s ease;
 }
 
 .works-section:hover {
-  box-shadow: 0 4px 20px rgba(184, 165, 193, 0.4);
+  box-shadow: 0 4px 20px rgba(182, 141, 64, 0.4);
   transform: translateY(-2px);
 }
 
 .works-section h3 {
   font-size: 1.5rem;
-  color: #C8B5D1;
+  color: var(--color-sub);
   margin-bottom: 1rem;
   padding-bottom: 0.5rem;
-  border-bottom: 2px solid #A695B1;
+  border-bottom: 2px solid rgba(182, 141, 64, 0.65);
 }
 
 .works-section h3 i {
   margin-right: 0.5rem;
-  color: #A695B1;
+  color: var(--color-accent);
 }
 
 /* Games */
@@ -196,29 +196,29 @@ onMounted(async () => {
 .game-card {
   display: block;
   padding: 1.2rem;
-  background: linear-gradient(135deg, #5e35b1 0%, #7e57c2 100%);
-  color: #fff;
+  background: linear-gradient(135deg, var(--color-accent) 0%, #8c6b3f 100%);
+  color: var(--color-text);
   text-decoration: none;
   border-radius: 10px;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 10px rgba(94, 53, 177, 0.25);
+  box-shadow: 0 2px 10px rgba(182, 141, 64, 0.35);
 }
 
 .game-card:hover {
   transform: translateY(-3px);
-  box-shadow: 0 6px 20px rgba(94, 53, 177, 0.4);
+  box-shadow: 0 6px 20px rgba(182, 141, 64, 0.5);
 }
 
 .game-card h4 {
   font-size: 1.2rem;
   margin-bottom: 0.5rem;
-  color: #fff;
+  color: var(--color-text);
 }
 
 .game-card p {
   font-size: 0.85rem;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.9);
+  color: rgba(245, 239, 230, 0.9);
 }
 
 /* Social Links */
@@ -234,21 +234,21 @@ onMounted(async () => {
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  background: rgba(45, 43, 74, 0.6);
+  background: rgba(60, 47, 47, 0.65);
   text-decoration: none;
   border-radius: 10px;
   transition: all 0.3s ease;
-  border: 1px solid rgba(200, 181, 209, 0.3);
-  box-shadow: 0 2px 8px rgba(200, 181, 209, 0.15);
+  border: 1px solid rgba(182, 141, 64, 0.35);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
   min-height: 100px;
   backdrop-filter: blur(5px);
 }
 
 .social-link:hover {
-  border-color: #A695B1;
-  box-shadow: 0 4px 15px rgba(166, 149, 177, 0.3);
+  border-color: var(--color-accent);
+  box-shadow: 0 4px 15px rgba(182, 141, 64, 0.35);
   transform: translateY(-2px);
-  background: rgba(56, 53, 82, 0.8);
+  background: rgba(60, 47, 47, 0.8);
 }
 
 .social-link i {
@@ -257,22 +257,14 @@ onMounted(async () => {
   margin-bottom: 0.5rem;
 }
 
-.social-link.pixiv i {
-  color: #0096fa;
-}
-
-.social-link.booth i {
-  color: #fc4d50;
-}
-
-.social-link.blog i {
-  color: #B8A5C1;
+.social-link i {
+  color: var(--color-accent);
 }
 
 .social-link strong {
   display: block;
   font-size: 1rem;
-  color: #C8B5D1;
+  color: var(--color-sub);
   font-weight: 600;
   text-align: center;
 }
@@ -300,7 +292,7 @@ onMounted(async () => {
 
 /* Section Description */
 .section-description {
-  color: #C8B5D1;
+  color: var(--color-sub);
   font-size: 0.95rem;
   line-height: 1.6;
   margin-bottom: 1rem;
@@ -316,22 +308,22 @@ onMounted(async () => {
 .external-link {
   display: inline-block;
   padding: 0.7rem 1.5rem;
-  background: rgba(45, 43, 74, 0.8);
-  color: #C8B5D1;
+  background: rgba(44, 35, 35, 0.9);
+  color: var(--color-sub);
   text-decoration: none;
   border-radius: 8px;
   font-weight: 600;
   font-size: 0.95rem;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 8px rgba(184, 165, 193, 0.3);
-  border: 1px solid rgba(184, 165, 193, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(182, 141, 64, 0.4);
 }
 
 .external-link:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 15px rgba(200, 181, 209, 0.5);
-  background: rgba(56, 53, 82, 0.9);
-  color: #E8E5F0;
+  box-shadow: 0 4px 15px rgba(182, 141, 64, 0.45);
+  background: rgba(60, 47, 47, 0.95);
+  color: var(--color-text);
 }
 
 .external-link i {

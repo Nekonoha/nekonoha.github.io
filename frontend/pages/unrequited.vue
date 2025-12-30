@@ -98,13 +98,13 @@
 .game-page {
   animation: fadeIn 1s ease-out;
   background: 
-    linear-gradient(180deg, rgba(15, 25, 45, 0.9) 0%, rgba(25, 35, 60, 0.9) 50%, rgba(10, 20, 40, 0.95) 100%),
+    linear-gradient(180deg, rgba(60, 47, 47, 0.88) 0%, rgba(48, 36, 32, 0.9) 50%, rgba(40, 31, 28, 0.92) 100%),
     url('/images/unrequited/back.png');
   background-size: cover, cover;
   background-position: center, center;
   background-repeat: no-repeat;
   min-height: 100vh;
-  color: #f0f0f0;
+  color: var(--color-text);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   padding: 2rem;
   overflow-x: hidden;
@@ -131,22 +131,22 @@
   font-family: 'Orbitron', monospace;
   font-size: 3.5rem;
   font-weight: 900;
-  background: linear-gradient(135deg, #b3d9ff 0%, #87ceeb 25%, #6495ed 50%, #4682b4 75%, #2f4f4f 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   text-shadow: 
-    0 0 20px rgba(135, 206, 235, 0.6),
-    0 0 40px rgba(135, 206, 235, 0.4),
-    0 0 60px rgba(135, 206, 235, 0.2);
+    0 0 20px rgba(182, 141, 64, 0.45),
+    0 0 40px rgba(182, 141, 64, 0.3),
+    0 0 60px rgba(182, 141, 64, 0.2);
   margin-bottom: 1rem;
   letter-spacing: 2px;
 }
 
 .game-description {
   font-size: 1.2rem;
-  color: #d0e6ff;
-  opacity: 0.9;
+  color: var(--color-sub);
+  opacity: 0.95;
   max-width: 600px;
   margin: 0 auto;
   line-height: 1.6;
@@ -160,36 +160,36 @@
 }
 
 .info-card {
-  background: rgba(15, 25, 45, 0.85);
-  border: 1px solid rgba(135, 206, 235, 0.3);
+  background: rgba(44, 35, 35, 0.86);
+  border: 1px solid rgba(182, 141, 64, 0.35);
   border-radius: 12px;
   padding: 2rem;
   backdrop-filter: blur(10px);
   box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.3),
-    0 0 20px rgba(135, 206, 235, 0.1);
+    0 8px 32px rgba(0, 0, 0, 0.35),
+    0 0 20px rgba(182, 141, 64, 0.12);
   transition: all 0.3s ease;
 }
 
 .info-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(135, 206, 235, 0.5);
+  border-color: rgba(182, 141, 64, 0.55);
   box-shadow: 
     0 12px 40px rgba(0, 0, 0, 0.4),
-    0 0 30px rgba(135, 206, 235, 0.2);
+    0 0 30px rgba(182, 141, 64, 0.25);
 }
 
 .info-card h2 {
   font-family: 'Orbitron', monospace;
-  color: #b3d9ff;
+  color: var(--color-sub);
   font-size: 1.5rem;
   margin-bottom: 1.5rem;
-  text-shadow: 0 0 10px rgba(135, 206, 235, 0.5);
+  text-shadow: 0 0 10px rgba(182, 141, 64, 0.4);
 }
 
 .info-card h3 {
   font-family: 'Inter', sans-serif;
-  color: #87ceeb;
+  color: var(--color-accent);
   font-size: 1.2rem;
   margin: 1.5rem 0 1rem 0;
 }
@@ -197,7 +197,7 @@
 .info-card p {
   line-height: 1.7;
   margin-bottom: 1rem;
-  color: #a0c8f0;
+  color: var(--color-text);
 }
 
 .info-card ul {
@@ -206,7 +206,7 @@
 }
 
 .info-card li {
-  color: #a0c8f0;
+  color: var(--color-sub);
   margin-bottom: 0.5rem;
   line-height: 1.6;
 }
@@ -219,13 +219,13 @@
 
 .control-table td {
   padding: 0.8rem;
-  border-bottom: 1px solid rgba(135, 206, 235, 0.2);
-  color: #a0c8f0;
+  border-bottom: 1px solid rgba(182, 141, 64, 0.25);
+  color: var(--color-sub);
 }
 
 .control-table td:first-child {
   font-weight: 600;
-  color: #b3d9ff;
+  color: var(--color-accent);
   width: 50%;
 }
 
@@ -239,15 +239,15 @@
 .screenshot-grid img {
   width: 100%;
   border-radius: 8px;
-  border: 2px solid rgba(135, 206, 235, 0.3);
+  border: 2px solid rgba(182, 141, 64, 0.35);
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .screenshot-grid img:hover {
   transform: scale(1.05);
-  border-color: rgba(135, 206, 235, 0.6);
-  box-shadow: 0 8px 25px rgba(135, 206, 235, 0.3);
+  border-color: rgba(182, 141, 64, 0.6);
+  box-shadow: 0 8px 25px rgba(182, 141, 64, 0.3);
 }
 
 .clickable {
@@ -346,8 +346,8 @@
 .download-btn {
   display: inline-block;
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, #4682b4 0%, #2f4f4f 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--color-accent) 0%, #8c6b3f 100%);
+  color: var(--color-main-strong);
   text-decoration: none;
   border-radius: 8px;
   font-weight: 600;
@@ -357,10 +357,10 @@
 }
 
 .download-btn:hover {
-  background: linear-gradient(135deg, #6495ed 0%, #4682b4 100%);
+  background: linear-gradient(135deg, var(--color-sub) 0%, var(--color-accent) 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(70, 130, 180, 0.4);
-  text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+  box-shadow: 0 8px 20px rgba(182, 141, 64, 0.4);
+  text-shadow: 0 0 10px rgba(75, 59, 48, 0.45);
 }
 
 .download-btn i {
@@ -381,9 +381,9 @@
 
 .game-title:hover {
   text-shadow: 
-    0 0 30px rgba(135, 206, 235, 0.8),
-    0 0 60px rgba(135, 206, 235, 0.5),
-    0 0 80px rgba(135, 206, 235, 0.3);
+    0 0 30px rgba(182, 141, 64, 0.7),
+    0 0 60px rgba(182, 141, 64, 0.45),
+    0 0 80px rgba(182, 141, 64, 0.25);
 }
 
 @media (max-width: 768px) {

@@ -34,6 +34,20 @@ useHead({
 })
 </script>
 <style>
+ :root {
+  --color-main: #3C2F2F;
+  --color-main-strong: #2f2424;
+  --color-surface: #4a3a32;
+  --color-panel: #2f2624;
+  --color-sub: #EADBC8;
+  --color-sub-strong: #d8c7ae;
+  --color-accent: #B68D40;
+  --color-accent-strong: #9b7634;
+  --color-text: #F5EFE6;
+  --color-muted: rgba(234, 219, 200, 0.75);
+  --shadow-strong: 0 2px 16px rgba(0, 0, 0, 0.35);
+  --shadow-soft: 0 10px 40px rgba(0, 0, 0, 0.28);
+ }
 * {
   margin: 0;
   padding: 0;
@@ -41,8 +55,10 @@ useHead({
 }
 body {
   font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  background: linear-gradient(135deg, #2D2B4A 0%, #3A3859 50%, #4A4674 100%);
-  color: #F8F6F0;
+  background: radial-gradient(circle at 20% 20%, rgba(234, 219, 200, 0.06), transparent 35%),
+              radial-gradient(circle at 80% 0%, rgba(182, 141, 64, 0.08), transparent 40%),
+              linear-gradient(135deg, var(--color-main-strong) 0%, var(--color-main) 45%, #4b3b34 100%);
+  color: var(--color-text);
   line-height: 1.6;
   min-height: 100vh;
   font-weight: 400;
