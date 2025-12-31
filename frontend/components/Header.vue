@@ -26,7 +26,7 @@
 import { ref, watch, onMounted, onUnmounted } from 'vue'
 
 const open = ref(false)
-const isMobile = ref(false)
+const isMobile = ref(typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
 const { t, setLocale, locale } = useLocale()
 
 const switchLanguage = () => {

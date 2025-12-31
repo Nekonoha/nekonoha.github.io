@@ -74,6 +74,8 @@
         @touchstart.passive="onTouchStart"
         @touchend.passive="onTouchEnd"
         @touchcancel.passive="onTouchCancel"
+        @pointerdown="onPointerStart"
+        @pointerup="onPointerEnd"
       >
         <div class="lightbox-content" @click.stop>
           <button class="lightbox-close" @click="closeLightbox">×</button>
@@ -430,6 +432,7 @@ const screenshots = Array.from({ length: SCREENSHOT_COUNT }, (_, i) => `/images/
 const lightboxOpen = ref(false)
 const currentImageIndex = ref(0)
 const touchStart = ref<{ x: number; y: number } | null>(null)
+const pointerStart = ref<{ x: number; y: number } | null>(null)
 const swipeThreshold = 45
 
 const openLightbox = (index: number) => {
@@ -481,6 +484,25 @@ const onTouchEnd = (e: TouchEvent) => {
 
 const onTouchCancel = () => {
   touchStart.value = null
+}
+
+const onPointerStart = (e: PointerEvent) => {
+  if (e.pointerType === 'touch') return
+  pointerStart.value = { x: e.clientX, y: e.clientY }
+}
+
+const onPointerEnd = (e: PointerEvent) => {
+  if (e.pointerType === 'touch') return
+  if (!pointerStart.value) return
+  const dx = e.clientX - pointerStart.value.x
+  const dy = e.clientY - pointerStart.value.y
+  pointerStart.value = null
+  if (Math.abs(dx) < swipeThreshold || Math.abs(dx) < Math.abs(dy)) return
+  if (dx < 0) {
+    nextImage()
+  } else {
+    prevImage()
+  }
 }
 
 // キーボードナビゲーション
