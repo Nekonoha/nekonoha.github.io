@@ -56,14 +56,7 @@
 
       <div class="info-card">
         <h2>▼{{ t('trial.screenshots') }}</h2>
-        <div class="screenshot-grid">
-          <img src="/images/trial/1.png" alt="Screenshot 1" @click="openLightbox(0)" class="clickable" />
-          <img src="/images/trial/2.png" alt="Screenshot 2" @click="openLightbox(1)" class="clickable" />
-          <img src="/images/trial/3.png" alt="Screenshot 3" @click="openLightbox(2)" class="clickable" />
-          <img src="/images/trial/4.png" alt="Screenshot 4" @click="openLightbox(3)" class="clickable" />
-          <img src="/images/trial/5.png" alt="Screenshot 5" @click="openLightbox(4)" class="clickable" />
-          <img src="/images/trial/6.png" alt="Screenshot 6" @click="openLightbox(5)" class="clickable" />
-        </div>
+        <ScreenshotCarousel :screenshots="screenshots" @screenshot-click="openLightbox" />
       </div>
 
       <!-- ライトボックスモーダル -->
@@ -80,7 +73,14 @@
         <div class="lightbox-content" @click.stop>
           <button class="lightbox-close" @click="closeLightbox">×</button>
           <button class="lightbox-nav lightbox-prev" @click="prevImage" v-if="currentImageIndex > 0">‹</button>
-          <img :src="screenshots[currentImageIndex]" :alt="`Screenshot ${currentImageIndex + 1}`" class="lightbox-image" />
+          <Transition :name="isMovingForward ? 'carousel-forward' : 'carousel-back'" mode="out-in">
+            <img
+              :key="currentImageIndex"
+              :src="screenshots[currentImageIndex]"
+              :alt="`Screenshot ${currentImageIndex + 1}`"
+              class="lightbox-image"
+            />
+          </Transition>
           <button class="lightbox-nav lightbox-next" @click="nextImage" v-if="currentImageIndex < screenshots.length - 1">›</button>
           <div class="lightbox-counter">{{ currentImageIndex + 1 }} / {{ screenshots.length }}</div>
         </div>
@@ -111,8 +111,9 @@
   min-height: 100vh;
   color: var(--color-text);
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
-  padding: 2rem;
+  padding: clamp(0.5rem, 2vw, 2rem);
   overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 @keyframes fadeIn {
@@ -163,21 +164,23 @@
 
 .content-section {
   display: grid;
-  gap: 2rem;
+  gap: clamp(0.75rem, 2vw, 1.5rem);
   max-width: 1000px;
   margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .info-card {
   background: rgba(44, 35, 35, 0.86);
   border: 1px solid rgba(182, 141, 64, 0.35);
   border-radius: 12px;
-  padding: 2rem;
+  padding: clamp(0.75rem, 2vw, 1.5rem);
   backdrop-filter: blur(10px);
   box-shadow: 
     0 8px 32px rgba(0, 0, 0, 0.35),
     0 0 20px rgba(182, 141, 64, 0.12);
   transition: all 0.3s ease;
+  box-sizing: border-box;
 }
 
 .info-card:hover {
@@ -292,6 +295,36 @@
   object-fit: contain;
   border-radius: 8px;
   box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+}
+
+.carousel-forward-enter-active,
+.carousel-forward-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.carousel-forward-enter-from {
+  transform: translateX(40px);
+  opacity: 0;
+}
+
+.carousel-forward-leave-to {
+  transform: translateX(-40px);
+  opacity: 0;
+}
+
+.carousel-back-enter-active,
+.carousel-back-leave-active {
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.carousel-back-enter-from {
+  transform: translateX(-40px);
+  opacity: 0;
+}
+
+.carousel-back-leave-to {
+  transform: translateX(40px);
+  opacity: 0;
 }
 
 .lightbox-close {
@@ -416,6 +449,8 @@
 
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
+import { useHead } from 'nuxt/app'
+import { useLocale } from '../composables/useLocale'
 
 const { t } = useLocale()
 
@@ -434,6 +469,7 @@ const currentImageIndex = ref(0)
 const touchStart = ref<{ x: number; y: number } | null>(null)
 const pointerStart = ref<{ x: number; y: number } | null>(null)
 const swipeThreshold = 45
+const isMovingForward = ref(true)
 
 const openLightbox = (index: number) => {
   if (index >= 0 && index < screenshots.length) {
@@ -442,17 +478,18 @@ const openLightbox = (index: number) => {
     document.body.style.overflow = 'hidden'
   }
 }
-
 const closeLightbox = () => {
   lightboxOpen.value = false
   document.body.style.overflow = 'auto'
 }
 
 const nextImage = () => {
+  isMovingForward.value = true
   currentImageIndex.value = Math.min(currentImageIndex.value + 1, screenshots.length - 1)
 }
 
 const prevImage = () => {
+  isMovingForward.value = false
   currentImageIndex.value = Math.max(currentImageIndex.value - 1, 0)
 }
 
