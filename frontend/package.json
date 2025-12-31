@@ -9,6 +9,8 @@
     "start": "nuxt start"
   },
   "dependencies": {
+    "@splidejs/splide": "^4.1.4",
+    "@splidejs/vue-splide": "^0.6.12",
     "nuxt": "^3.10.0"
   }
 }

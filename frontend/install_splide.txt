@@ -1,0 +1,2 @@
+// SplideのVue用パッケージをインストールします。
+npm install @splidejs/vue-splide @splidejs/splide
