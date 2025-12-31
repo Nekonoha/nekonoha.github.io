@@ -31,6 +31,8 @@ const props = withDefaults(defineProps<Props>(), {
   eerieMode: false
 })
 
+const lowPowerMode = ref(false)
+
 const canvas = ref<HTMLCanvasElement>()
 const canvasWidth = ref(0)
 const canvasHeight = ref(0)
@@ -335,9 +337,11 @@ const createEerieImage = () => {
 
 const updateEerieImages = () => {
   if (!props.showEerieImages) return
+  const maxImages = lowPowerMode.value ? 5 : 8
+  const spawnChance = lowPowerMode.value ? 0.002 : 0.005
   
   // 新しい画像を時々追加
-  if (Math.random() < 0.005 && eerieImages.value.length < 8) {
+  if (Math.random() < spawnChance && eerieImages.value.length < maxImages) {
     eerieImages.value.push(createEerieImage())
   }
   
@@ -366,9 +370,14 @@ const animate = () => {
   // 不気味な画像を更新
   updateEerieImages()
   
+  const starSpawnChance = lowPowerMode.value ? 0.008 : 0.02
+  const maxStars = lowPowerMode.value ? 30 : 80
+  const eerieParticleSpawnChance = lowPowerMode.value ? 0.015 : 0.03
+  const maxEerieParticles = lowPowerMode.value ? 10 : 18
+
   if (props.eerieMode) {
     // 不気味モード：不気味な粒子を管理
-    if (Math.random() < 0.03 && eerieParticles.length < 15) {
+    if (Math.random() < eerieParticleSpawnChance && eerieParticles.length < maxEerieParticles) {
       eerieParticles.push(new EerieParticle())
     }
     
@@ -379,7 +388,7 @@ const animate = () => {
     })
   } else {
     // 通常モード：流れ星を管理
-    if (Math.random() < 0.02) {
+    if (Math.random() < starSpawnChance && stars.length < maxStars) {
       stars.push(new ShootingStar())
     }
     
@@ -390,12 +399,21 @@ const animate = () => {
       }
       return !shouldRemove
     })
+    if (stars.length > maxStars) {
+      stars = stars.slice(-maxStars)
+    }
   }
   
   animationId = requestAnimationFrame(animate)
 }
 
+const updateLowPowerMode = () => {
+  const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  lowPowerMode.value = prefersReduce || window.innerWidth < 640
+}
+
 const handleResize = () => {
+  updateLowPowerMode()
   // document.documentElementを使用してより信頼性の高いサイズ取得
   const width = Math.min(window.innerWidth, document.documentElement.clientWidth)
   const height = Math.min(window.innerHeight, document.documentElement.clientHeight)

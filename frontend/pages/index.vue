@@ -19,6 +19,19 @@ const canvasHeight = ref(400)
 // マウス位置を追跡
 const mousePos = ref({ x: -1000, y: -1000 }) // 初期値は画面外
 
+const updatePointerPosition = (clientX: number, clientY: number) => {
+  if (!canvas.value) return
+  const rect = canvas.value.getBoundingClientRect()
+  mousePos.value = {
+    x: clientX - rect.left,
+    y: clientY - rect.top
+  }
+}
+
+const clearPointerPosition = () => {
+  mousePos.value = { x: -1000, y: -1000 }
+}
+
 // 言語変更を監視してアニメーションを再初期化
 watch(locale, () => {
   nextTick(() => {
@@ -148,7 +161,8 @@ const initDots = () => {
   dots = []
   
   // ピクセルをサンプリングしてドットを作成
-  const samplingRate = Math.max(2, Math.floor(4 * scaleFactor))
+  const isNarrow = canvasWidth.value < 480
+  const samplingRate = Math.max(2, Math.floor(4 * scaleFactor) + (isNarrow ? 1 : 0))
   for (let y = 0; y < canvasHeight.value; y += samplingRate) {
     for (let x = 0; x < canvasWidth.value; x += samplingRate) {
       const index = (y * canvasWidth.value + x) * 4
@@ -180,29 +194,40 @@ const animate = () => {
   animationId = requestAnimationFrame(animate)
 }
 
-// マウスイベントリスナー
-const setupMouseEvents = () => {
+// タッチ・マウス共通のポインタイベント
+const setupPointerEvents = () => {
   if (!canvas.value) return
-  
-  const handleMouseMove = (e: MouseEvent) => {
-    const rect = canvas.value!.getBoundingClientRect()
-    mousePos.value = {
-      x: e.clientX - rect.left,
-      y: e.clientY - rect.top
-    }
+
+  const listenerOptions: AddEventListenerOptions = { passive: true }
+
+  const handlePointerMove = (e: PointerEvent | MouseEvent) => {
+    updatePointerPosition(e.clientX, e.clientY)
   }
-  
-  const handleMouseLeave = () => {
-    // マウスがキャンバスから離れたら画面外に設定
-    mousePos.value = { x: -1000, y: -1000 }
+
+  const handleTouchMove = (e: TouchEvent) => {
+    const touch = e.touches[0]
+    if (!touch) return
+    updatePointerPosition(touch.clientX, touch.clientY)
   }
-  
-  canvas.value.addEventListener('mousemove', handleMouseMove)
-  canvas.value.addEventListener('mouseleave', handleMouseLeave)
-  
+
+  canvas.value.addEventListener('pointermove', handlePointerMove, listenerOptions)
+  canvas.value.addEventListener('pointerleave', clearPointerPosition, listenerOptions)
+  canvas.value.addEventListener('pointercancel', clearPointerPosition, listenerOptions)
+  canvas.value.addEventListener('touchmove', handleTouchMove, listenerOptions)
+  canvas.value.addEventListener('touchend', clearPointerPosition, listenerOptions)
+  canvas.value.addEventListener('touchcancel', clearPointerPosition, listenerOptions)
+
+  // Safari で pointermove が無効な場合のフォールバック
+  canvas.value.addEventListener('mousemove', handlePointerMove, listenerOptions)
+
   return () => {
-    canvas.value?.removeEventListener('mousemove', handleMouseMove)
-    canvas.value?.removeEventListener('mouseleave', handleMouseLeave)
+    canvas.value?.removeEventListener('pointermove', handlePointerMove, listenerOptions)
+    canvas.value?.removeEventListener('pointerleave', clearPointerPosition, listenerOptions)
+    canvas.value?.removeEventListener('pointercancel', clearPointerPosition, listenerOptions)
+    canvas.value?.removeEventListener('touchmove', handleTouchMove, listenerOptions)
+    canvas.value?.removeEventListener('touchend', clearPointerPosition, listenerOptions)
+    canvas.value?.removeEventListener('touchcancel', clearPointerPosition, listenerOptions)
+    canvas.value?.removeEventListener('mousemove', handlePointerMove, listenerOptions)
   }
 }
 
@@ -211,7 +236,8 @@ const handleResize = () => {
   if (!container) return
   
   // コンテナの幅に基づいてキャンバスサイズを動的に調整
-  const containerWidth = container.clientWidth - 40
+  const containerPadding = window.innerWidth < 480 ? 24 : 40
+  const containerWidth = Math.max(280, container.clientWidth - containerPadding)
   const scaleFactor = Math.min(1, containerWidth / 800)
   
   canvasWidth.value = Math.min(800, containerWidth)
@@ -230,7 +256,7 @@ onMounted(() => {
   
   setTimeout(() => {
     animate()
-    const cleanup = setupMouseEvents()
+    const cleanup = setupPointerEvents()
     if (cleanup) {
       mouseEventCleanup = cleanup
     }
@@ -280,6 +306,7 @@ canvas {
   margin: 0 auto;
   max-width: 100%;
   height: auto;
+  touch-action: pan-y pinch-zoom;
 }
 
 @media (max-width: 768px) {

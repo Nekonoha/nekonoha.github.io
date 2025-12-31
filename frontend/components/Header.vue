@@ -7,29 +7,50 @@
         <span class="bar"></span>
         <span class="bar"></span>
       </button>
-      <ul :class="{ open }">
-        <li><NuxtLink to="/" @click="open = false"><i class="fas fa-home"></i> {{ t('header.top') }}</NuxtLink></li>
-        <li><NuxtLink to="/about" @click="open = false"><i class="fas fa-info-circle"></i> {{ t('header.about') }}</NuxtLink></li>
-        <li><NuxtLink to="/works" @click="open = false"><i class="fas fa-briefcase"></i> {{ t('header.works') }}</NuxtLink></li>
-        <li class="lang-switch">
-          <button @click="switchLanguage" class="lang-btn">
-            <i class="fas fa-globe"></i> {{ locale === 'ja' ? 'JP' : 'EN' }}
-          </button>
-        </li>
-      </ul>
+      <Transition name="menu-slide">
+        <ul v-if="!isMobile || open">
+          <li><NuxtLink to="/" @click="open = false"><i class="fas fa-home"></i> {{ t('header.top') }}</NuxtLink></li>
+          <li><NuxtLink to="/about" @click="open = false"><i class="fas fa-info-circle"></i> {{ t('header.about') }}</NuxtLink></li>
+          <li><NuxtLink to="/works" @click="open = false"><i class="fas fa-briefcase"></i> {{ t('header.works') }}</NuxtLink></li>
+          <li class="lang-switch">
+            <button @click="switchLanguage" class="lang-btn">
+              <i class="fas fa-globe"></i> {{ locale === 'ja' ? 'JP' : 'EN' }}
+            </button>
+          </li>
+        </ul>
+      </Transition>
     </nav>
   </header>
 </template>
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 
 const open = ref(false)
+const isMobile = ref(false)
 const { t, setLocale, locale } = useLocale()
 
 const switchLanguage = () => {
   setLocale(locale.value === 'ja' ? 'en' : 'ja')
   open.value = false
 }
+
+watch(open, (isOpen) => {
+  document.documentElement.style.overflow = isOpen ? 'hidden' : ''
+})
+
+const updateIsMobile = () => {
+  isMobile.value = window.innerWidth <= 768
+}
+
+onMounted(() => {
+  updateIsMobile()
+  window.addEventListener('resize', updateIsMobile, { passive: true })
+})
+
+onUnmounted(() => {
+  document.documentElement.style.overflow = ''
+  window.removeEventListener('resize', updateIsMobile)
+})
 </script>
 <style scoped>
 .header {
@@ -75,6 +96,7 @@ nav {
   border: none;
   cursor: pointer;
   padding: 0.5rem;
+  touch-action: manipulation;
 }
 .menu-btn .bar {
   width: 28px;
@@ -169,21 +191,20 @@ ul li a.router-link-active::after {
   }
   .menu-btn {
     display: flex;
+    padding: 0.5rem 0.25rem;
   }
   ul {
     flex-direction: column;
     position: absolute;
     top: 60px;
-    right: -250px;
+    right: 0;
     background: linear-gradient(135deg, rgba(60, 47, 47, 0.95) 0%, rgba(44, 35, 35, 0.95) 100%);
     width: 200px;
     padding: 1.5rem 0;
     gap: 0;
     box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.35);
     border-radius: 8px 0 0 8px;
-  }
-  ul.open {
-    right: 0;
+    pointer-events: auto;
   }
   ul li {
     padding: 0 1.5rem;
@@ -197,4 +218,21 @@ ul li a.router-link-active::after {
     border-bottom: none;
   }
 }
+
+  .menu-slide-enter-active,
+  .menu-slide-leave-active {
+    transition: transform 0.25s ease, opacity 0.25s ease;
+  }
+
+  .menu-slide-enter-from,
+  .menu-slide-leave-to {
+    transform: translateX(110%);
+    opacity: 0;
+  }
+
+  .menu-slide-enter-to,
+  .menu-slide-leave-from {
+    transform: translateX(0);
+    opacity: 1;
+  }
 </style>

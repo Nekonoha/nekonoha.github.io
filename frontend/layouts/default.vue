@@ -53,8 +53,12 @@ useHead({
   padding: 0;
   box-sizing: border-box;
 }
+html {
+  overflow-x: hidden;
+}
 body {
   font-family: 'Inter', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  font-size: clamp(15px, 0.5vw + 14px, 17px);
   background: radial-gradient(circle at 20% 20%, rgba(234, 219, 200, 0.06), transparent 35%),
               radial-gradient(circle at 80% 0%, rgba(182, 141, 64, 0.08), transparent 40%),
               linear-gradient(135deg, var(--color-main-strong) 0%, var(--color-main) 45%, #4b3b34 100%);
@@ -74,8 +78,8 @@ body {
 main {
   flex: 1;
   min-height: 70vh;
-  padding: 3rem 1.5rem;
-  max-width: 1000px;
+  padding: clamp(1.75rem, 2vw + 1rem, 3rem) clamp(1.25rem, 5vw, 2.25rem);
+  max-width: 1100px;
   margin: 0 auto;
   width: 100%;
   animation: slideUp 0.6s ease-out;
@@ -88,6 +92,18 @@ main {
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  main {
+    padding: 1.5rem 1.25rem;
+  }
+}
+
+@media (max-width: 540px) {
+  main {
+    padding: 1.25rem 1rem 1.5rem;
   }
 }
 </style>

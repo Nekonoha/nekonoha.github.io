@@ -67,7 +67,14 @@
       </div>
 
       <!-- ライトボックスモーダル -->
-      <div v-if="lightboxOpen" class="lightbox-overlay" @click="closeLightbox">
+      <div
+        v-if="lightboxOpen"
+        class="lightbox-overlay"
+        @click="closeLightbox"
+        @touchstart.passive="onTouchStart"
+        @touchend.passive="onTouchEnd"
+        @touchcancel.passive="onTouchCancel"
+      >
         <div class="lightbox-content" @click.stop>
           <button class="lightbox-close" @click="closeLightbox">×</button>
           <button class="lightbox-nav lightbox-prev" @click="prevImage" v-if="currentImageIndex > 0">‹</button>
@@ -125,7 +132,7 @@
 
 .game-title {
   font-family: 'Orbitron', monospace;
-  font-size: 3.5rem;
+  font-size: clamp(2rem, 3.8vw + 0.25rem, 2.6rem);
   font-weight: 900;
   background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
   -webkit-background-clip: text;
@@ -136,7 +143,11 @@
     0 0 40px rgba(182, 141, 64, 0.3),
     0 0 60px rgba(182, 141, 64, 0.2);
   margin-bottom: 1rem;
-  letter-spacing: 2px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+  max-width: 70vw;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .game-description {
@@ -253,10 +264,9 @@
 /* ライトボックススタイル */
 .lightbox-overlay {
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  inset: 0;
+  width: 100%;
+  height: 100%;
   background: rgba(0, 0, 0, 0.9);
   display: flex;
   justify-content: center;
@@ -375,10 +385,6 @@
     padding: 1rem;
   }
   
-  .game-title {
-    font-size: 2.5rem;
-  }
-  
   .screenshot-grid {
     grid-template-columns: 1fr;
   }
@@ -423,6 +429,8 @@ const screenshots = Array.from({ length: SCREENSHOT_COUNT }, (_, i) => `/images/
 // ライトボックス関連
 const lightboxOpen = ref(false)
 const currentImageIndex = ref(0)
+const touchStart = ref<{ x: number; y: number } | null>(null)
+const swipeThreshold = 45
 
 const openLightbox = (index: number) => {
   if (index >= 0 && index < screenshots.length) {
@@ -443,6 +451,36 @@ const nextImage = () => {
 
 const prevImage = () => {
   currentImageIndex.value = Math.max(currentImageIndex.value - 1, 0)
+}
+
+const onTouchStart = (e: TouchEvent) => {
+  const touch = e.touches[0]
+  if (!touch) return
+  touchStart.value = { x: touch.clientX, y: touch.clientY }
+}
+
+const onTouchEnd = (e: TouchEvent) => {
+  if (!touchStart.value) return
+  const touch = e.changedTouches[0]
+  if (!touch) {
+    touchStart.value = null
+    return
+  }
+
+  const dx = touch.clientX - touchStart.value.x
+  const dy = touch.clientY - touchStart.value.y
+  touchStart.value = null
+
+  if (Math.abs(dx) < swipeThreshold || Math.abs(dx) < Math.abs(dy)) return
+  if (dx < 0) {
+    nextImage()
+  } else {
+    prevImage()
+  }
+}
+
+const onTouchCancel = () => {
+  touchStart.value = null
 }
 
 // キーボードナビゲーション

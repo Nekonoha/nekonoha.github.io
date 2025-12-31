@@ -15,6 +15,10 @@ export default defineNuxtConfig({
       title: '針の筵 - nekonoha',
       meta: [
         {
+          name: 'viewport',
+          content: 'width=device-width, initial-scale=1, viewport-fit=cover'
+        },
+        {
           name: 'description',
           content: '針の筵 - nekonoha の趣味サイト。ゲーム制作、音楽制作など、自由気ままに作った作品たちを置いています。'
         },

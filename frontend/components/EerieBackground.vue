@@ -10,6 +10,7 @@ import { ref, onMounted, onUnmounted } from 'vue'
 const canvas = ref<HTMLCanvasElement>()
 const canvasWidth = ref(0)
 const canvasHeight = ref(0)
+const lowPowerMode = ref(false)
 
 // 水滴クラス
 class WaterDrop {
@@ -214,18 +215,25 @@ const animate = () => {
   ctx.fillStyle = 'rgba(34, 26, 22, 0.12)'
   ctx.fillRect(0, 0, canvasWidth.value, canvasHeight.value)
   
+  const waterSpawnChance = lowPowerMode.value ? 0.04 : 0.08
+  const shadowSpawnChance = lowPowerMode.value ? 0.006 : 0.01
+  const orbSpawnChance = lowPowerMode.value ? 0.012 : 0.02
+  const maxDrops = lowPowerMode.value ? 80 : 140
+  const maxShadows = lowPowerMode.value ? 6 : 10
+  const maxOrbs = lowPowerMode.value ? 10 : 16
+
   // 水滴を追加
-  if (Math.random() < 0.08) {
+  if (Math.random() < waterSpawnChance && waterDrops.length < maxDrops) {
     waterDrops.push(new WaterDrop())
   }
   
   // 影の塊を追加
-  if (Math.random() < 0.01 && shadowBlobs.length < 8) {
+  if (Math.random() < shadowSpawnChance && shadowBlobs.length < maxShadows) {
     shadowBlobs.push(new ShadowBlob())
   }
   
   // 暗いオーブを追加
-  if (Math.random() < 0.02 && darkOrbs.length < 12) {
+  if (Math.random() < orbSpawnChance && darkOrbs.length < maxOrbs) {
     darkOrbs.push(new DarkOrb())
   }
   
@@ -237,6 +245,9 @@ const animate = () => {
     }
     return !shouldRemove
   })
+  if (waterDrops.length > maxDrops) {
+    waterDrops = waterDrops.slice(-maxDrops)
+  }
   
   // 影の塊を更新・描画
   shadowBlobs = shadowBlobs.filter(blob => {
@@ -246,6 +257,9 @@ const animate = () => {
     }
     return !shouldRemove
   })
+  if (shadowBlobs.length > maxShadows) {
+    shadowBlobs = shadowBlobs.slice(-maxShadows)
+  }
   
   // 暗いオーブを更新・描画
   darkOrbs.forEach(orb => {
@@ -256,7 +270,13 @@ const animate = () => {
   animationId = requestAnimationFrame(animate)
 }
 
+const updateLowPowerMode = () => {
+  const prefersReduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  lowPowerMode.value = prefersReduce || window.innerWidth < 640
+}
+
 const handleResize = () => {
+  updateLowPowerMode()
   canvasWidth.value = window.innerWidth
   canvasHeight.value = window.innerHeight
 }
