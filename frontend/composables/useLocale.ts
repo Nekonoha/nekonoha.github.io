@@ -19,16 +19,16 @@ const translations = {
     },
     works: {
       title: 'WORKS',
-      games: 'Fan Games',
-      gamesDescription: 'ゆめにっきの二次創作ゲームを制作しています。',
-      music: 'Music',
-      musicDescription: 'SoundCloudで音楽を公開しています。',
+      games: 'ゲーム',
+      fanGames: 'ファンゲーム',
+      music: '音楽',
+      musicDescription: 'SoundCloudにいくつか公開しています。',
       twitterDescription: '最新のツイートをチェックできます。',
       visitTwitter: 'Twitterで見る',
       visitSoundcloud: 'SoundCloudで聴く',
       shop: 'Shop',
       shopDescription: 'BOOTHで販売物を掲載しています。',
-      social: 'Social',
+      social: 'SNS / ショップ',
       socialDescription: 'SNSやブログで活動しています。'
     },
     about: { 
@@ -46,6 +46,7 @@ const translations = {
     product: { 
       title: 'PRODUCT', 
       games: 'Fan Games', 
+      playBoard: 'Play Board', 
       trial: 'TRIAL', 
       unrequited: 'UnRequited', 
       shop: '販売物など', 
@@ -156,6 +157,9 @@ const translations = {
       visitPixiv: 'pixivで見る', 
       soundcloud: 'SoundCloud', 
       soundcloudDescription: '音楽を公開しています。' 
+    },
+    playBoard: {
+      description: 'オンラインのボードゲームプラットフォーム。Hexxagonなどを友だちとリアルタイムで遊べます。'
     }
   },
   en: {
@@ -172,16 +176,16 @@ const translations = {
     },
     works: {
       title: 'WORKS',
-      games: 'Fan Games',
-      gamesDescription: 'Creating Yume Nikki fangames.',
+      games: 'Games',
+      fanGames: 'Fan Games',
       music: 'Music',
-      musicDescription: 'Sharing my music on SoundCloud.',
-      twitterDescription: 'Check out my latest tweets.',
-      visitTwitter: 'Visit Twitter',
-      visitSoundcloud: 'Listen on SoundCloud',
+      musicDescription: 'A few tracks are available on SoundCloud.',
+      twitterDescription: 'Latest updates on Twitter.',
+      visitTwitter: 'Open Twitter profile',
+      visitSoundcloud: 'Open SoundCloud',
       shop: 'Shop',
       shopDescription: 'Products available on BOOTH.',
-      social: 'Social',
+      social: 'Social / Stores',
       socialDescription: 'Follow me on social media and read my blog.'
     },
     about: { 
@@ -199,6 +203,7 @@ const translations = {
     product: { 
       title: 'PRODUCT', 
       games: 'Fan Games', 
+      playBoard: 'Play Board', 
       trial: 'TRIAL', 
       unrequited: 'UnRequited', 
       shop: 'Shop', 
@@ -309,6 +314,9 @@ const translations = {
       visitPixiv: 'Visit pixiv', 
       soundcloud: 'SoundCloud', 
       soundcloudDescription: 'Listen to my music.' 
+    },
+    playBoard: {
+      description: 'Online multiplayer board games platform. Play Hexxagon and other games with friends in real-time.'
     }
   }
 }

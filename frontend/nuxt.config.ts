@@ -12,6 +12,37 @@ export default defineNuxtConfig({
   app: {
     baseURL: '/', // ユーザーページの場合は常に '/'
     head: {
+      title: '針の筵 - nekonoha',
+      meta: [
+        {
+          name: 'description',
+          content: '針の筵 - nekonoha の趣味サイト。ゲーム制作、音楽制作など、自由気ままに作った作品たちを置いています。'
+        },
+        {
+          property: 'og:title',
+          content: '針の筵 - nekonoha'
+        },
+        {
+          property: 'og:description',
+          content: '針の筵 - nekonoha の趣味サイト。ゲーム制作、音楽制作など、自由気ままに作った作品たちを置いています。'
+        },
+        {
+          property: 'og:type',
+          content: 'website'
+        },
+        {
+          name: 'twitter:card',
+          content: 'summary_large_image'
+        },
+        {
+          name: 'twitter:title',
+          content: '針の筵 - nekonoha'
+        },
+        {
+          name: 'twitter:description',
+          content: '針の筵 - nekonoha の趣味サイト。ゲーム制作、音楽制作など、自由気ままに作った作品たちを置いています。'
+        }
+      ],
       link: [
         {
           rel: 'stylesheet',

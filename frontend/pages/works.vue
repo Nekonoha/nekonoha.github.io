@@ -7,6 +7,17 @@
       <div class="works-section">
         <h3><i class="fas fa-gamepad"></i> {{ t('works.games') }}</h3>
         <div class="game-grid">
+          <a href="https://play-board-three.vercel.app" target="_blank" class="game-card">
+            <h4>{{ t('product.playBoard') }}</h4>
+            <p>{{ t('playBoard.description') }}</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Fan Games Section -->
+      <div class="works-section">
+        <h3><i class="fas fa-heart"></i> {{ t('works.fanGames') }}</h3>
+        <div class="game-grid">
           <NuxtLink to="/trial" class="game-card">
             <h4>{{ t('product.trial') }}</h4>
             <p>{{ t('trial.description') }}</p>
