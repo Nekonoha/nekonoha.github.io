@@ -2,6 +2,11 @@
 
 ## 概要
 このプロジェクトはNuxt.js製のポートフォリオサイトで、GitHub Pagesで自動公開されます。
+auto-battlerプロジェクトをサブモジュールとして含み、一緒にデプロイされます。
+
+## プロジェクト構成
+- **frontend/**: メインポートフォリオサイト
+- **auto-battler/**: テキストベース・オートバトラー (サブモジュール)
 
 ## GitHub Pagesでの公開手順
 
@@ -13,38 +18,51 @@
 ### 2. 自動デプロイ
 - `main` ブランチにプッシュすると自動的にビルド・デプロイされます
 - GitHub Actions ワークフローが実行され、静的サイトが生成されます
+- frontendとauto-battlerの両方がビルドされ、統合されます
 
 ### 3. アクセスURL
 デプロイ後は以下のURLでアクセス可能です：
 ```
-https://[ユーザー名].github.io/nekonoha-web/
+https://[ユーザー名].github.io/           # メインサイト
+https://[ユーザー名].github.io/auto-battler/  # Auto Battler
 ```
-
-## リポジトリ名の推奨設定
-URLをより美しくするため、以下のいずれかの方法をお勧めします：
-
-### 方法1: リポジトリ名を変更
-- リポジトリ名を `nekonoha-web` に変更
-- URL: `https://[ユーザー名].github.io/nekonoha-web/`
-
-### 方法2: ユーザーページとして公開
-- リポジトリ名を `[ユーザー名].github.io` に変更
-- URL: `https://[ユーザー名].github.io/` （最もシンプル）
-- この場合、`nuxt.config.ts` の `baseURL` を `'/'` に変更
 
 ## ローカル開発
 
-### 開発サーバー起動
+### 開発サーバー起動（frontend）
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
 
-### 静的サイト生成（本番用）
+### 開発サーバー起動（auto-battler）
 ```bash
+cd auto-battler
+npm install
+npm run dev
+```
+
+### 統合ビルド（両方をビルドしてテスト）
+```powershell
+# PowerShellスクリプトを実行
+.\build-all.ps1
+
+# または手動で：
 cd frontend
 npm run generate
+
+cd ../auto-battler
+$env:NUXT_APP_BASE_URL="/auto-battler/"
+npm run generate
+
+cd ..
+mkdir -p frontend/dist/auto-battler
+cp -r auto-battler/.output/public/* frontend/dist/auto-battler/
+
+# プレビュー
+cd frontend/dist
+npx serve
 ```
 
 ## 主な機能
@@ -82,6 +100,7 @@ frontend/
 ```
 
 ## 更新履歴
+- 2026/01/03: auto-battlerをサブモジュールとして統合
 - 2025/12/28: GitHub Pages対応、ライトボックス機能追加
 - 2025/12/28: 不気味背景アニメーション実装
 - 2025/12/28: 多言語対応、レスポンシブデザイン実装

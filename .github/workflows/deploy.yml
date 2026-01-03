@@ -20,30 +20,54 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          submodules: recursive
         
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '18'
           
-      - name: Clean node_modules and package-lock.json
+      - name: Clean frontend node_modules and package-lock.json
         run: |
           rm -rf node_modules
           rm -f package-lock.json
         working-directory: ./frontend
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         run: npm install
         working-directory: ./frontend
+        
+      - name: Clean auto-battler node_modules and package-lock.json
+        run: |
+          rm -rf node_modules
+          rm -f package-lock.json
+        working-directory: ./auto-battler
+
+      - name: Install auto-battler dependencies
+        run: npm install
+        working-directory: ./auto-battler
         
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
-      - name: Generate static site
+      - name: Generate frontend static site
         run: npm run generate
         working-directory: ./frontend
         env:
           NODE_ENV: production
+          
+      - name: Generate auto-battler static site
+        run: npm run generate
+        working-directory: ./auto-battler
+        env:
+          NODE_ENV: production
+          NUXT_APP_BASE_URL: /auto-battler/
+          
+      - name: Copy auto-battler to frontend dist
+        run: |
+          mkdir -p ./frontend/dist/auto-battler
+          cp -r ./auto-battler/.output/public/* ./frontend/dist/auto-battler/
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

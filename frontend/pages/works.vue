@@ -7,6 +7,10 @@
       <div class="works-section">
         <h3><i class="fas fa-gamepad"></i> {{ t('works.games') }}</h3>
         <div class="links-grid">
+          <a href="/auto-battler/" class="social-link">
+            <i class="fas fa-swords"></i>
+            <strong>Auto Battler</strong>
+          </a>
           <a href="https://play-board-three.vercel.app" target="_blank" class="social-link">
             <i class="fas fa-gamepad"></i>
             <strong>{{ t('product.playBoard') }}</strong>

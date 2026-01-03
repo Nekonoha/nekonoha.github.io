@@ -1,0 +1,3 @@
+[submodule "auto-battler"]
+	path = auto-battler
+	url = https://github.com/Nekonoha/auto-battler.git
