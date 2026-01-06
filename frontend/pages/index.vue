@@ -1,17 +1,25 @@
 <template>
-  <section class="hero">
+  <article class="hero">
+    <h1 class="sr-only">{{ t('index.title') }}</h1>
     <div class="dots-text-container">
-      <canvas ref="canvas" :width="canvasWidth" :height="canvasHeight"></canvas>
+      <canvas 
+        ref="canvas" 
+        :width="canvasWidth" 
+        :height="canvasHeight"
+        role="img"
+        aria-label="インタラクティブなパーティクルアニメーション。マウスを動かすと反応します"
+      ></canvas>
     </div>
     <div class="subtitle-text">
       <p class="subtitle">{{ t('index.subtitle') }}</p>
     </div>
-  </section>
+  </article>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, nextTick, watch } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, watch } from 'vue'
 
 const { t, locale } = useLocale()
+const { currentTheme } = useSettings()
 const canvas = ref<HTMLCanvasElement>()
 const canvasWidth = ref(800)
 const canvasHeight = ref(400)
@@ -34,6 +42,13 @@ const clearPointerPosition = () => {
 
 // 言語変更を監視してアニメーションを再初期化
 watch(locale, () => {
+  nextTick(() => {
+    initDots()
+  })
+})
+
+// テーマ変更を監視してアニメーションカラーを再初期化
+watch(currentTheme, () => {
   nextTick(() => {
     initDots()
   })
@@ -62,16 +77,23 @@ class Dot {
     this.opacity = 0
     this.scaleFactor = scaleFactor
     
-    const themeDots = [
-      '#B68D40', // accent gold
-      '#EADBC8', // beige
-      '#F5EFE6', // soft light
-      '#D7C2A1', // warm sand
-      '#A37B4F', // mid gold-brown
-      '#8C6B3F', // deep accent
-      '#6B4A38'  // shadowed brown
-    ]
-    this.color = themeDots[Math.floor(Math.random() * themeDots.length)]
+    // CSS変数からテーマのカラーを取得
+    const getThemeColors = () => {
+      const root = document.documentElement
+      const accent = getComputedStyle(root).getPropertyValue('--color-accent').trim()
+      const sub = getComputedStyle(root).getPropertyValue('--color-sub').trim()
+      const subStrong = getComputedStyle(root).getPropertyValue('--color-sub-strong').trim()
+      const accentStrong = getComputedStyle(root).getPropertyValue('--color-accent-strong').trim()
+      const text = getComputedStyle(root).getPropertyValue('--color-text').trim()
+      const textMuted = getComputedStyle(root).getPropertyValue('--color-text-muted').trim()
+      
+      return [accent, sub, text, subStrong, accentStrong, textMuted].filter(c => c)
+    }
+    
+    const themeDots = getThemeColors()
+    this.color = themeDots.length > 0 
+      ? themeDots[Math.floor(Math.random() * themeDots.length)]
+      : '#C7A860'
   }
   
   update(mouseX: number, mouseY: number) {
@@ -253,14 +275,16 @@ let mouseEventCleanup: (() => void) | null = null
 onMounted(() => {
   handleResize()
   window.addEventListener('resize', handleResize)
-  
-  setTimeout(() => {
+
+  // start animation immediately on page load
+  nextTick(() => {
+    initDots()
     animate()
     const cleanup = setupPointerEvents()
     if (cleanup) {
       mouseEventCleanup = cleanup
     }
-  }, 500)
+  })
 })
 
 onUnmounted(() => {

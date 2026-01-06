@@ -15,7 +15,11 @@ const translations = {
       title: '針の筵', 
       subtitle: '趣味で色々作ってるサイト', 
       about: 'ABOUT', 
-      works: 'WORKS'
+      works: 'WORKS',
+      loading: 'ロード中',
+      loadingHint: '入口を準備しています…',
+      enterPrompt: '入る',
+      enterHint: 'Enterキーでも入れます'
     },
     works: {
       title: 'WORKS',
@@ -160,6 +164,65 @@ const translations = {
     },
     playBoard: {
       description: 'オンラインのボードゲームプラットフォーム。Hexxagonなどを友だちとリアルタイムで遊べます。'
+    },
+    settings: {
+      title: '設定',
+      theme: 'テーマ',
+      themes: {
+        luxury: 'ラグジュアリー',
+        light: 'ライト',
+        dark: 'ダーク',
+        modern: 'モダン',
+        system: 'システム',
+        cyber: 'サイバー',
+        forest: 'フォレスト',
+        sunset: 'サンセット',
+        lavender: 'ラベンダー',
+        ocean: 'オーシャン',
+        aurora: 'オーロラ',
+        blush: 'ブラッシュ',
+        mint: 'ミント',
+        midnight: 'ミッドナイト',
+        sunrise: 'サンライズ',
+        ember: 'エンバー',
+        sakura: 'さくら',
+        lagoon: 'ラグーン',
+        golden: 'ゴールデン'
+      },
+      themeDescriptions: {
+        system: 'OS設定に追従',
+        luxury: '重厚なブラウンとゴールド',
+        light: '明るいアイボリーと茶のコントラスト',
+        dark: '夜を思わせる群青と紫',
+        modern: 'ネオン寄りのダークシアン',
+        cyber: '黒にネオングリーン＆マゼンタ',
+        forest: '深い森のグリーン',
+        sunset: '夕焼けの暖色グラデーション',
+        lavender: '紫基調のやわらかい配色',
+        ocean: '深海ブルーとシアン',
+        aurora: '夜空に浮かぶグリーンとパープル',
+        blush: 'スモーキーピンクとローズ',
+        mint: 'フレッシュなミントグリーン',
+        midnight: 'ミッドナイトブルーと薄明かり',
+        sunrise: '朝焼けのオレンジと琥珀',
+        ember: '焚き火のアンバーと炭色',
+        sakura: '桜色のやさしいピンク',
+        lagoon: 'ラグーンブルーとエメラルド',
+        golden: '重厚なゴールドと焦茶'
+      },
+      light: 'ライト',
+      dark: 'ダーク',
+      modern: 'モダン',
+      system: 'システム',
+      currentTheme: '現在のテーマ',
+      moreThemes: 'その他のテーマを開く',
+      hideThemes: 'その他のテーマを閉じる',
+      language: '言語',
+      fontSize: 'フォントサイズ',
+      motion: 'アニメーション',
+      reduceMotion: 'アニメーションを減らす',
+      reset: '設定をリセット',
+      confirmReset: '設定をリセットしますか？'
     }
   },
   en: {
@@ -172,7 +235,11 @@ const translations = {
       title: 'Hari no Mushiro', 
       subtitle: 'Personal hobby site for creative works', 
       about: 'ABOUT', 
-      works: 'WORKS'
+      works: 'WORKS',
+      loading: 'Loading',
+      loadingHint: 'Preparing the entrance...',
+      enterPrompt: 'Enter',
+      enterHint: 'Press Enter to begin'
     },
     works: {
       title: 'WORKS',
@@ -317,6 +384,65 @@ const translations = {
     },
     playBoard: {
       description: 'Online multiplayer board games platform. Play Hexxagon and other games with friends in real-time.'
+    },
+    settings: {
+      title: 'Settings',
+      theme: 'Theme',
+      themes: {
+        luxury: 'Luxury',
+        light: 'Light',
+        dark: 'Dark',
+        modern: 'Modern',
+        system: 'System',
+        cyber: 'Cyber',
+        forest: 'Forest',
+        sunset: 'Sunset',
+        lavender: 'Lavender',
+        ocean: 'Ocean',
+        aurora: 'Aurora',
+        blush: 'Blush',
+        mint: 'Mint',
+        midnight: 'Midnight',
+        sunrise: 'Sunrise',
+        ember: 'Ember',
+        sakura: 'Sakura',
+        lagoon: 'Lagoon',
+        golden: 'Golden'
+      },
+      themeDescriptions: {
+        system: 'Follows your OS setting',
+        luxury: 'Rich browns with warm gold',
+        light: 'Bright ivory with soft contrast',
+        dark: 'Deep navy with violet glow',
+        modern: 'Neon teal on midnight base',
+        cyber: 'Neon green and magenta on black',
+        forest: 'Lush greens inspired by woods',
+        sunset: 'Warm dusk oranges and reds',
+        lavender: 'Soft purples with gentle highlights',
+        ocean: 'Deep sea blues with crisp cyan',
+        aurora: 'Aurora greens and purples on night sky',
+        blush: 'Smoky rose and blush pink',
+        mint: 'Fresh mint greens and teal',
+        midnight: 'Midnight blue with starlight accents',
+        sunrise: 'Amber sunrise glow with orange',
+        ember: 'Campfire amber over charcoal',
+        sakura: 'Gentle sakura pink tones',
+        lagoon: 'Lagoon teal with seafoam',
+        golden: 'Classic gold with dark umber'
+      },
+      light: 'Light',
+      dark: 'Dark',
+      modern: 'Modern',
+      system: 'System',
+      currentTheme: 'Current theme',
+      moreThemes: 'Show more themes',
+      hideThemes: 'Hide extra themes',
+      language: 'Language',
+      fontSize: 'Font Size',
+      motion: 'Motion',
+      reduceMotion: 'Reduce motion',
+      reset: 'Reset settings',
+      confirmReset: 'Reset all settings?'
     }
   }
 }

@@ -1,5 +1,5 @@
 <template>
-  <footer class="footer">
+  <footer class="footer" role="contentinfo">
     <div class="content">
       <p>{{ t('footer.copyright') }}</p>
     </div>
@@ -10,14 +10,19 @@ const { t } = useLocale()
 </script>
 <style scoped>
 .footer {
-  background: linear-gradient(180deg, rgba(44, 35, 35, 0.95) 0%, rgba(36, 28, 28, 0.95) 100%);
+  background: var(--footer-bg);
   color: var(--color-text);
   text-align: center;
-  padding: 2rem 1rem;
-  font-size: 0.9rem;
-  margin-top: 4rem;
-  box-shadow: var(--shadow-strong);
+  padding: 1.5rem 1rem;
+  font-size: 0.85rem;
+  box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.35);
   border-top: 1px solid rgba(182, 141, 64, 0.25);
+  backdrop-filter: blur(10px);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
 }
 .content {
   max-width: 1200px;

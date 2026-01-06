@@ -1,23 +1,23 @@
 <template>
-  <div>
+  <article>
     <EerieBackground />
     <section class="game-page">
-      <div class="header-section">
+      <header class="header-section">
         <h1 class="game-title">{{ t('unrequited.title') }}</h1>
         <p class="game-description">{{ t('unrequited.description') }}</p>
-      </div>
+      </header>
 
     <div class="content-section">
-      <div class="info-card">
-        <h2>▼{{ t('unrequited.gameInfo') }}</h2>
+      <section class="info-card" aria-labelledby="game-info-heading">
+        <h2 id="game-info-heading">▼{{ t('unrequited.gameInfo') }}</h2>
         <ul>
           <li>{{ t('unrequited.effectCount') }} <strong>{{ t('unrequited.effectTotal') }}</strong>{{ t('unrequited.period') }}</li>
           <li>{{ t('unrequited.edCount') }} <strong>{{ t('unrequited.edTotal') }}</strong> {{ t('unrequited.implemented') }}{{ t('unrequited.period') }}</li>
         </ul>
-      </div>
+      </section>
 
-      <div class="info-card">
-        <h2>▼{{ t('unrequited.howToPlay') }}</h2>
+      <section class="info-card" aria-labelledby="how-to-play-heading">
+        <h2 id="how-to-play-heading">▼{{ t('unrequited.howToPlay') }}</h2>
         <p>{{ t('unrequited.gameplay1') }}</p>
         <p>{{ t('unrequited.gameplay2') }}</p>
         <p>{{ t('unrequited.gameplay3') }}</p>
@@ -52,12 +52,12 @@
             </tr>
           </tbody>
         </table>
-      </div>
+      </section>
 
-      <div class="info-card">
-        <h2>▼{{ t('unrequited.screenshots') }}</h2>
+      <section class="info-card" aria-labelledby="screenshots-heading">
+        <h2 id="screenshots-heading">▼{{ t('unrequited.screenshots') }}</h2>
         <ScreenshotCarousel :screenshots="screenshots" @screenshot-click="openLightbox" />
-      </div>
+      </section>
 
       <!-- ライトボックスモーダル -->
       <div
@@ -86,30 +86,30 @@
         </div>
       </div>
 
-      <div class="info-card">
-        <h2>▼{{ t('unrequited.download') }}</h2>
+      <section class="info-card" aria-labelledby="download-heading">
+        <h2 id="download-heading">▼{{ t('unrequited.download') }}</h2>
         <p>{{ t('unrequited.downloadTextJp') }} <strong>{{ t('unrequited.versionJp') }}</strong>{{ t('unrequited.versionSuffix') }}</p>
         <p>{{ t('unrequited.downloadTextEn') }} <strong>{{ t('unrequited.versionEn') }}</strong>{{ t('unrequited.versionSuffix') }}</p>
         <p>{{ t('unrequited.downloadLink') }}</p>
         <div class="download-buttons">
-          <a href="http://www1.axfc.net/u/3511483" target="_blank" class="download-btn">
-            <i class="fas fa-download"></i> {{ t('unrequited.downloadButtonJp') }}
+          <a href="http://www1.axfc.net/u/3511483" target="_blank" rel="noopener noreferrer" class="download-btn">
+            <i class="fas fa-download" aria-hidden="true"></i> {{ t('unrequited.downloadButtonJp') }}
           </a>
-          <a href="http://www1.axfc.net/u/3511484" target="_blank" class="download-btn">
-            <i class="fas fa-download"></i> {{ t('unrequited.downloadButtonEn') }}
+          <a href="http://www1.axfc.net/u/3511484" target="_blank" rel="noopener noreferrer" class="download-btn">
+            <i class="fas fa-download" aria-hidden="true"></i> {{ t('unrequited.downloadButtonEn') }}
           </a>
         </div>
-      </div>
+      </section>
     </div>
     </section>
-  </div>
+  </article>
 </template>
 
 <style scoped>
 .game-page {
   animation: fadeIn 1s ease-out;
   background: 
-    linear-gradient(180deg, rgba(60, 47, 47, 0.88) 0%, rgba(48, 36, 32, 0.9) 50%, rgba(40, 31, 28, 0.92) 100%),
+    linear-gradient(180deg, rgba(var(--color-rgb-main), 0.88) 0%, rgba(var(--color-rgb-main), 0.9) 50%, rgba(var(--color-rgb-main), 0.92) 100%),
     url('/images/unrequited/back.png');
   background-size: cover, cover;
   background-position: center, center;
@@ -143,14 +143,7 @@
   font-family: 'Orbitron', monospace;
   font-size: clamp(2rem, 3.8vw + 0.25rem, 2.6rem);
   font-weight: 900;
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  text-shadow: 
-    0 0 20px rgba(182, 141, 64, 0.45),
-    0 0 40px rgba(182, 141, 64, 0.3),
-    0 0 60px rgba(182, 141, 64, 0.2);
+  color: var(--color-text);
   margin-bottom: 1rem;
   letter-spacing: 1px;
   white-space: nowrap;
@@ -177,32 +170,31 @@
 }
 
 .info-card {
-  background: rgba(44, 35, 35, 0.86);
-  border: 1px solid rgba(182, 141, 64, 0.35);
-  border-radius: 12px;
-  padding: clamp(0.75rem, 2vw, 1.5rem);
+  background: rgba(var(--color-rgb-main), 0.5);
+  border: 1px solid var(--color-accent);
+  opacity: 0.9;
+  border-radius: 16px;
+  padding: clamp(1rem, 2vw, 2rem);
   backdrop-filter: blur(10px);
-  box-shadow: 
-    0 8px 32px rgba(0, 0, 0, 0.35),
-    0 0 20px rgba(182, 141, 64, 0.12);
+  box-shadow: var(--shadow-subtle);
   transition: all 0.3s ease;
   box-sizing: border-box;
 }
 
 .info-card:hover {
   transform: translateY(-2px);
-  border-color: rgba(182, 141, 64, 0.55);
-  box-shadow: 
-    0 12px 40px rgba(0, 0, 0, 0.4),
-    0 0 30px rgba(182, 141, 64, 0.25);
+  border-color: var(--color-sub);
+  box-shadow: 0 8px 24px rgba(var(--color-rgb-accent), 0.25);
+  opacity: 1;
 }
 
 .info-card h2 {
   font-family: 'Orbitron', monospace;
-  color: var(--color-sub);
-  font-size: 1.5rem;
+  color: var(--color-text);
+  font-size: 1.4rem;
   margin-bottom: 1.5rem;
-  text-shadow: 0 0 10px rgba(182, 141, 64, 0.4);
+  font-weight: 600;
+  letter-spacing: -0.3px;
 }
 
 .info-card h3 {
@@ -237,7 +229,8 @@
 
 .control-table td {
   padding: 0.8rem;
-  border-bottom: 1px solid rgba(182, 141, 64, 0.25);
+  border-bottom: 1px solid var(--color-accent);
+  opacity: 0.8;
   color: var(--color-sub);
 }
 
@@ -257,15 +250,17 @@
 .screenshot-grid img {
   width: 100%;
   border-radius: 8px;
-  border: 2px solid rgba(182, 141, 64, 0.35);
+  border: 2px solid var(--color-accent);
+  opacity: 0.85;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 
 .screenshot-grid img:hover {
   transform: scale(1.05);
-  border-color: rgba(182, 141, 64, 0.6);
-  box-shadow: 0 8px 25px rgba(182, 141, 64, 0.3);
+  border-color: var(--color-accent);
+  opacity: 1;
+  box-shadow: 0 8px 25px rgba(var(--color-rgb-accent), 0.3);
 }
 
 .clickable {
@@ -278,7 +273,7 @@
   inset: 0;
   width: 100%;
   height: 100%;
-  background: rgba(0, 0, 0, 0.9);
+  background: rgba(var(--color-rgb-main), 0.95);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -300,7 +295,7 @@
   max-height: 100%;
   object-fit: contain;
   border-radius: 8px;
-  box-shadow: 0 10px 50px rgba(0, 0, 0, 0.5);
+  box-shadow: var(--shadow-strong);
 }
 
 .carousel-forward-enter-active,
@@ -349,12 +344,12 @@
 }
 
 .lightbox-close:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(var(--color-rgb-accent), 0.2);
 }
 
 .lightbox-nav {
   position: absolute;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(var(--color-rgb-main), 0.6);
   border: none;
   color: white;
   font-size: 2rem;
@@ -367,7 +362,7 @@
 }
 
 .lightbox-nav:hover {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(var(--color-rgb-main), 0.9);
 }
 
 .lightbox-prev {
@@ -385,7 +380,7 @@
   transform: translateX(-50%);
   color: white;
   font-size: 1rem;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(var(--color-rgb-main), 0.7);
   padding: 8px 16px;
   border-radius: 20px;
 }
@@ -393,7 +388,7 @@
 .download-btn {
   display: inline-block;
   padding: 1rem 2rem;
-  background: linear-gradient(135deg, var(--color-accent) 0%, #8c6b3f 100%);
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent-strong) 100%);
   color: var(--color-main-strong);
   text-decoration: none;
   border-radius: 8px;
@@ -406,8 +401,8 @@
 .download-btn:hover {
   background: linear-gradient(135deg, var(--color-sub) 0%, var(--color-accent) 100%);
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(182, 141, 64, 0.4);
-  text-shadow: 0 0 10px rgba(75, 59, 48, 0.45);
+  box-shadow: 0 8px 20px rgba(var(--color-rgb-accent), 0.4);
+  text-shadow: 0 0 10px rgba(var(--color-rgb-main), 0.45);
 }
 
 .download-btn i {
@@ -428,9 +423,9 @@
 
 .game-title:hover {
   text-shadow: 
-    0 0 30px rgba(182, 141, 64, 0.7),
-    0 0 60px rgba(182, 141, 64, 0.45),
-    0 0 80px rgba(182, 141, 64, 0.25);
+    0 0 30px rgba(var(--color-rgb-accent), 0.7),
+    0 0 60px rgba(var(--color-rgb-accent), 0.45),
+    0 0 80px rgba(var(--color-rgb-accent), 0.25);
 }
 
 @media (max-width: 768px) {

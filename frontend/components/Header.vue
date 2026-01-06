@@ -1,20 +1,33 @@
 <template>
-  <header class="header">
-    <nav>
+  <header class="header" role="banner">
+    <nav aria-label="メインナビゲーション" class="nav-main">
       <NuxtLink to="/" class="logo">針の筵</NuxtLink>
-      <button class="menu-btn" @click="open = !open">
-        <span class="bar"></span>
-        <span class="bar"></span>
-        <span class="bar"></span>
+      <button 
+        class="menu-btn" 
+        @click="open = !open"
+        @keydown.enter="open = !open"
+        @keydown.space.prevent="open = !open"
+        :aria-expanded="open"
+        aria-label="ナビゲーションメニューの開閉"
+        aria-controls="nav-menu"
+      >
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
+        <span class="bar" aria-hidden="true"></span>
       </button>
       <Transition name="menu-slide">
-        <ul v-if="!isMobile || open">
-          <li><NuxtLink to="/" @click="open = false"><i class="fas fa-home"></i> {{ t('header.top') }}</NuxtLink></li>
-          <li><NuxtLink to="/about" @click="open = false"><i class="fas fa-info-circle"></i> {{ t('header.about') }}</NuxtLink></li>
-          <li><NuxtLink to="/works" @click="open = false"><i class="fas fa-briefcase"></i> {{ t('header.works') }}</NuxtLink></li>
-          <li class="lang-switch">
-            <button @click="switchLanguage" class="lang-btn">
-              <i class="fas fa-globe"></i> {{ locale === 'ja' ? 'JP' : 'EN' }}
+        <ul v-if="!isMobile || open" id="nav-menu" role="menubar">
+          <li role="none"><NuxtLink to="/" @click="open = false" role="menuitem"><i class="fas fa-home" aria-hidden="true"></i> {{ t('header.top') }}</NuxtLink></li>
+          <li role="none"><NuxtLink to="/about" @click="open = false" role="menuitem"><i class="fas fa-info-circle" aria-hidden="true"></i> {{ t('header.about') }}</NuxtLink></li>
+          <li role="none"><NuxtLink to="/works" @click="open = false" role="menuitem"><i class="fas fa-briefcase" aria-hidden="true"></i> {{ t('header.works') }}</NuxtLink></li>
+          <li role="none">
+            <button 
+              @click="openSettings" 
+              class="lang-btn-header"
+              role="menuitem"
+              :aria-label="t('settings.title')"
+            >
+              <i class="fas fa-cog" aria-hidden="true"></i> {{ t('settings.title') }}
             </button>
           </li>
         </ul>
@@ -23,14 +36,15 @@
   </header>
 </template>
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted } from 'vue'
+import { ref, watch, onMounted, onUnmounted, inject } from 'vue'
 
 const open = ref(false)
 const isMobile = ref(typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
-const { t, setLocale, locale } = useLocale()
+const { t, locale } = useLocale()
+const settingsOpen = inject('settingsOpen') as any
 
-const switchLanguage = () => {
-  setLocale(locale.value === 'ja' ? 'en' : 'ja')
+const openSettings = () => {
+  settingsOpen.value = true
   open.value = false
 }
 
@@ -54,24 +68,33 @@ onUnmounted(() => {
 </script>
 <style scoped>
 .header {
-  background: linear-gradient(180deg, rgba(60, 47, 47, 0.96) 0%, rgba(44, 35, 35, 0.92) 100%);
+  background: var(--header-bg);
   color: var(--color-text);
   padding: 1rem 2rem;
   box-shadow: var(--shadow-strong);
-  position: sticky;
+  position: fixed;
   top: 0;
+  left: 0;
+  right: 0;
   z-index: 1000;
   backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(182, 141, 64, 0.35);
+  border-bottom: 1px solid rgba(var(--color-rgb-accent), 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 100%;
 }
-nav {
+
+.nav-main {
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
   max-width: 1200px;
-  margin: 0 auto;
+  flex: 1;
+  gap: 1rem;
 }
+
 .logo {
   font-weight: bold;
   font-size: 1.5rem;
@@ -82,8 +105,17 @@ nav {
   animation: fadeIn 0.8s ease-in;
   text-decoration: none;
   transition: transform 0.2s ease;
-  filter: drop-shadow(0 0 8px rgba(182, 141, 64, 0.25));
+  filter: drop-shadow(0 0 8px rgba(var(--color-rgb-accent), 0.25));
+  padding: 0.5rem;
+  border-radius: 4px;
+  flex-shrink: 0;
 }
+
+.logo:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 .logo:hover {
   transform: scale(1.05);
   filter: drop-shadow(0 0 12px rgba(182, 141, 64, 0.4));
@@ -98,6 +130,13 @@ nav {
   padding: 0.5rem;
   touch-action: manipulation;
 }
+
+.menu-btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 .menu-btn .bar {
   width: 28px;
   height: 3px;
@@ -124,7 +163,14 @@ ul li a {
   position: relative;
   padding: 0.5rem 0;
   transition: all 0.3s ease;
+  border-radius: 4px;
 }
+
+ul li a:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
 ul li a::after {
   content: '';
   position: absolute;
@@ -134,31 +180,65 @@ ul li a::after {
   height: 2px;
   background: linear-gradient(90deg, var(--color-accent), var(--color-sub));
   transition: width 0.3s ease;
-  box-shadow: 0 0 4px rgba(182, 141, 64, 0.35);
+  box-shadow: 0 0 4px rgba(var(--color-rgb-accent), 0.35);
 }
 ul li a:hover {
   color: var(--color-sub);
   transform: translateY(-2px);
-  text-shadow: 0 0 8px rgba(182, 141, 64, 0.35);
+  text-shadow: 0 0 8px rgba(var(--color-rgb-accent), 0.35);
 }
 ul li a:hover::after {
   width: 100%;
 }
 ul li a.router-link-active {
   color: var(--color-sub);
-  text-shadow: 0 0 8px rgba(182, 141, 64, 0.35);
+  text-shadow: 0 0 8px rgba(var(--color-rgb-accent), 0.35);
 }
 ul li a.router-link-active::after {
   width: 100%;
 }
-.lang-switch {
-  display: flex;
-  align-items: center;
+
+/* 言語切り替えボタン（ヘッダー右上・常時表示） */
+.lang-btn-header {
+  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
+  color: var(--color-main-strong);
+  border: 1px solid rgba(var(--color-rgb-accent), 0.45);
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+  flex-shrink: 0;
+  white-space: nowrap;
 }
+
+.lang-btn-header:focus-visible {
+  outline: 2px solid rgba(182, 141, 64, 0.8);
+  outline-offset: 2px;
+  box-shadow: 0 0 8px rgba(var(--color-rgb-accent), 0.5);
+}
+
+.lang-btn-header:hover {
+  background: linear-gradient(135deg, var(--color-sub) 0%, var(--color-accent) 100%);
+  color: var(--color-main-strong);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--color-rgb-accent), 0.35);
+}
+
+.lang-btn-header i {
+  margin-right: 0.3rem;
+}
+
+.lang-switch {
+  display: none;
+}
+
+/* 旧スタイル（後方互換性用） */
 .lang-btn {
   background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
   color: var(--color-main-strong);
-  border: 1px solid rgba(182, 141, 64, 0.45);
+  border: 1px solid rgba(var(--color-rgb-accent), 0.45);
   padding: 0.5rem 1rem;
   border-radius: 6px;
   cursor: pointer;
@@ -166,11 +246,18 @@ ul li a.router-link-active::after {
   transition: all 0.3s ease;
   font-size: 0.9rem;
 }
+
+.lang-btn:focus-visible {
+  outline: 2px solid rgba(182, 141, 64, 0.8);
+  outline-offset: 2px;
+  box-shadow: 0 0 8px rgba(var(--color-rgb-accent), 0.5);
+}
+
 .lang-btn:hover {
   background: linear-gradient(135deg, var(--color-sub) 0%, var(--color-accent) 100%);
   color: var(--color-main-strong);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(182, 141, 64, 0.35);
+  box-shadow: 0 4px 12px rgba(var(--color-rgb-accent), 0.35);
 }
 .lang-btn i {
   margin-right: 0.3rem;
@@ -188,32 +275,53 @@ ul li a.router-link-active::after {
 @media (max-width: 768px) {
   .header {
     padding: 1rem;
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
   }
+
+  .nav-main {
+    width: 100%;
+    gap: 0.5rem;
+  }
+
   .menu-btn {
     display: flex;
     padding: 0.5rem 0.25rem;
+    margin-left: auto;
   }
+
+  .lang-btn-header {
+    width: 100%;
+    order: -1;
+  }
+
   ul {
     flex-direction: column;
     position: absolute;
-    top: 60px;
+    top: 100%;
     right: 0;
-    background: linear-gradient(135deg, rgba(60, 47, 47, 0.95) 0%, rgba(44, 35, 35, 0.95) 100%);
+    background: linear-gradient(135deg, rgba(var(--color-rgb-main), 0.95) 0%, rgba(var(--color-rgb-main), 0.9) 100%);
     width: 200px;
     padding: 1.5rem 0;
     gap: 0;
-    box-shadow: -4px 4px 20px rgba(0, 0, 0, 0.35);
-    border-radius: 8px 0 0 8px;
+    box-shadow: -4px 4px 20px rgba(var(--color-rgb-accent), 0.25);
+    border-radius: 8px 0 8px 8px;
     pointer-events: auto;
+    margin-top: 0.5rem;
+    border: 1px solid rgba(var(--color-rgb-accent), 0.35);
   }
+
   ul li {
     padding: 0 1.5rem;
   }
+
   ul li a {
     display: block;
     padding: 1rem 0;
-    border-bottom: 1px solid rgba(234, 219, 200, 0.12);
+    border-bottom: 1px solid rgba(var(--color-rgb-accent), 0.2);
   }
+
   ul li:last-child a {
     border-bottom: none;
   }

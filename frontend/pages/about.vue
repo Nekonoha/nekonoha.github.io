@@ -1,20 +1,26 @@
 <template>
-  <section class="about">
-    <h2>{{ t('about.title') }}</h2>
-    <div class="content">
-      <p>{{ t('about.intro') }}</p>
+  <article class="about">
+    <h1>{{ t('about.title') }}</h1>
+    <section class="content" aria-labelledby="about-intro">
+      <p id="about-intro">{{ t('about.intro') }}</p>
       <p>{{ t('about.description') }}</p>
-      <h3>{{ t('about.hobbies') }}</h3>
-      <ul>
-        <li>{{ t('about.hobby1') }}</li>
-        <li>{{ t('about.hobby2') }}</li>
-        <li>{{ t('about.hobby3') }}</li>
-        <li>{{ t('about.hobby4') }}</li>
-      </ul>
-      <h3>{{ t('about.contact') }}</h3>
-      <p>{{ t('about.twitter') }}</p>
-    </div>
-  </section>
+      
+      <section aria-labelledby="hobbies-title">
+        <h2 id="hobbies-title">{{ t('about.hobbies') }}</h2>
+        <ul>
+          <li>{{ t('about.hobby1') }}</li>
+          <li>{{ t('about.hobby2') }}</li>
+          <li>{{ t('about.hobby3') }}</li>
+          <li>{{ t('about.hobby4') }}</li>
+        </ul>
+      </section>
+      
+      <section aria-labelledby="contact-title">
+        <h2 id="contact-title">{{ t('about.contact') }}</h2>
+        <p>{{ t('about.twitter') }}</p>
+      </section>
+    </section>
+  </article>
 </template>
 <script setup lang="ts">
 const { t } = useLocale()
@@ -23,41 +29,49 @@ const { t } = useLocale()
 .about {
   animation: fadeIn 0.6s ease-out;
 }
-.about h2 {
-  margin-bottom: 1.5rem;
+
+.about h1 {
+  margin-bottom: 2rem;
   font-size: 2.5rem;
   font-family: 'Inter', 'Noto Sans JP', sans-serif;
   font-weight: 700;
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  border-bottom: 3px solid rgba(182, 141, 64, 0.8);
-  padding-bottom: 0.8rem;
-  text-shadow: 0 0 8px rgba(182, 141, 64, 0.35);
+  color: var(--color-text);
+  letter-spacing: -0.5px;
 }
+
 .content {
   line-height: 1.8;
-  background: rgba(44, 35, 35, 0.82);
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid rgba(182, 141, 64, 0.35);
+  background: rgba(var(--color-rgb-main), 0.5);
+  padding: 2.5rem;
+  border-radius: 16px;
+  box-shadow: var(--shadow-subtle);
+  border: 1px solid var(--color-accent);
+  opacity: 0.9;
 }
-.content p {
+
+.content > p {
   margin-bottom: 1rem;
   color: var(--color-text);
 }
-.content h3 {
-  margin-top: 2.5rem;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
-  color: var(--color-accent);
+
+.content section {
+  margin-top: 2rem;
 }
+
+.content h2 {
+  margin-bottom: 1.25rem;
+  margin-top: 2rem;
+  font-size: 1.4rem;
+  color: var(--color-text);
+  font-weight: 600;
+  letter-spacing: -0.3px;
+}
+
 .content ul {
   list-style: none;
   margin-left: 2rem;
 }
+
 .content li {
   margin-bottom: 0.8rem;
   position: relative;
@@ -65,6 +79,7 @@ const { t } = useLocale()
   color: var(--color-sub);
   transition: all 0.2s ease;
 }
+
 .content li::before {
   content: '\f105';
   font-family: 'Font Awesome 6 Free';
@@ -73,10 +88,12 @@ const { t } = useLocale()
   left: 0;
   color: var(--color-accent);
 }
+
 .content li:hover {
-  background: rgba(182, 141, 64, 0.12);
+  background: rgba(var(--color-rgb-accent), 0.15);
   transform: translateX(5px);
 }
+
 @keyframes fadeIn {
   from {
     opacity: 0;

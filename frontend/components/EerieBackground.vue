@@ -5,12 +5,18 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
+import { ref, onMounted, onUnmounted, watch } from 'vue'
 
 const canvas = ref<HTMLCanvasElement>()
 const canvasWidth = ref(0)
 const canvasHeight = ref(0)
 const lowPowerMode = ref(false)
+const currentTheme = ref('')
+
+// 現在のテーマを取得
+const getCurrentTheme = () => {
+  return document.documentElement.getAttribute('data-theme') || 'luxury'
+}
 
 // 水滴クラス
 class WaterDrop {
@@ -40,11 +46,32 @@ class WaterDrop {
     ctx.save()
     ctx.globalAlpha = this.opacity
     
+    // CSS変数からテーマカラーを取得
+    const getThemeColor = () => {
+      const root = document.documentElement
+      const accent = getComputedStyle(root).getPropertyValue('--color-accent').trim()
+      return accent || '#B68D40'
+    }
+    
+    const themeColor = getThemeColor()
+    
     // 水滴のグラデーション
     const gradient = ctx.createLinearGradient(this.x, this.y, this.x, this.y + this.length)
-    gradient.addColorStop(0, 'rgba(182, 141, 64, 0.85)')
-    gradient.addColorStop(0.3, 'rgba(160, 123, 56, 0.7)')
-    gradient.addColorStop(1, 'rgba(110, 82, 50, 0.25)')
+    
+    // テーマカラーからRGBを抽出
+    const hexToRgb = (hex: string) => {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : { r: 182, g: 141, b: 64 }
+    }
+    
+    const rgb = hexToRgb(themeColor)
+    gradient.addColorStop(0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.85)`)
+    gradient.addColorStop(0.3, `rgba(${Math.floor(rgb.r * 0.88)}, ${Math.floor(rgb.g * 0.87)}, ${Math.floor(rgb.b * 0.88)}, 0.7)`)
+    gradient.addColorStop(1, `rgba(${Math.floor(rgb.r * 0.6)}, ${Math.floor(rgb.g * 0.58)}, ${Math.floor(rgb.b * 0.78)}, 0.25)`)
     
     ctx.strokeStyle = gradient
     ctx.lineWidth = this.width
@@ -106,14 +133,35 @@ class ShadowBlob {
     ctx.save()
     ctx.globalAlpha = this.opacity
     
+    // CSS変数からテーマカラーを取得
+    const getThemeColors = () => {
+      const root = document.documentElement
+      const main = getComputedStyle(root).getPropertyValue('--color-main').trim()
+      const mainStrong = getComputedStyle(root).getPropertyValue('--color-main-strong').trim()
+      return { main: main || '#3C2F2F', mainStrong: mainStrong || '#2f2424' }
+    }
+    
+    const colors = getThemeColors()
+    
     // 影のグラデーション
     const gradient = ctx.createRadialGradient(
       this.x, this.y, 0,
       this.x, this.y, this.size
     )
-    gradient.addColorStop(0, 'rgba(40, 30, 24, 0.85)')
-    gradient.addColorStop(0.4, 'rgba(60, 45, 36, 0.45)')
-    gradient.addColorStop(1, 'rgba(75, 55, 44, 0)')
+    
+    const hexToRgb = (hex: string) => {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : { r: 40, g: 30, b: 24 }
+    }
+    
+    const rgb = hexToRgb(colors.mainStrong)
+    gradient.addColorStop(0, `rgba(${Math.floor(rgb.r * 0.95)}, ${Math.floor(rgb.g * 0.95)}, ${Math.floor(rgb.b * 0.95)}, 0.85)`)
+    gradient.addColorStop(0.4, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.45)`)
+    gradient.addColorStop(1, `rgba(${Math.floor(rgb.r * 1.25)}, ${Math.floor(rgb.g * 1.25)}, ${Math.floor(rgb.b * 1.25)}, 0)`)
     
     ctx.fillStyle = gradient
     
@@ -182,14 +230,35 @@ class DarkOrb {
     const pulsedOpacity = this.opacity * (0.5 + 0.5 * Math.sin(this.pulsePhase))
     ctx.globalAlpha = pulsedOpacity
     
+    // CSS変数からテーマカラーを取得
+    const getThemeColor = () => {
+      const root = document.documentElement
+      const accent = getComputedStyle(root).getPropertyValue('--color-accent').trim()
+      const sub = getComputedStyle(root).getPropertyValue('--color-sub').trim()
+      return { accent: accent || '#C7A860', sub: sub || '#EADBC8' }
+    }
+    
+    const colors = getThemeColor()
+    
     // 暗いオーブのグラデーション
     const gradient = ctx.createRadialGradient(
       this.x, this.y, 0,
       this.x, this.y, this.size
     )
-    gradient.addColorStop(0, 'rgba(150, 115, 70, 0.6)')
-    gradient.addColorStop(0.6, 'rgba(115, 85, 55, 0.35)')
-    gradient.addColorStop(1, 'rgba(55, 40, 30, 0)')
+    
+    const hexToRgb = (hex: string) => {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : { r: 150, g: 115, b: 70 }
+    }
+    
+    const rgb = hexToRgb(colors.accent)
+    gradient.addColorStop(0, `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.6)`)
+    gradient.addColorStop(0.6, `rgba(${Math.floor(rgb.r * 0.77)}, ${Math.floor(rgb.g * 0.74)}, ${Math.floor(rgb.b * 0.79)}, 0.35)`)
+    gradient.addColorStop(1, `rgba(${Math.floor(rgb.r * 0.37)}, ${Math.floor(rgb.g * 0.35)}, ${Math.floor(rgb.b * 0.43)}, 0)`)
     
     ctx.fillStyle = gradient
     ctx.beginPath()
@@ -211,9 +280,28 @@ const animate = () => {
   const ctx = canvas.value.getContext('2d')
   if (!ctx) return
   
-  // 暗い背景で前フレームを薄く残す（軌跡効果）
-  ctx.fillStyle = 'rgba(34, 26, 22, 0.12)'
-  ctx.fillRect(0, 0, canvasWidth.value, canvasHeight.value)
+    // CSS変数からテーマの背景色を取得
+    const getThemeBgColor = () => {
+      const root = document.documentElement
+      const mainStrong = getComputedStyle(root).getPropertyValue('--color-main-strong').trim()
+      return mainStrong || '#2f2424'
+    }
+  
+    const hexToRgb = (hex: string) => {
+      const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
+      return result ? {
+        r: parseInt(result[1], 16),
+        g: parseInt(result[2], 16),
+        b: parseInt(result[3], 16)
+      } : { r: 34, g: 26, b: 22 }
+    }
+  
+    const bgColor = getThemeBgColor()
+    const rgb = hexToRgb(bgColor)
+  
+    // 暗い背景で前フレームを薄く残す（軌跡効果）
+    ctx.fillStyle = `rgba(${rgb.r}, ${rgb.g}, ${rgb.b}, 0.12)`
+    ctx.fillRect(0, 0, canvasWidth.value, canvasHeight.value)
   
   const waterSpawnChance = lowPowerMode.value ? 0.04 : 0.08
   const shadowSpawnChance = lowPowerMode.value ? 0.006 : 0.01
@@ -281,17 +369,44 @@ const handleResize = () => {
   canvasHeight.value = window.innerHeight
 }
 
+// アニメーションを再初期化
+const reinitialize = () => {
+  waterDrops = []
+  shadowBlobs = []
+  darkOrbs = []
+}
+
 onMounted(() => {
+  currentTheme.value = getCurrentTheme()
   handleResize()
   window.addEventListener('resize', handleResize)
   animate()
-})
-
-onUnmounted(() => {
-  if (animationId) {
-    cancelAnimationFrame(animationId)
-  }
-  window.removeEventListener('resize', handleResize)
+  
+  // テーマ変更を監視
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+        const newTheme = getCurrentTheme()
+        if (newTheme !== currentTheme.value) {
+          currentTheme.value = newTheme
+          reinitialize()
+        }
+      }
+    })
+  })
+  
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme']
+  })
+  
+  onUnmounted(() => {
+    observer.disconnect()
+    if (animationId) {
+      cancelAnimationFrame(animationId)
+    }
+    window.removeEventListener('resize', handleResize)
+  })
 })
 </script>
 
@@ -304,7 +419,11 @@ onUnmounted(() => {
   height: 100%;
   pointer-events: none;
   z-index: -1;
-  background: radial-gradient(circle at center, rgba(44, 35, 35, 0.82) 0%, rgba(28, 21, 20, 0.9) 100%);
+    background: radial-gradient(
+      circle at center, 
+      rgba(var(--color-rgb-main), 0.82) 0%, 
+      rgba(var(--color-rgb-main), 0.95) 100%
+    );
 }
 
 canvas {

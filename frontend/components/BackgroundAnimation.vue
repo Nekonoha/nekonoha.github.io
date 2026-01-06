@@ -32,6 +32,12 @@ const props = withDefaults(defineProps<Props>(), {
 })
 
 const lowPowerMode = ref(false)
+const currentTheme = ref('')
+
+// 現在のテーマを取得
+const getCurrentTheme = () => {
+  return document.documentElement.getAttribute('data-theme') || 'luxury'
+}
 
 const canvas = ref<HTMLCanvasElement>()
 const canvasWidth = ref(0)
@@ -122,11 +128,21 @@ class ShootingStar {
     this.exploding = false
     this.particles = []
     
-    const warmGlowColors = [
-      '#B68D40', '#EADBC8', '#D7C2A1', '#F5EFE6', '#A37B4F',
-      '#8C6B3F', '#6B4A38', '#c7a56a'
-    ]
-    this.color = warmGlowColors[Math.floor(Math.random() * warmGlowColors.length)]
+    // CSS変数からテーマカラーを取得
+    const getThemeColors = () => {
+      const root = document.documentElement
+      const accent = getComputedStyle(root).getPropertyValue('--color-accent').trim()
+      const sub = getComputedStyle(root).getPropertyValue('--color-sub').trim()
+      const subStrong = getComputedStyle(root).getPropertyValue('--color-sub-strong').trim()
+      const text = getComputedStyle(root).getPropertyValue('--color-text').trim()
+      const accentStrong = getComputedStyle(root).getPropertyValue('--color-accent-strong').trim()
+      return [accent, sub, text, subStrong, accentStrong].filter(c => c)
+    }
+    
+    const warmGlowColors = getThemeColors()
+    this.color = warmGlowColors.length > 0
+      ? warmGlowColors[Math.floor(Math.random() * warmGlowColors.length)]
+      : '#B68D40'
   }
   
   explode() {
@@ -445,7 +461,15 @@ const handleResize = () => {
   }
 }
 
+// アニメーションを再初期化
+const reinitialize = () => {
+  stars = []
+  eerieParticles = []
+  eerieImages.value = []
+}
+
 onMounted(() => {
+  currentTheme.value = getCurrentTheme()
   handleResize()
   window.addEventListener('resize', handleResize)
   
@@ -464,8 +488,27 @@ onMounted(() => {
   
   animate()
   
+  // テーマ変更を監視
+  const themeObserver = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'data-theme') {
+        const newTheme = getCurrentTheme()
+        if (newTheme !== currentTheme.value) {
+          currentTheme.value = newTheme
+          reinitialize()
+        }
+      }
+    })
+  })
+  
+  themeObserver.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['data-theme']
+  })
+  
   // cleanup
   onUnmounted(() => {
+    themeObserver.disconnect()
     if (resizeObserver) {
       resizeObserver.disconnect()
     }
