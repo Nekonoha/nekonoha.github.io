@@ -1,10 +1,8 @@
 [submodule "auto-battler"]
 	path = auto-battler
 	url = https://github.com/Nekonoha/auto-battler.git
-	ignore = all
 	branch = main
 [submodule "visual-tool"]
 	path = visual-tool
 	url = https://github.com/Nekonoha/visual-tool.git
-	ignore = all
 	branch = master
