@@ -32,11 +32,11 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'
+          node-version: '20'
 
-      - name: Pin npm to 9.x and clean cache
+      - name: Setup npm and clean cache
         run: |
-          npm install -g npm@9
+          npm install -g npm@10
           npm cache clean --force
           
       - name: Clean frontend node_modules and package-lock.json
@@ -46,7 +46,9 @@ jobs:
         working-directory: ./frontend
 
       - name: Install frontend dependencies
-        run: npm install
+        run: |
+          npm cache clean --force
+          npm install
         working-directory: ./frontend
         
       - name: Clean auto-battler node_modules and package-lock.json
@@ -56,7 +58,9 @@ jobs:
         working-directory: ./auto-battler
 
       - name: Install auto-battler dependencies
-        run: npm install
+        run: |
+          npm cache clean --force
+          npm install
         working-directory: ./auto-battler
 
       - name: Clean visual-tool node_modules and package-lock.json
@@ -66,7 +70,9 @@ jobs:
         working-directory: ./visual-tool
 
       - name: Install visual-tool dependencies
-        run: npm install
+        run: |
+          npm cache clean --force
+          npm install
         working-directory: ./visual-tool
         
       - name: Setup Pages
