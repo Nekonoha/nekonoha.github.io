@@ -33,6 +33,11 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '18'
+
+      - name: Pin npm to 9.x and clean cache
+        run: |
+          npm install -g npm@9
+          npm cache clean --force
           
       - name: Clean frontend node_modules and package-lock.json
         run: |
