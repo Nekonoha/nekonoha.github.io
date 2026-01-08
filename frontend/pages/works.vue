@@ -11,6 +11,10 @@
             <i class="fas fa-chess" aria-hidden="true"></i>
             <strong>Auto Battler</strong>
           </a>
+          <a href="/visual-tool/" class="social-link">
+            <i class="fas fa-tools" aria-hidden="true"></i>
+            <strong>{{ t('product.visualTool') }}</strong>
+          </a>
           <a href="https://play-board-three.vercel.app" target="_blank" rel="noopener noreferrer" class="social-link">
             <i class="fas fa-gamepad" aria-hidden="true"></i>
             <strong>{{ t('product.playBoard') }}</strong>
