@@ -26,10 +26,10 @@ const translations = {
       games: 'ゲーム',
       fanGames: 'ファンゲーム',
       music: '音楽',
-      musicDescription: 'SoundCloudにいくつか公開しています。',
+      musicDescription: 'TuneCoreで配信中の音楽を紹介しています。',
       twitterDescription: '最新のツイートをチェックできます。',
       visitTwitter: 'Twitterで見る',
-      visitSoundcloud: 'SoundCloudで聴く',
+      visitTuneCore: 'TuneCoreで見る',
       shop: 'Shop',
       shopDescription: 'BOOTHで販売物を掲載しています。',
       social: 'SNS / ショップ',
@@ -37,9 +37,9 @@ const translations = {
     },
     about: { 
       title: 'ABOUT', 
-      intro: 'ネコノハです。', 
-      description: 'エンジニア。趣味で絵とか3Dモデルとかゲームとか音楽とか作ってます。', 
-      hobbies: '好きなもの・趣味', 
+      intro: 'ネコノハです。エンジニアをしながら、趣味でいろいろ作っています。',
+      description: 'ゲーム、イラスト、3Dモデル、音楽など、そのとき興味を持ったものを気ままに制作しています。このサイトには、これまでに作ったものと活動先をまとめています。',
+      hobbies: '好きなもの・作るもの',
       hobby1: 'フリーホラーゲーム', 
       hobby2: '漫画・映画・ゲーム', 
       hobby3: 'イラスト', 
@@ -50,15 +50,11 @@ const translations = {
     product: { 
       title: 'PRODUCT', 
       games: 'Fan Games', 
-      playBoard: 'Play Board', 
-      visualTool: 'Visual Tool', 
       trial: 'TRIAL', 
       unrequited: 'UnRequited', 
       shop: '販売物など', 
       booth: 'Booth', 
-      music: 'Music', 
-      musicDescription: 'SoundCloudで音楽を公開しています。', 
-      soundcloudLink: 'SoundCloudで聴く' 
+      music: 'Music'
     },
     link: { 
       title: 'LINK', 
@@ -160,11 +156,6 @@ const translations = {
       pixiv: 'pixiv', 
       pixivDescription: 'イラストや漫画を投稿しています。', 
       visitPixiv: 'pixivで見る', 
-      soundcloud: 'SoundCloud', 
-      soundcloudDescription: '音楽を公開しています。' 
-    },
-    playBoard: {
-      description: 'オンラインのボードゲームプラットフォーム。Hexxagonなどを友だちとリアルタイムで遊べます。'
     },
     settings: {
       title: '設定',
@@ -247,10 +238,10 @@ const translations = {
       games: 'Games',
       fanGames: 'Fan Games',
       music: 'Music',
-      musicDescription: 'A few tracks are available on SoundCloud.',
+      musicDescription: 'Explore music distributed through TuneCore.',
       twitterDescription: 'Latest updates on Twitter.',
       visitTwitter: 'Open Twitter profile',
-      visitSoundcloud: 'Open SoundCloud',
+      visitTuneCore: 'View on TuneCore',
       shop: 'Shop',
       shopDescription: 'Products available on BOOTH.',
       social: 'Social / Stores',
@@ -258,9 +249,9 @@ const translations = {
     },
     about: { 
       title: 'ABOUT', 
-      intro: 'I\'m Nekonoha.', 
-      description: 'Engineer. I make illustrations, 3D models, games, and music as a hobby.', 
-      hobbies: 'Likes & Hobbies', 
+      intro: 'I\'m Nekonoha, an engineer who enjoys making things in my spare time.',
+      description: 'I make games, illustrations, 3D models, music, and whatever else catches my interest. This site collects my projects and the places where I share them.',
+      hobbies: 'Things I Like & Make',
       hobby1: 'Free horror games', 
       hobby2: 'Manga, Movies & Games', 
       hobby3: 'Illustration', 
@@ -271,15 +262,11 @@ const translations = {
     product: { 
       title: 'PRODUCT', 
       games: 'Fan Games', 
-      playBoard: 'Play Board', 
-      visualTool: 'Visual Tool', 
       trial: 'TRIAL', 
       unrequited: 'UnRequited', 
       shop: 'Shop', 
       booth: 'Booth', 
-      music: 'Music', 
-      musicDescription: 'I share my music on SoundCloud.', 
-      soundcloudLink: 'Listen on SoundCloud' 
+      music: 'Music'
     },
     link: { 
       title: 'LINK', 
@@ -381,11 +368,6 @@ const translations = {
       pixiv: 'pixiv', 
       pixivDescription: 'My illustrations and manga.', 
       visitPixiv: 'Visit pixiv', 
-      soundcloud: 'SoundCloud', 
-      soundcloudDescription: 'Listen to my music.' 
-    },
-    playBoard: {
-      description: 'Online multiplayer board games platform. Play Hexxagon and other games with friends in real-time.'
     },
     settings: {
       title: 'Settings',

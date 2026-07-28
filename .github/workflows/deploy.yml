@@ -20,8 +20,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          submodules: recursive
 
       - name: Clean root npm artifacts
         run: |
@@ -51,30 +49,6 @@ jobs:
           npm install
         working-directory: ./frontend
         
-      - name: Clean auto-battler node_modules and package-lock.json
-        run: |
-          rm -rf node_modules
-          rm -f package-lock.json
-        working-directory: ./auto-battler
-
-      - name: Install auto-battler dependencies
-        run: |
-          npm cache clean --force
-          npm install
-        working-directory: ./auto-battler
-
-      - name: Clean visual-tool node_modules and package-lock.json
-        run: |
-          rm -rf node_modules
-          rm -f package-lock.json
-        working-directory: ./visual-tool
-
-      - name: Install visual-tool dependencies
-        run: |
-          npm cache clean --force
-          npm install
-        working-directory: ./visual-tool
-        
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
@@ -83,30 +57,6 @@ jobs:
         working-directory: ./frontend
         env:
           NODE_ENV: production
-          
-      - name: Generate auto-battler static site
-        run: npm run generate
-        working-directory: ./auto-battler
-        env:
-          NODE_ENV: production
-          NUXT_APP_BASE_URL: /auto-battler/
-
-      - name: Generate visual-tool static site
-        run: npm run generate
-        working-directory: ./visual-tool
-        env:
-          NODE_ENV: production
-          NUXT_APP_BASE_URL: /visual-tool/
-          
-      - name: Copy auto-battler to frontend dist
-        run: |
-          mkdir -p ./frontend/dist/auto-battler
-          cp -r ./auto-battler/.output/public/* ./frontend/dist/auto-battler/
-
-      - name: Copy visual-tool to frontend dist
-        run: |
-          mkdir -p ./frontend/dist/visual-tool
-          cp -r ./visual-tool/.output/public/* ./frontend/dist/visual-tool/
           
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

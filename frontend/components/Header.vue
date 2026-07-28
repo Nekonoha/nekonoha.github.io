@@ -1,346 +1,124 @@
 <template>
-  <header class="header" role="banner">
-    <nav aria-label="メインナビゲーション" class="nav-main">
-      <NuxtLink to="/" class="logo">針の筵</NuxtLink>
-      <button 
-        class="menu-btn" 
-        @click="open = !open"
-        @keydown.enter="open = !open"
-        @keydown.space.prevent="open = !open"
-        :aria-expanded="open"
-        aria-label="ナビゲーションメニューの開閉"
-        aria-controls="nav-menu"
-      >
-        <span class="bar" aria-hidden="true"></span>
-        <span class="bar" aria-hidden="true"></span>
-        <span class="bar" aria-hidden="true"></span>
+  <header class="site-header">
+    <nav ref="navRoot" class="nav" :aria-label="locale === 'ja' ? 'メインナビゲーション' : 'Main navigation'">
+      <NuxtLink to="/" class="brand" @click="closeAll">
+        <span>{{ locale === 'ja' ? '針の筵' : 'HARI NO MUSHIRO' }}<small>{{ locale === 'ja' ? 'ネコノハの個人サイト' : 'NEKONOHA’S PERSONAL WEBSITE' }}</small></span>
+      </NuxtLink>
+
+      <button class="menu-toggle" :aria-expanded="open" aria-controls="nav-links" @click="open = !open">
+        <i :class="open ? 'fas fa-times' : 'fas fa-bars'" aria-hidden="true"></i>
+        <span class="sr-only">{{ locale === 'ja' ? 'メニュー' : 'Menu' }}</span>
       </button>
-      <Transition name="menu-slide">
-        <ul v-if="!isMobile || open" id="nav-menu" role="menubar">
-          <li role="none"><NuxtLink to="/" @click="open = false" role="menuitem"><i class="fas fa-home" aria-hidden="true"></i> {{ t('header.top') }}</NuxtLink></li>
-          <li role="none"><NuxtLink to="/about" @click="open = false" role="menuitem"><i class="fas fa-info-circle" aria-hidden="true"></i> {{ t('header.about') }}</NuxtLink></li>
-          <li role="none"><NuxtLink to="/works" @click="open = false" role="menuitem"><i class="fas fa-briefcase" aria-hidden="true"></i> {{ t('header.works') }}</NuxtLink></li>
-          <li role="none">
-            <button 
-              @click="openSettings" 
-              class="lang-btn-header"
-              role="menuitem"
-              :aria-label="t('settings.title')"
-            >
-              <i class="fas fa-cog" aria-hidden="true"></i> {{ t('settings.title') }}
-            </button>
-          </li>
-        </ul>
-      </Transition>
+
+      <div id="nav-links" class="nav-links" :class="{ open }">
+        <div class="primary-nav">
+          <NuxtLink to="/" @click="closeAll">{{ t('header.top') }}</NuxtLink>
+          <NuxtLink to="/works" @click="closeAll">{{ t('header.works') }}</NuxtLink>
+          <NuxtLink to="/about" @click="closeAll">{{ t('header.about') }}</NuxtLink>
+        </div>
+
+        <div class="link-menu">
+          <button class="link-trigger" :aria-expanded="linksOpen" aria-controls="quick-links" @click="linksOpen = !linksOpen">
+            {{ locale === 'ja' ? 'リンク' : 'LINKS' }}
+            <i class="fas fa-chevron-down" aria-hidden="true"></i>
+          </button>
+          <div v-if="linksOpen" id="quick-links" class="quick-links">
+            <p>{{ locale === 'ja' ? '公開先・活動先' : 'Find me online' }}</p>
+            <a href="https://www.tunecore.co.jp/artists/nekonoha" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-wave-square" aria-hidden="true"></i><span><strong>TuneCore</strong><small>{{ locale === 'ja' ? '音楽' : 'Music' }}</small></span><b>↗</b>
+            </a>
+            <a href="https://pixiv.me/tanfantazma" target="_blank" rel="noopener noreferrer">
+              <i class="fa-brands fa-pixiv" aria-hidden="true"></i><span><strong>pixiv</strong><small>{{ locale === 'ja' ? 'イラスト・漫画' : 'Illustration' }}</small></span><b>↗</b>
+            </a>
+            <a href="https://tanfantazma.booth.pm/" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-bag-shopping" aria-hidden="true"></i><span><strong>BOOTH</strong><small>{{ locale === 'ja' ? '販売物' : 'Shop' }}</small></span><b>↗</b>
+            </a>
+            <a href="http://nekonoha.hatenablog.com/" target="_blank" rel="noopener noreferrer">
+              <i class="fas fa-pen-to-square" aria-hidden="true"></i><span><strong>Blog</strong><small>{{ locale === 'ja' ? '日記・制作記録' : 'Notes' }}</small></span><b>↗</b>
+            </a>
+            <a href="https://twitter.com/tan_fantazma" target="_blank" rel="noopener noreferrer">
+              <i class="fa-brands fa-x-twitter" aria-hidden="true"></i><span><strong>Twitter / X</strong><small>{{ locale === 'ja' ? '近況' : 'Updates' }}</small></span><b>↗</b>
+            </a>
+          </div>
+        </div>
+
+        <button class="language" :aria-label="locale === 'ja' ? '英語に切り替える' : 'Switch to Japanese'" @click="toggleLocale">
+          {{ locale === 'ja' ? 'EN' : 'JA' }}
+        </button>
+      </div>
     </nav>
   </header>
 </template>
+
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, inject } from 'vue'
-
+import { ref, watch, onMounted, onUnmounted } from 'vue'
 const open = ref(false)
-const isMobile = ref(typeof window !== 'undefined' ? window.innerWidth <= 768 : false)
-const { t, locale } = useLocale()
-const settingsOpen = inject('settingsOpen') as any
-
-const openSettings = () => {
-  settingsOpen.value = true
+const linksOpen = ref(false)
+const navRoot = ref<HTMLElement | null>(null)
+const { t, locale, setLocale } = useLocale()
+const route = useRoute()
+const closeAll = () => {
   open.value = false
+  linksOpen.value = false
 }
-
-watch(open, (isOpen) => {
-  document.documentElement.style.overflow = isOpen ? 'hidden' : ''
-})
-
-const updateIsMobile = () => {
-  isMobile.value = window.innerWidth <= 768
+const toggleLocale = () => setLocale(locale.value === 'ja' ? 'en' : 'ja')
+const handleKeydown = (event: KeyboardEvent) => {
+  if (event.key === 'Escape') closeAll()
 }
-
+const handleOutsideClick = (event: PointerEvent) => {
+  if (navRoot.value && !navRoot.value.contains(event.target as Node)) closeAll()
+}
+watch(() => route.path, closeAll)
 onMounted(() => {
-  updateIsMobile()
-  window.addEventListener('resize', updateIsMobile, { passive: true })
+  document.addEventListener('keydown', handleKeydown)
+  document.addEventListener('pointerdown', handleOutsideClick)
 })
-
 onUnmounted(() => {
-  document.documentElement.style.overflow = ''
-  window.removeEventListener('resize', updateIsMobile)
+  document.removeEventListener('keydown', handleKeydown)
+  document.removeEventListener('pointerdown', handleOutsideClick)
 })
 </script>
+
 <style scoped>
-.header {
-  background: var(--header-bg);
-  color: var(--color-text);
-  padding: 1rem 2rem;
-  box-shadow: var(--shadow-strong);
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 1000;
-  backdrop-filter: blur(10px);
-  border-bottom: 1px solid rgba(var(--color-rgb-accent), 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  max-width: 100%;
+.site-header { position: fixed; inset: 0 0 auto; z-index: 100; padding: 10px 0 0; pointer-events: none; }
+.nav { position: relative; display: flex; width: min(var(--container), calc(100% - 40px)); min-height: 64px; margin: auto; padding: 10px 12px; align-items: center; justify-content: space-between; border: 1px solid rgba(255,255,255,.1); border-radius: 18px; background: rgba(10,12,17,.78); box-shadow: 0 16px 45px rgba(0,0,0,.28), inset 0 1px rgba(255,255,255,.035); backdrop-filter: blur(22px) saturate(1.2); pointer-events: auto; }
+.nav::before { position: absolute; top: -1px; left: 52px; width: 90px; height: 1px; content: ''; background: linear-gradient(90deg, transparent, var(--color-accent), transparent); }
+.brand { display: flex; min-height: 42px; padding: 0 14px; align-items: center; border-radius: 12px; color: white; font-size: .82rem; font-weight: 800; letter-spacing: .1em; text-decoration: none; }
+.brand:hover { background: rgba(255,111,175,.07); }
+.brand small { display: block; margin-top: 2px; color: var(--color-text-muted); font: 400 .54rem/1 'DM Mono', monospace; letter-spacing: .1em; }
+.nav-links, .primary-nav { display: flex; align-items: center; }
+.nav-links { gap: 9px; }
+.primary-nav { gap: 5px; }
+.primary-nav a, .link-trigger { min-height: 40px; padding: 0 16px; border: 1px solid transparent; border-radius: 999px; color: #c4c7ce; background: transparent; font-size: .78rem; font-weight: 700; letter-spacing: .04em; text-decoration: none; cursor: pointer; transition: color .2s, background .2s, border-color .2s, transform .2s; }
+.primary-nav a { display: flex; align-items: center; }
+.primary-nav a:hover, .link-trigger:hover { color: #ffddea; border-color: rgba(255,111,175,.2); background: rgba(255,111,175,.08); transform: translateY(-1px); }
+.primary-nav a.router-link-active, .link-trigger[aria-expanded="true"] { color: #2b0b18; border-color: #ff9ac7; background: linear-gradient(135deg, #ff91c2, #ffb7d6); box-shadow: 0 5px 16px rgba(255,111,175,.18); }
+.link-menu { position: relative; }
+.link-trigger i { margin-left: 7px; font-size: .62rem; transition: transform .2s; }
+.link-trigger[aria-expanded="true"] i { transform: rotate(180deg); }
+.quick-links { position: absolute; top: calc(100% + 14px); right: 0; width: 330px; padding: 14px; border: 1px solid rgba(255,255,255,.1); border-radius: 17px; background: #11141a; box-shadow: var(--shadow-strong); }
+.quick-links > p { padding: 6px 8px 12px; color: #727985; font: 500 .62rem 'DM Mono', monospace; letter-spacing: .1em; text-transform: uppercase; }
+.quick-links a { display: grid; padding: 11px 9px; align-items: center; border-radius: 10px; color: #daddE3; text-decoration: none; grid-template-columns: 34px 1fr auto; gap: 9px; }
+.quick-links a:hover { background: rgba(255,255,255,.055); }
+.quick-links a > i { color: var(--color-accent); text-align: center; }
+.quick-links strong, .quick-links small { display: block; }
+.quick-links strong { font-size: .78rem; }
+.quick-links small { margin-top: 1px; color: #7f8590; font-size: .66rem; }
+.quick-links b { color: var(--color-accent); font-size: .75rem; }
+.language, .menu-toggle { display: grid; width: 42px; height: 42px; place-items: center; border: 1px solid rgba(255,111,175,.28); border-radius: 50%; color: #ffd7e8; background: rgba(255,111,175,.08); cursor: pointer; transition: transform .2s, background .2s, color .2s; }
+.language { font: 500 .68rem 'DM Mono', monospace; }
+.language:hover, .menu-toggle:hover { color: #2b0b18; border-color: #ff9ac7; background: #ff9ac7; transform: rotate(-4deg) scale(1.04); }
+.menu-toggle { display: none; }
+@media (max-width: 760px) {
+  .site-header { padding-top: 8px; }
+  .nav { width: calc(100% - 16px); min-height: 60px; padding: 9px 10px; border-radius: 16px; }
+  .menu-toggle { display: grid; }
+  .nav-links { position: absolute; top: calc(100% + 8px); right: 0; left: 0; display: none; max-height: calc(100vh - 90px); padding: 14px; overflow-y: auto; border: 1px solid rgba(255,255,255,.1); border-radius: 17px; background: rgba(16,19,25,.97); box-shadow: var(--shadow-strong); backdrop-filter: blur(20px); align-items: stretch; flex-direction: column; }
+  .nav-links.open { display: flex; }
+  .primary-nav { align-items: stretch; flex-direction: column; }
+  .primary-nav a { min-height: 48px; border-radius: 14px; font-size: .9rem; }
+  .link-trigger { display: flex; width: 100%; min-height: 48px; align-items: center; justify-content: space-between; border-radius: 14px; font-size: .9rem; }
+  .quick-links { position: static; width: 100%; margin-top: 7px; border: 0; border-radius: 10px; background: rgba(255,255,255,.025); box-shadow: none; }
+  .language { width: 100%; height: 46px; margin-top: 4px; border-radius: 14px; }
 }
-
-.nav-main {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  max-width: 1200px;
-  flex: 1;
-  gap: 1rem;
-}
-
-.logo {
-  font-weight: bold;
-  font-size: 1.5rem;
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: fadeIn 0.8s ease-in;
-  text-decoration: none;
-  transition: transform 0.2s ease;
-  filter: drop-shadow(0 0 8px rgba(var(--color-rgb-accent), 0.25));
-  padding: 0.5rem;
-  border-radius: 4px;
-  flex-shrink: 0;
-}
-
-.logo:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
-
-.logo:hover {
-  transform: scale(1.05);
-  filter: drop-shadow(0 0 12px rgba(182, 141, 64, 0.4));
-}
-.menu-btn {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0.5rem;
-  touch-action: manipulation;
-}
-
-.menu-btn:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-.menu-btn .bar {
-  width: 28px;
-  height: 3px;
-  background: var(--color-sub);
-  border-radius: 3px;
-  transition: all 0.3s ease;
-}
-.menu-btn:hover .bar {
-  background: var(--color-accent);
-  box-shadow: 0 0 8px rgba(182, 141, 64, 0.45);
-}
-ul {
-  display: flex;
-  gap: 2rem;
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  transition: right 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-ul li a {
-  color: var(--color-text);
-  text-decoration: none;
-  font-weight: 600;
-  position: relative;
-  padding: 0.5rem 0;
-  transition: all 0.3s ease;
-  border-radius: 4px;
-}
-
-ul li a:focus-visible {
-  outline: 2px solid var(--color-accent);
-  outline-offset: 2px;
-}
-
-ul li a::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--color-accent), var(--color-sub));
-  transition: width 0.3s ease;
-  box-shadow: 0 0 4px rgba(var(--color-rgb-accent), 0.35);
-}
-ul li a:hover {
-  color: var(--color-sub);
-  transform: translateY(-2px);
-  text-shadow: 0 0 8px rgba(var(--color-rgb-accent), 0.35);
-}
-ul li a:hover::after {
-  width: 100%;
-}
-ul li a.router-link-active {
-  color: var(--color-sub);
-  text-shadow: 0 0 8px rgba(var(--color-rgb-accent), 0.35);
-}
-ul li a.router-link-active::after {
-  width: 100%;
-}
-
-/* 言語切り替えボタン（ヘッダー右上・常時表示） */
-.lang-btn-header {
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
-  color: var(--color-main-strong);
-  border: 1px solid rgba(var(--color-rgb-accent), 0.45);
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-  flex-shrink: 0;
-  white-space: nowrap;
-}
-
-.lang-btn-header:focus-visible {
-  outline: 2px solid rgba(182, 141, 64, 0.8);
-  outline-offset: 2px;
-  box-shadow: 0 0 8px rgba(var(--color-rgb-accent), 0.5);
-}
-
-.lang-btn-header:hover {
-  background: linear-gradient(135deg, var(--color-sub) 0%, var(--color-accent) 100%);
-  color: var(--color-main-strong);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(var(--color-rgb-accent), 0.35);
-}
-
-.lang-btn-header i {
-  margin-right: 0.3rem;
-}
-
-.lang-switch {
-  display: none;
-}
-
-/* 旧スタイル（後方互換性用） */
-.lang-btn {
-  background: linear-gradient(135deg, var(--color-accent) 0%, var(--color-sub) 100%);
-  color: var(--color-main-strong);
-  border: 1px solid rgba(var(--color-rgb-accent), 0.45);
-  padding: 0.5rem 1rem;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: 600;
-  transition: all 0.3s ease;
-  font-size: 0.9rem;
-}
-
-.lang-btn:focus-visible {
-  outline: 2px solid rgba(182, 141, 64, 0.8);
-  outline-offset: 2px;
-  box-shadow: 0 0 8px rgba(var(--color-rgb-accent), 0.5);
-}
-
-.lang-btn:hover {
-  background: linear-gradient(135deg, var(--color-sub) 0%, var(--color-accent) 100%);
-  color: var(--color-main-strong);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(var(--color-rgb-accent), 0.35);
-}
-.lang-btn i {
-  margin-right: 0.3rem;
-}
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-@media (max-width: 768px) {
-  .header {
-    padding: 1rem;
-    flex-direction: column;
-    gap: 1rem;
-    align-items: flex-start;
-  }
-
-  .nav-main {
-    width: 100%;
-    gap: 0.5rem;
-  }
-
-  .menu-btn {
-    display: flex;
-    padding: 0.5rem 0.25rem;
-    margin-left: auto;
-  }
-
-  .lang-btn-header {
-    width: 100%;
-    order: -1;
-  }
-
-  ul {
-    flex-direction: column;
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: linear-gradient(135deg, rgba(var(--color-rgb-main), 0.95) 0%, rgba(var(--color-rgb-main), 0.9) 100%);
-    width: 200px;
-    padding: 1.5rem 0;
-    gap: 0;
-    box-shadow: -4px 4px 20px rgba(var(--color-rgb-accent), 0.25);
-    border-radius: 8px 0 8px 8px;
-    pointer-events: auto;
-    margin-top: 0.5rem;
-    border: 1px solid rgba(var(--color-rgb-accent), 0.35);
-  }
-
-  ul li {
-    padding: 0 1.5rem;
-  }
-
-  ul li a {
-    display: block;
-    padding: 1rem 0;
-    border-bottom: 1px solid rgba(var(--color-rgb-accent), 0.2);
-  }
-
-  ul li:last-child a {
-    border-bottom: none;
-  }
-}
-
-  .menu-slide-enter-active,
-  .menu-slide-leave-active {
-    transition: transform 0.25s ease, opacity 0.25s ease;
-  }
-
-  .menu-slide-enter-from,
-  .menu-slide-leave-to {
-    transform: translateX(110%);
-    opacity: 0;
-  }
-
-  .menu-slide-enter-to,
-  .menu-slide-leave-from {
-    transform: translateX(0);
-    opacity: 1;
-  }
 </style>

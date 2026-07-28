@@ -469,7 +469,13 @@ const { t } = useLocale()
 
 // ページタイトル設定
 useHead({
-  title: 'UnRequited - 針の筜'
+  title: 'UnRequited - 針の筵',
+  meta: [
+    { name: 'description', content: '「ゆめにっき」の二次創作ゲーム UnRequited の作品情報、スクリーンショット、ダウンロード。' },
+    { property: 'og:title', content: 'UnRequited - 針の筵' },
+    { property: 'og:description', content: '「ゆめにっき」の二次創作ゲーム UnRequited。' }
+  ],
+  link: [{ rel: 'canonical', href: 'https://nekonoha.github.io/unrequited' }]
 })
 
 // 画像データ

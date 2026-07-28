@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "predev": "nuxt cleanup",
     "dev": "nuxt dev",
     "build": "nuxt build",
     "generate": "nuxt generate",

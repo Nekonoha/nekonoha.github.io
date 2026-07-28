@@ -451,7 +451,13 @@ const { t } = useLocale()
 
 // ページタイトル設定
 useHead({
-  title: 'TRIAL - 針の筜'
+  title: 'TRIAL - 針の筵',
+  meta: [
+    { name: 'description', content: '「ゆめにっき」の二次創作ゲーム TRIAL の作品情報、スクリーンショット、ダウンロード。' },
+    { property: 'og:title', content: 'TRIAL - 針の筵' },
+    { property: 'og:description', content: '「ゆめにっき」の二次創作ゲーム TRIAL。' }
+  ],
+  link: [{ rel: 'canonical', href: 'https://nekonoha.github.io/trial' }]
 })
 
 // 画像データ
