@@ -3,25 +3,6 @@
     <h1>{{ t('works.title') }}</h1>
     
     <div class="content">
-      <!-- Games Section -->
-      <section class="works-section" aria-labelledby="games-heading">
-        <h2 id="games-heading"><i class="fas fa-gamepad" aria-hidden="true"></i> {{ t('works.games') }}</h2>
-        <div class="links-grid">
-          <a href="/auto-battler/" class="social-link">
-            <i class="fas fa-chess" aria-hidden="true"></i>
-            <strong>Auto Battler</strong>
-          </a>
-          <a href="/visual-tool/" class="social-link">
-            <i class="fas fa-tools" aria-hidden="true"></i>
-            <strong>{{ t('product.visualTool') }}</strong>
-          </a>
-          <a href="https://play-board-three.vercel.app" target="_blank" rel="noopener noreferrer" class="social-link">
-            <i class="fas fa-gamepad" aria-hidden="true"></i>
-            <strong>{{ t('product.playBoard') }}</strong>
-          </a>
-        </div>
-      </section>
-
       <!-- Fan Games Section -->
       <section class="works-section" aria-labelledby="fangames-heading">
         <h2 id="fangames-heading"><i class="fas fa-heart" aria-hidden="true"></i> {{ t('works.fanGames') }}</h2>
@@ -62,39 +43,11 @@
 
       <!-- Music Section -->
       <section class="works-section" aria-labelledby="music-heading">
-        <h2 id="music-heading"><i class="fab fa-soundcloud" aria-hidden="true"></i> {{ t('works.music') }}</h2>
+        <h2 id="music-heading"><i class="fas fa-music" aria-hidden="true"></i> {{ t('works.music') }}</h2>
         <p class="section-description">{{ t('works.musicDescription') }}</p>
-        <div class="soundcloud-embeds">
-          <iframe 
-            width="100%" 
-            height="166" 
-            scrolling="no" 
-            frameborder="no" 
-            allow="autoplay"
-            title="Battle1 Astralhowl by cmu6elwlkgep"
-            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/cmu6elwlkgep/battle1-astralhowl&color=%23B68D40&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true">
-          </iframe>
-          <iframe 
-            width="100%" 
-            height="166" 
-            scrolling="no" 
-            frameborder="no" 
-            allow="autoplay"
-            title="No name 1 by cmu6elwlkgep"
-            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/cmu6elwlkgep/noname-1&color=%23B68D40&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true">
-          </iframe>
-          <iframe 
-            width="100%" 
-            height="166" 
-            scrolling="no" 
-            frameborder="no" 
-            allow="autoplay"
-            src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/cmu6elwlkgep/ksmppmd1aivq&color=%23B68D40&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true">
-          </iframe>
-        </div>
         <div class="external-link-container">
-          <a href="https://soundcloud.com/cmu6elwlkgep" target="_blank" class="external-link">
-            <i class="fas fa-external-link-alt"></i> {{ t('works.visitSoundcloud') }}
+          <a href="https://www.tunecore.co.jp/artists/nekonoha" target="_blank" rel="noopener noreferrer" class="external-link">
+            <i class="fas fa-external-link-alt" aria-hidden="true"></i> {{ t('works.visitTuneCore') }}
           </a>
         </div>
       </section>
@@ -204,18 +157,6 @@ const { t } = useLocale()
   color: var(--color-sub);
   font-weight: 600;
   text-align: center;
-}
-
-/* SoundCloud Embeds */
-.soundcloud-embeds {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.soundcloud-embeds iframe {
-  border-radius: 8px;
-  overflow: hidden;
 }
 
 /* Section Description */
