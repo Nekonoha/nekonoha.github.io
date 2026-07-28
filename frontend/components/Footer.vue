@@ -1,40 +1,18 @@
 <template>
-  <footer class="footer" role="contentinfo">
-    <div class="content">
+  <footer class="footer">
+    <div class="footer-inner">
+      <div><span class="status-dot"></span> {{ locale === 'ja' ? '個人制作サイト' : 'PERSONAL WEBSITE' }}</div>
       <p>{{ t('footer.copyright') }}</p>
+      <a href="#main-content">{{ locale === 'ja' ? 'ページ上部へ' : 'BACK TO TOP' }} ↑</a>
     </div>
   </footer>
 </template>
-<script setup lang="ts">
-const { t } = useLocale()
-</script>
+<script setup lang="ts">const { t, locale } = useLocale()</script>
 <style scoped>
-.footer {
-  background: var(--footer-bg);
-  color: var(--color-text);
-  text-align: center;
-  padding: 1.5rem 1rem;
-  font-size: 0.85rem;
-  box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.35);
-  border-top: 1px solid rgba(182, 141, 64, 0.25);
-  backdrop-filter: blur(10px);
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 900;
-}
-.content {
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.content p {
-  margin: 0;
-  opacity: 0.9;
-  color: var(--color-sub);
-}
-@keyframes twinkle {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
+.footer { border-top: 1px solid rgba(255,255,255,.08); color: var(--color-text-muted); }
+.footer-inner { display: flex; width: min(var(--container), calc(100% - 40px)); min-height: 108px; margin: auto; align-items: center; justify-content: space-between; gap: 24px; font: 500 .68rem 'DM Mono', monospace; letter-spacing: .08em; }
+.status-dot { display: inline-block; width: 7px; height: 7px; margin-right: 9px; border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 14px var(--color-accent); }
+a { color: var(--color-text-muted); text-decoration: none; }
+a:hover { color: var(--color-accent); }
+@media (max-width: 720px) { .footer-inner { width: calc(100% - 28px); padding: 26px 0; flex-direction: column; align-items: flex-start; } }
 </style>
