@@ -2,14 +2,14 @@
   <article class="about page-wrap">
     <header class="page-hero">
       <p class="eyebrow">{{ locale === 'ja' ? 'プロフィール' : 'PROFILE' }}</p>
-      <h1 class="display-title">ABOUT<br>NEKONOHA.</h1>
+      <h1 class="display-title">ABOUT<br>NEKONOHA</h1>
     </header>
 
     <div class="about-grid">
       <aside class="identity panel">
         <div class="avatar"><img src="/images/iconnn.png" :alt="locale === 'ja' ? 'ネコノハのアイコン' : 'Nekonoha icon'"></div>
         <p class="mono">NEKONOHA</p>
-        <span>{{ locale === 'ja' ? 'エンジニア / 趣味で制作' : 'Engineer / Hobby creator' }}</span>
+        <span>{{ locale === 'ja' ? 'エンジニア / いろいろ作る人' : 'Engineer / Makes things' }}</span>
       </aside>
 
       <div class="story">
@@ -18,16 +18,16 @@
 
         <dl class="profile-notes">
           <div>
-            <dt>{{ locale === 'ja' ? '普段' : 'DAY TO DAY' }}</dt>
+            <dt>{{ locale === 'ja' ? '仕事' : 'DAY JOB' }}</dt>
             <dd>{{ locale === 'ja' ? 'エンジニア' : 'Engineer' }}</dd>
           </div>
           <div>
-            <dt>{{ locale === 'ja' ? '趣味' : 'FOR FUN' }}</dt>
+            <dt>{{ locale === 'ja' ? '作るもの' : 'I MAKE' }}</dt>
             <dd>{{ locale === 'ja' ? 'ゲーム・絵・3D・音楽' : 'Games, art, 3D & music' }}</dd>
           </div>
           <div>
-            <dt>{{ locale === 'ja' ? '活動' : 'BASED IN' }}</dt>
-            <dd>{{ locale === 'ja' ? 'インターネット' : 'The internet' }}</dd>
+            <dt>{{ locale === 'ja' ? 'いるところ' : 'FIND ME' }}</dt>
+            <dd>{{ locale === 'ja' ? 'だいたいインターネット' : 'Mostly online' }}</dd>
           </div>
         </dl>
         <section>
@@ -50,14 +50,14 @@
 </template>
 <script setup lang="ts">
 const { t, locale } = useLocale()
-useSeoMeta({
-  title: 'ABOUT - 針の筵',
-  description: 'ネコノハのプロフィール。エンジニアをしながら、ゲーム、イラスト、3Dモデル、音楽などを趣味で制作しています。',
-  ogTitle: 'ABOUT - 針の筵',
-  ogDescription: 'ネコノハのプロフィールと活動先。',
+useSeoMeta(() => ({
+  title: locale.value === 'ja' ? 'ABOUT - 針の筵' : 'ABOUT - Hari no Mushiro',
+  description: locale.value === 'ja' ? 'ネコノハのプロフィール。ゲーム、イラスト、3Dモデル、音楽などを作っています。' : 'About Nekonoha, an engineer who makes games, illustrations, 3D art, and music.',
+  ogTitle: locale.value === 'ja' ? 'ABOUT - 針の筵' : 'ABOUT - Hari no Mushiro',
+  ogDescription: locale.value === 'ja' ? 'ネコノハのプロフィールと活動先。' : 'About Nekonoha and where to find me online.',
   ogUrl: 'https://nekonoha.github.io/about',
   ogImage: 'https://nekonoha.github.io/images/iconnn.png'
-})
+}))
 useHead({ link: [{ rel: 'canonical', href: 'https://nekonoha.github.io/about' }] })
 </script>
 <style scoped>

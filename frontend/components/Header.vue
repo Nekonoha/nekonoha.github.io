@@ -24,7 +24,7 @@
           </button>
           <div v-if="linksOpen" id="quick-links" class="quick-links">
             <p>{{ locale === 'ja' ? '公開先・活動先' : 'Find me online' }}</p>
-            <a href="https://www.tunecore.co.jp/artists/nekonoha" target="_blank" rel="noopener noreferrer">
+            <a :href="tuneCoreUrl" target="_blank" rel="noopener noreferrer">
               <i class="fas fa-wave-square" aria-hidden="true"></i><span><strong>TuneCore</strong><small>{{ locale === 'ja' ? '音楽' : 'Music' }}</small></span><b>↗</b>
             </a>
             <a href="https://pixiv.me/tanfantazma" target="_blank" rel="noopener noreferrer">
@@ -56,6 +56,7 @@ const open = ref(false)
 const linksOpen = ref(false)
 const navRoot = ref<HTMLElement | null>(null)
 const { t, locale, setLocale } = useLocale()
+const tuneCoreUrl = computed(() => `https://www.tunecore.co.jp/artists/nekonoha?lang=${locale.value}`)
 const route = useRoute()
 const closeAll = () => {
   open.value = false

@@ -447,18 +447,18 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useHead } from 'nuxt/app'
 import { useLocale } from '../composables/useLocale'
 
-const { t } = useLocale()
+const { t, locale } = useLocale()
 
 // ページタイトル設定
-useHead({
-  title: 'TRIAL - 針の筵',
+useHead(() => ({
+  title: locale.value === 'ja' ? 'TRIAL - 針の筵' : 'TRIAL - Hari no Mushiro',
   meta: [
-    { name: 'description', content: '「ゆめにっき」の二次創作ゲーム TRIAL の作品情報、スクリーンショット、ダウンロード。' },
-    { property: 'og:title', content: 'TRIAL - 針の筵' },
-    { property: 'og:description', content: '「ゆめにっき」の二次創作ゲーム TRIAL。' }
+    { name: 'description', content: locale.value === 'ja' ? '「ゆめにっき」の二次創作ゲーム TRIAL の作品情報、スクリーンショット、ダウンロード。' : 'Information, screenshots, and downloads for TRIAL, a Yume Nikki fan game.' },
+    { property: 'og:title', content: locale.value === 'ja' ? 'TRIAL - 針の筵' : 'TRIAL - Hari no Mushiro' },
+    { property: 'og:description', content: locale.value === 'ja' ? '「ゆめにっき」の二次創作ゲーム TRIAL。' : 'TRIAL, a fan game based on Yume Nikki.' }
   ],
   link: [{ rel: 'canonical', href: 'https://nekonoha.github.io/trial' }]
-})
+}))
 
 // 画像データ
 const SCREENSHOT_COUNT = 6

@@ -13,8 +13,8 @@
 
 <script setup lang="ts">
 const { locale } = useLocale()
-useHead({
-  htmlAttrs: { lang: 'ja' },
+useHead(() => ({
+  htmlAttrs: { lang: locale.value },
   link: [
     { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
     { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
@@ -23,7 +23,7 @@ useHead({
       href: 'https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Manrope:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;600;700;800&display=swap'
     }
   ]
-})
+}))
 </script>
 
 <style>
