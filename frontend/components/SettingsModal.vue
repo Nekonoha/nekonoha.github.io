@@ -4,7 +4,7 @@
       <div class="modal-container" role="dialog" aria-labelledby="settings-title" aria-modal="true">
         <div class="modal-header">
           <h2 id="settings-title">{{ t('settings.title') }}</h2>
-          <button @click="close" class="close-btn" aria-label="閉じる">
+          <button @click="close" class="close-btn" :aria-label="locale === 'ja' ? '閉じる' : 'Close'">
             <i class="fas fa-times" aria-hidden="true"></i>
           </button>
         </div>

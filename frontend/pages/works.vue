@@ -3,12 +3,12 @@
     <header class="works-head">
       <div>
         <p class="eyebrow">{{ locale === 'ja' ? '制作物' : 'WORKS' }}</p>
-        <h1 class="display-title">WORKS.</h1>
+        <h1 class="display-title">WORKS</h1>
       </div>
       <p class="lead">
         {{ locale === 'ja'
-          ? '趣味で制作した音楽、イラスト、ゲームをまとめています。'
-          : 'Music, illustrations, and games made in my spare time.' }}
+          ? 'これまでに作ったもの。音楽も、絵も、ゲームもあります。'
+          : 'Things I have made so far — music, art, games, and more.' }}
       </p>
     </header>
 
@@ -17,12 +17,12 @@
         <span class="mono">01</span>
         <div>
           <h2 id="published-heading">{{ locale === 'ja' ? '公開している制作物' : 'PUBLISHED WORKS' }}</h2>
-          <p>{{ locale === 'ja' ? '音楽、イラスト、販売物など。' : 'Music, illustrations, items, and more.' }}</p>
+          <p>{{ locale === 'ja' ? 'ネットのあちこちに置いているもの。' : 'Things scattered around the internet.' }}</p>
         </div>
       </header>
 
       <div class="card-grid">
-        <a class="work-card music-card" href="https://www.tunecore.co.jp/artists/nekonoha" target="_blank" rel="noopener noreferrer">
+        <a class="work-card music-card" :href="tuneCoreUrl" target="_blank" rel="noopener noreferrer">
           <div class="card-visual icon-visual"><i class="fas fa-wave-square" aria-hidden="true"></i></div>
           <div class="card-body">
             <div class="card-label mono"><span>MUSIC</span><b>{{ locale === 'ja' ? '外部サイト' : 'EXTERNAL' }} ↗</b></div>
@@ -36,7 +36,7 @@
           <div class="card-body">
             <div class="card-label mono"><span>ILLUSTRATION</span><b>{{ locale === 'ja' ? '外部サイト' : 'EXTERNAL' }} ↗</b></div>
             <h3>pixiv</h3>
-            <p>{{ locale === 'ja' ? 'イラストや漫画を投稿しています。' : 'Illustrations and manga.' }}</p>
+            <p>{{ locale === 'ja' ? '描いた絵や漫画を置いています。' : 'Drawings and manga live here.' }}</p>
           </div>
         </a>
 
@@ -45,7 +45,7 @@
           <div class="card-body">
             <div class="card-label mono"><span>SHOP / ITEMS</span><b>{{ locale === 'ja' ? '外部サイト' : 'EXTERNAL' }} ↗</b></div>
             <h3>BOOTH</h3>
-            <p>{{ locale === 'ja' ? '同人作品などの販売ページです。' : 'Items and independent releases.' }}</p>
+            <p>{{ locale === 'ja' ? '作ったものをたまに頒布しています。' : 'Things I occasionally make available.' }}</p>
           </div>
         </a>
       </div>
@@ -56,7 +56,7 @@
         <span class="mono">02</span>
         <div>
           <h2 id="fan-games-heading">{{ locale === 'ja' ? 'ファンゲーム' : 'FAN GAMES' }}</h2>
-          <p>{{ locale === 'ja' ? '「ゆめにっき」の二次創作ゲームです。' : 'Fan games based on Yume Nikki.' }}</p>
+          <p>{{ locale === 'ja' ? '「ゆめにっき」が好きで作っているゲーム。' : 'Games I make out of my love for Yume Nikki.' }}</p>
         </div>
       </header>
 
@@ -85,8 +85,8 @@
       <i class="fas fa-link" aria-hidden="true"></i>
       <p>
         {{ locale === 'ja'
-          ? 'Blog、Twitterなどの活動先は、ヘッダーの「リンク」から確認できます。'
-          : 'Find Blog, Twitter, and other profiles under “Links” in the header.' }}
+          ? '日記や近況は、上の「リンク」からどうぞ。'
+          : 'For notes and occasional updates, try “Links” above.' }}
       </p>
     </aside>
   </article>
@@ -94,13 +94,14 @@
 
 <script setup lang="ts">
 const { t, locale } = useLocale()
-useSeoMeta({
-  title: 'WORKS - 針の筵',
-  description: 'ネコノハが制作した音楽、イラスト、同人作品、ファンゲームの一覧です。',
-  ogTitle: 'WORKS - 針の筵',
-  ogDescription: '音楽、イラスト、販売物、ファンゲームなどの制作物。',
+const tuneCoreUrl = computed(() => `https://www.tunecore.co.jp/artists/nekonoha?lang=${locale.value}`)
+useSeoMeta(() => ({
+  title: locale.value === 'ja' ? 'WORKS - 針の筵' : 'WORKS - Hari no Mushiro',
+  description: locale.value === 'ja' ? 'ネコノハが制作した音楽、イラスト、同人作品、ファンゲームの一覧です。' : 'Music, illustrations, indie releases, and fan games by Nekonoha.',
+  ogTitle: locale.value === 'ja' ? 'WORKS - 針の筵' : 'WORKS - Hari no Mushiro',
+  ogDescription: locale.value === 'ja' ? '音楽、イラスト、販売物、ファンゲームなどの制作物。' : 'Music, illustrations, games, and other things I have made.',
   ogUrl: 'https://nekonoha.github.io/works'
-})
+}))
 useHead({ link: [{ rel: 'canonical', href: 'https://nekonoha.github.io/works' }] })
 </script>
 

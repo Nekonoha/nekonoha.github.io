@@ -465,18 +465,18 @@ import { ref, onMounted, onUnmounted } from 'vue'
 import { useHead } from 'nuxt/app'
 import { useLocale } from '../composables/useLocale'
 
-const { t } = useLocale()
+const { t, locale } = useLocale()
 
 // ページタイトル設定
-useHead({
-  title: 'UnRequited - 針の筵',
+useHead(() => ({
+  title: locale.value === 'ja' ? 'UnRequited - 針の筵' : 'UnRequited - Hari no Mushiro',
   meta: [
-    { name: 'description', content: '「ゆめにっき」の二次創作ゲーム UnRequited の作品情報、スクリーンショット、ダウンロード。' },
-    { property: 'og:title', content: 'UnRequited - 針の筵' },
-    { property: 'og:description', content: '「ゆめにっき」の二次創作ゲーム UnRequited。' }
+    { name: 'description', content: locale.value === 'ja' ? '「ゆめにっき」の二次創作ゲーム UnRequited の作品情報、スクリーンショット、ダウンロード。' : 'Information, screenshots, and downloads for UnRequited, a Yume Nikki fan game.' },
+    { property: 'og:title', content: locale.value === 'ja' ? 'UnRequited - 針の筵' : 'UnRequited - Hari no Mushiro' },
+    { property: 'og:description', content: locale.value === 'ja' ? '「ゆめにっき」の二次創作ゲーム UnRequited。' : 'UnRequited, a fan game based on Yume Nikki.' }
   ],
   link: [{ rel: 'canonical', href: 'https://nekonoha.github.io/unrequited' }]
-})
+}))
 
 // 画像データ
 const SCREENSHOT_COUNT = 4

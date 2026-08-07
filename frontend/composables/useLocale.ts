@@ -13,7 +13,7 @@ const translations = {
     },
     index: { 
       title: '針の筵', 
-      subtitle: '趣味で色々作ってるサイト', 
+      subtitle: '好きなものを、好きなように作っています',
       about: 'ABOUT', 
       works: 'WORKS',
       loading: 'ロード中',
@@ -26,7 +26,7 @@ const translations = {
       games: 'ゲーム',
       fanGames: 'ファンゲーム',
       music: '音楽',
-      musicDescription: 'TuneCoreで配信中の音楽を紹介しています。',
+      musicDescription: '作った音楽をまとめて聴けます。',
       twitterDescription: '最新のツイートをチェックできます。',
       visitTwitter: 'Twitterで見る',
       visitTuneCore: 'TuneCoreで見る',
@@ -37,14 +37,14 @@ const translations = {
     },
     about: { 
       title: 'ABOUT', 
-      intro: 'ネコノハです。エンジニアをしながら、趣味でいろいろ作っています。',
-      description: 'ゲーム、イラスト、3Dモデル、音楽など、そのとき興味を持ったものを気ままに制作しています。このサイトには、これまでに作ったものと活動先をまとめています。',
-      hobbies: '好きなもの・作るもの',
+      intro: 'ネコノハです。気になったものを、そのとき作りたい形で作っています。',
+      description: '普段はエンジニアをしています。ゲームを作ったり、絵を描いたり、音楽や3Dを触ったり。完成したものも途中のものも、ここに少しずつ置いています。',
+      hobbies: '好きなものとか',
       hobby1: 'フリーホラーゲーム', 
       hobby2: '漫画・映画・ゲーム', 
       hobby3: 'イラスト', 
       hobby4: 'DTM', 
-      contact: '連絡先', 
+      contact: 'なにかあれば',
       twitter: 'Twitter: @tan_fantazma' 
     },
     product: { 
@@ -225,7 +225,7 @@ const translations = {
     },
     index: { 
       title: 'Hari no Mushiro', 
-      subtitle: 'Personal hobby site for creative works', 
+      subtitle: 'Making whatever I happen to be into',
       about: 'ABOUT', 
       works: 'WORKS',
       loading: 'Loading',
@@ -238,7 +238,7 @@ const translations = {
       games: 'Games',
       fanGames: 'Fan Games',
       music: 'Music',
-      musicDescription: 'Explore music distributed through TuneCore.',
+      musicDescription: 'Listen to the music I have made.',
       twitterDescription: 'Latest updates on Twitter.',
       visitTwitter: 'Open Twitter profile',
       visitTuneCore: 'View on TuneCore',
@@ -249,14 +249,14 @@ const translations = {
     },
     about: { 
       title: 'ABOUT', 
-      intro: 'I\'m Nekonoha, an engineer who enjoys making things in my spare time.',
-      description: 'I make games, illustrations, 3D models, music, and whatever else catches my interest. This site collects my projects and the places where I share them.',
-      hobbies: 'Things I Like & Make',
+      intro: 'I\'m Nekonoha. I make whatever catches my interest, in whatever form feels right.',
+      description: 'I work as an engineer, and spend the rest of my time making games, drawing, writing music, and playing with 3D. Finished or not, bits of it gradually find their way here.',
+      hobbies: 'Things I like',
       hobby1: 'Free horror games', 
       hobby2: 'Manga, Movies & Games', 
       hobby3: 'Illustration', 
       hobby4: 'DTM', 
-      contact: 'Contact', 
+      contact: 'Say hello',
       twitter: 'Twitter: @tan_fantazma' 
     },
     product: { 
