@@ -1,18 +1,17 @@
 <template>
   <footer class="footer">
     <div class="footer-inner">
-      <div><span class="status-dot"></span> {{ locale === 'ja' ? '個人制作サイト' : 'PERSONAL WEBSITE' }}</div>
-      <p>{{ t('footer.copyright') }}</p>
-      <a href="#main-content">{{ locale === 'ja' ? 'ページ上部へ' : 'BACK TO TOP' }} ↑</a>
+      <NuxtLink to="/" class="footer-brand">針の筵 <span>nekonoha</span></NuxtLink>
+      <p>© Nekonoha</p>
+      <a href="#main-content">{{ locale === 'ja' ? 'ページ上部へ' : 'Back to top' }} ↑</a>
     </div>
   </footer>
 </template>
-<script setup lang="ts">const { t, locale } = useLocale()</script>
+<script setup lang="ts">const { locale } = useLocale()</script>
 <style scoped>
-.footer { border-top: 1px solid rgba(255,255,255,.08); color: var(--color-text-muted); }
-.footer-inner { display: flex; width: min(var(--container), calc(100% - 40px)); min-height: 108px; margin: auto; align-items: center; justify-content: space-between; gap: 24px; font: 500 .68rem 'DM Mono', monospace; letter-spacing: .08em; }
-.status-dot { display: inline-block; width: 7px; height: 7px; margin-right: 9px; border-radius: 50%; background: var(--color-accent); box-shadow: 0 0 14px var(--color-accent); }
-a { color: var(--color-text-muted); text-decoration: none; }
-a:hover { color: var(--color-accent); }
-@media (max-width: 720px) { .footer-inner { width: calc(100% - 28px); padding: 26px 0; flex-direction: column; align-items: flex-start; } }
+.footer { border-top: 1px solid var(--line); }
+.footer-inner { width: min(var(--container), calc(100% - 96px)); margin: auto; min-height: 130px; display: flex; justify-content: space-between; align-items: center; gap: 24px; font-size: .75rem; }
+a { text-decoration: none; } a:hover { text-decoration: underline; }
+.footer-brand { font-size: 1rem; } .footer-brand span { margin-left: 16px; font-size: .75rem; } p { color: var(--color-text-muted); }
+@media(max-width:760px) { .footer-inner { width: calc(100% - 40px); flex-wrap: wrap; padding: 28px 0; } .footer-brand { width: 100%; } }
 </style>

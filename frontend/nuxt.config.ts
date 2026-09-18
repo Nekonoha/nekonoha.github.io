@@ -20,7 +20,7 @@ export default defineNuxtConfig({
         },
         {
           name: 'description',
-          content: '針の筵 - nekonoha の趣味サイト。ゲーム制作、音楽制作など、自由気ままに作った作品たちを置いています。'
+          content: 'ネコノハの音楽・ゲーム・イラスト。最新リリースと公開作品。'
         },
         {
           property: 'og:title',
@@ -28,7 +28,7 @@ export default defineNuxtConfig({
         },
         {
           property: 'og:description',
-          content: '針の筵 - nekonoha の趣味サイト。ゲーム制作、音楽制作など、自由気ままに作った作品たちを置いています。'
+          content: 'ネコノハの音楽・ゲーム・イラスト。最新リリースと公開作品。'
         },
         {
           property: 'og:type',
@@ -44,7 +44,7 @@ export default defineNuxtConfig({
         },
         {
           name: 'theme-color',
-          content: '#07090d'
+          content: '#f5f0e9'
         },
         {
           name: 'twitter:card',
@@ -56,10 +56,13 @@ export default defineNuxtConfig({
         },
         {
           name: 'twitter:description',
-          content: '針の筵 - nekonoha の趣味サイト。ゲーム制作、音楽制作など、自由気ままに作った作品たちを置いています。'
+          content: 'ネコノハの音楽・ゲーム・イラスト。最新リリースと公開作品。'
         }
       ],
       link: [
+        { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
+        { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap' },
         {
           rel: 'canonical',
           href: 'https://nekonoha.github.io/'
@@ -75,6 +78,7 @@ export default defineNuxtConfig({
         }
       ],
       script: [
+        { src: '/theme.js', tagPosition: 'head' },
         {
           type: 'application/ld+json',
           innerHTML: JSON.stringify({

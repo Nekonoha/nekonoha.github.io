@@ -1,99 +1,75 @@
 <template>
   <div class="home page-wrap">
-    <section class="hero">
+    <section class="hero" aria-labelledby="site-title">
       <div class="hero-copy">
-        <p class="eyebrow">NEKONOHA / PERSONAL ARCHIVE</p>
-        <h1>{{ t('index.title') }}</h1>
-        <p class="hero-lead">{{ t('index.subtitle') }}</p>
-        <p class="hero-note">{{ locale === 'ja' ? '音楽を作ったり、ゲームを作ったり、絵を描いたり。ここはそんなものを置いておく場所です。' : 'Music, games, drawings, and whatever comes next. This is where I leave the things I make.' }}</p>
-        <div class="hero-actions">
-          <a href="#latest">{{ locale === 'ja' ? '最新作を聴く' : 'Listen now' }} <span>↓</span></a>
-          <NuxtLink to="/works">{{ locale === 'ja' ? '制作物一覧' : 'All works' }} <span>→</span></NuxtLink>
+        <p class="eyebrow">NEKONOHA</p>
+        <h1 id="site-title">針の筵<span>Hari no Mushiro</span></h1>
+        <p class="hero-description">{{ locale === 'ja' ? '音楽・ゲーム・イラスト' : 'Music, games & illustration' }}</p>
+        <div class="hero-nav">
+          <a href="#music"><span><i class="fa-solid fa-music ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? '音楽' : 'Music' }}</span><i class="fa-solid fa-arrow-down nav-arrow" aria-hidden="true"></i></a>
+          <a href="#games"><span><i class="fa-solid fa-gamepad ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</span><i class="fa-solid fa-arrow-down nav-arrow" aria-hidden="true"></i></a>
+          <a href="#art"><span><i class="fa-solid fa-paintbrush ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? 'イラスト' : 'Art' }}</span><i class="fa-solid fa-arrow-down nav-arrow" aria-hidden="true"></i></a>
         </div>
       </div>
-      <div class="hero-index mono" aria-hidden="true">
-        <span>CREATIVE LOG</span><strong>{{ locale === 'ja' ? '音 / 遊 / 絵' : 'SOUND / PLAY / ART' }}</strong><small>TOKYO — JP</small>
+      <div v-if="latest" class="hero-release">
+        <a class="hero-art" :href="latest.linkcoreUrl + '?lang=' + locale" target="_blank" rel="noopener noreferrer">
+          <img :src="latest.artwork" :alt="releaseTitle" width="800" height="800" fetchpriority="high">
+          <span class="listen-label"><i class="fa-solid fa-headphones ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? '聴く' : 'Listen' }} ↗</span>
+        </a>
+        <div class="hero-caption"><p class="eyebrow">LATEST RELEASE</p><time :datetime="latest.releaseDate">{{ latest.releaseDate.replaceAll('-', '.') }}</time></div>
+        <h2><a :href="latest.linkcoreUrl + '?lang=' + locale" target="_blank" rel="noopener noreferrer">{{ releaseTitle }}</a></h2>
       </div>
     </section>
-
-    <section id="latest" class="latest">
-      <header class="section-title">
-        <div><p class="eyebrow">NEW RELEASES</p><h2>{{ locale === 'ja' ? '最近の音楽' : 'Latest music' }}</h2></div>
-        <div class="section-side"><p>{{ locale === 'ja' ? '新しいものから3つ。ここでそのまま聴けます。' : 'The latest three, ready to play here.' }}</p><a :href="tuneCoreUrl" target="_blank" rel="noopener noreferrer">TuneCore ↗</a></div>
-      </header>
+    <section id="music" class="section">
+      <header class="section-head"><h2><i class="fa-solid fa-music ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? '音楽' : 'Music' }}<small>Releases</small></h2><NuxtLink to="/works#music">{{ locale === 'ja' ? 'すべてのリリース' : 'All releases' }} ↗</NuxtLink></header>
       <LatestReleases />
     </section>
-
-    <section class="featured">
-      <header class="section-title">
-        <div><p class="eyebrow">SELECTED WORKS</p><h2>{{ locale === 'ja' ? '遊べる作品' : 'Games to explore' }}</h2></div>
-        <NuxtLink to="/works">{{ locale === 'ja' ? 'すべて見る' : 'View all' }} →</NuxtLink>
-      </header>
-      <div class="work-grid">
-        <NuxtLink to="/trial" class="work-tile"><img src="/images/trial/5.png" alt="TRIAL screenshot"><div><span class="mono">FAN GAME / 01</span><h3>TRIAL</h3><p>{{ t('trial.description') }}</p></div><b>→</b></NuxtLink>
-        <NuxtLink to="/unrequited" class="work-tile"><img src="/images/unrequited/3.png" alt="UnRequited screenshot"><div><span class="mono">FAN GAME / 02</span><h3>UnRequited</h3><p>{{ t('unrequited.description') }}</p></div><b>→</b></NuxtLink>
-      </div>
+    <section id="games" class="section">
+      <header class="section-head"><h2><i class="fa-solid fa-gamepad ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}<small>Yume Nikki fan games</small></h2></header>
+      <GameWorks />
     </section>
-
-    <section class="links-strip" aria-label="External links">
-      <a href="https://pixiv.me/tanfantazma" target="_blank" rel="noopener noreferrer"><span class="mono">ILLUSTRATION</span><strong>pixiv</strong><b>↗</b></a>
-      <a href="https://tanfantazma.booth.pm/" target="_blank" rel="noopener noreferrer"><span class="mono">SHOP</span><strong>BOOTH</strong><b>↗</b></a>
-      <a href="http://nekonoha.hatenablog.com/" target="_blank" rel="noopener noreferrer"><span class="mono">JOURNAL</span><strong>Blog</strong><b>↗</b></a>
-      <a href="https://twitter.com/tan_fantazma" target="_blank" rel="noopener noreferrer"><span class="mono">UPDATES</span><strong>Twitter / X</strong><b>↗</b></a>
+    <section id="art" class="section">
+      <header class="section-head"><h2><i class="fa-solid fa-paintbrush ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? 'イラスト' : 'Illustration' }}<small>Latest on pixiv</small></h2><NuxtLink to="/works#art">{{ locale === 'ja' ? 'すべて見る' : 'View all' }} ↗</NuxtLink></header>
+      <LatestIllustrations />
+    </section>
+    <section id="links" class="section links-section">
+      <header class="section-head"><h2><i class="fa-solid fa-link ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? 'リンク' : 'Links' }}</h2></header>
+      <ExternalLinks />
     </section>
   </div>
 </template>
-
 <script setup lang="ts">
-const { t, locale } = useLocale()
-const tuneCoreUrl = computed(() => `https://www.tunecore.co.jp/artists/nekonoha?lang=${locale.value}`)
-useSeoMeta(() => ({
-  title: locale.value === 'ja' ? '針の筵 - nekonoha' : 'Hari no Mushiro - nekonoha',
-  description: locale.value === 'ja' ? 'ネコノハの個人制作サイト。音楽、ゲーム、イラストなどの制作物をまとめています。' : 'Nekonoha’s personal site for music, games, illustrations, and other things I make.',
-  ogTitle: locale.value === 'ja' ? '針の筵 - nekonoha' : 'Hari no Mushiro - nekonoha',
-  ogDescription: locale.value === 'ja' ? '音楽、ゲーム、イラストなどの個人制作アーカイブ。' : 'A personal archive of music, games, illustrations, and more.',
-  ogUrl: 'https://nekonoha.github.io/',
-  twitterCard: 'summary_large_image'
-}))
+import { musicReleases } from '~/data/releases'
+const { locale } = useLocale()
+const latest = musicReleases[0]
+const releaseTitle = computed(() => latest ? (locale.value === 'ja' ? latest.title : latest.titleEn) : '')
+useSeoMeta({
+  title: '針の筵 — nekonoha',
+  description: () => locale.value === 'ja' ? 'ネコノハの音楽・ゲーム・イラスト。最新リリースと公開作品。' : 'Music, games and illustration by Nekonoha. Latest releases and published works.',
+  ogTitle: '針の筵 — nekonoha',
+  ogUrl: 'https://nekonoha.github.io/'
+})
 </script>
-
 <style scoped>
-.home { max-width: 1120px; }
-.hero { display: grid; min-height: 690px; padding: 64px 0 110px; align-items: center; grid-template-columns: 1fr auto; gap: 60px; }
-.hero h1 { margin: 22px 0 24px; font-size: clamp(5rem, 14vw, 11rem); font-weight: 800; line-height: .78; letter-spacing: -.085em; }
-.hero-lead { color: white; font-size: clamp(1.2rem, 2.2vw, 1.65rem); font-weight: 650; }
-.hero-note { max-width: 570px; margin-top: 15px; color: var(--color-text-muted); }
-.hero-actions { display: flex; margin-top: 38px; flex-wrap: wrap; gap: 10px; }
-.hero-actions a { display: flex; min-width: 175px; padding: 14px 17px; justify-content: space-between; border: 1px solid rgba(255,255,255,.13); border-radius: 999px; text-decoration: none; font-size: .78rem; font-weight: 700; }
-.hero-actions a:first-child { color: #170810; border-color: var(--color-accent); background: var(--color-accent); }
-.hero-actions a:hover { transform: translateY(-2px); }
-.hero-index { display: flex; width: 158px; height: 270px; padding: 20px; justify-content: space-between; border-left: 1px solid rgba(255,255,255,.15); color: #777d88; writing-mode: vertical-rl; font-size: .58rem; letter-spacing: .12em; }
-.hero-index strong { color: #daddE3; font-size: .72rem; font-weight: 500; }
-.latest, .featured { padding: 100px 0; border-top: 1px solid rgba(255,255,255,.09); scroll-margin-top: 100px; }
-.section-title { display: flex; margin-bottom: 38px; align-items: end; justify-content: space-between; gap: 30px; }
-.section-title h2 { margin-top: 14px; font-size: clamp(2.4rem, 5vw, 4.8rem); line-height: .95; letter-spacing: -.06em; }
-.section-title > a, .section-side { color: var(--color-text-muted); font-size: .75rem; }
-.section-title a { text-decoration: none; }
-.section-title a:hover { color: var(--color-accent); }
-.section-side { text-align: right; }
-.section-side a { display: inline-block; margin-top: 5px; color: #e5e7eb; font-weight: 700; }
-.work-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-.work-tile { position: relative; display: grid; min-height: 390px; overflow: hidden; border: 1px solid rgba(255,255,255,.1); border-radius: 24px; background: #11141a; text-decoration: none; }
-.work-tile img { width: 100%; height: 235px; object-fit: cover; filter: saturate(.65) brightness(.8); transition: .4s; }
-.work-tile div { padding: 22px 24px; }
-.work-tile span { color: var(--color-accent); font-size: .6rem; letter-spacing: .1em; }
-.work-tile h3 { margin: 5px 0; font-size: 2rem; letter-spacing: -.045em; }
-.work-tile p { color: var(--color-text-muted); font-size: .76rem; }
-.work-tile b { position: absolute; right: 24px; bottom: 27px; color: var(--color-accent); }
-.work-tile:hover { border-color: rgba(255,111,175,.55); transform: translateY(-3px); }
-.work-tile:hover img { filter: saturate(1) brightness(.95); transform: scale(1.02); }
-.links-strip { display: grid; margin-top: 20px; border-top: 1px solid rgba(255,255,255,.1); grid-template-columns: repeat(4, 1fr); }
-.links-strip a { display: grid; min-height: 120px; padding: 22px 14px; border-right: 1px solid rgba(255,255,255,.1); border-bottom: 1px solid rgba(255,255,255,.1); text-decoration: none; grid-template-columns: 1fr auto; }
-.links-strip a:first-child { border-left: 1px solid rgba(255,255,255,.1); }
-.links-strip span { grid-column: 1 / -1; color: #737985; font-size: .56rem; letter-spacing: .12em; }
-.links-strip strong { align-self: end; font-size: 1rem; }
-.links-strip b { align-self: end; color: var(--color-accent); }
-.links-strip a:hover { background: rgba(255,255,255,.03); }
-@media (max-width: 760px) { .hero { min-height: 610px; padding-top: 45px; grid-template-columns: 1fr; } .hero-index { display: none; } .hero h1 { font-size: clamp(4.8rem, 24vw, 8rem); } .section-title { align-items: flex-start; flex-direction: column; } .section-side { text-align: left; } .work-grid { grid-template-columns: 1fr; } .links-strip { grid-template-columns: 1fr 1fr; } .links-strip a:nth-child(3) { border-left: 1px solid rgba(255,255,255,.1); } }
-@media (max-width: 460px) { .links-strip { grid-template-columns: 1fr; } .links-strip a { border-left: 1px solid rgba(255,255,255,.1); } }
+.home { padding-top: 52px; }
+.hero { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(48px,8vw,120px); align-items: center; }
+.hero-copy { padding-block: 40px; }
+.hero-copy > .eyebrow { margin-bottom: 36px; color: var(--color-text); letter-spacing: .2em; }
+h1 { font-family: var(--font-sans); font-size: clamp(4.6rem,9vw,9rem); font-weight: 700; line-height: 1.25; letter-spacing: -.06em; white-space: nowrap; }
+h1 span { display: block; margin-top: 16px; font-family: var(--font-sans); font-weight: 500; font-size: clamp(1rem,2vw,1.7rem); line-height: 1.5; letter-spacing: -.015em; }
+.hero-description { margin-top: 48px; font-size: .9rem; color: var(--color-text-muted); }
+.hero-nav { max-width: 340px; margin-top: 36px; }
+.hero-nav a { display: flex; justify-content: space-between; gap: 20px; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: .8rem; text-decoration: none; }
+.hero-nav a:hover { color: var(--color-accent); border-color: var(--color-accent); }
+.hero-art { position: relative; display: block; overflow: hidden; aspect-ratio: 1; background: var(--color-surface); }
+.hero-art img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
+.hero-art:hover img { transform: scale(1.025); }
+.listen-label { position: absolute; bottom: 20px; right: 20px; padding: 12px 24px; background: var(--color-main); font-size: .8rem; }
+.hero-caption { display: flex; justify-content: space-between; gap: 16px; margin-top: 20px; }
+.hero-caption .eyebrow, time { font-size: .68rem; color: var(--color-text-muted); }
+h2 { margin-top: 8px; font-size: 1.05rem; font-weight: 500; line-height: 1.65; }
+h2 a { text-decoration: none; } h2 a:hover { text-decoration: underline; }
+@media(max-width:760px) { .home { padding-top: 28px; } .hero { grid-template-columns: 1fr; gap: 40px; } .hero-copy { padding-block: 10px 0; } .hero-copy > .eyebrow { margin-bottom: 18px; } h1 { font-size: clamp(4.8rem,19vw,8rem); } .hero-description { margin-top: 28px; } .hero-nav { display: flex; max-width: none; gap: 22px; margin-top: 16px; } .hero-nav a { flex: 1; gap: 12px; white-space: nowrap; font-size: .7rem; } }
+@media(max-width:360px) { .hero-nav { gap: 14px; } .hero-nav a { gap: 6px; } }
+@media(max-width:600px) { .hero-nav { gap: 12px; } .hero-nav a { gap: 0; } .nav-arrow { display: none; } .hero-nav .ui-icon { margin-inline-end: .35em; } }
 </style>
