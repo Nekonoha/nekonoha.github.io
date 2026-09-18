@@ -1,6 +1,5 @@
 <template>
   <article>
-    <EerieBackground />
     <section class="game-page">
       <header class="header-section">
         <h1 class="game-title">{{ t('unrequited.title') }}</h1>

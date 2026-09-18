@@ -7,7 +7,11 @@
     "dev": "nuxt dev",
     "build": "nuxt build",
     "generate": "nuxt generate",
-    "start": "nuxt start"
+    "start": "nuxt start",
+    "sync:releases": "node scripts/sync-releases.mjs",
+    "sync:illustrations": "node scripts/sync-illustrations.mjs",
+    "sync:content": "npm run sync:releases && npm run sync:illustrations",
+    "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {
     "@splidejs/splide": "^4.1.4",

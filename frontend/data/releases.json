@@ -1,0 +1,72 @@
+{
+  "source": "https://www.tunecore.co.jp/artists/nekonoha?lang=ja",
+  "checkedAt": "2026-09-16T07:04:47.304Z",
+  "releases": [
+    {
+      "id": "1943510",
+      "title": "存在しない冒険の記録 VI～永遠の探求",
+      "titleEn": "Songs from an Unmade Adventure VI: The Eternal Quest",
+      "releaseDate": "2026-09-14",
+      "linkcoreUrl": "https://linkco.re/CnYCfzSe",
+      "type": "album",
+      "trackCount": 5,
+      "artwork": "/images/releases/1943510-c3cf141d71ce.png",
+      "spotifyId": "4KEAM45gJ6S4j1v5Dp72wX"
+    },
+    {
+      "id": "1935518",
+      "title": "存在しない冒険の記録 V～名もなき深淵へ",
+      "titleEn": "Songs from an Unmade Adventure V: Into the Nameless Abyss",
+      "releaseDate": "2026-09-10",
+      "linkcoreUrl": "https://linkco.re/DGPqdmF2",
+      "type": "album",
+      "trackCount": 5,
+      "artwork": "/images/releases/1935518-de8321ba633f.png",
+      "spotifyId": "3pjjZIjsPi4eTpdRvHWtOx"
+    },
+    {
+      "id": "1897322",
+      "title": "存在しない冒険の記録 IV～風は海山を越えて",
+      "titleEn": "Songs from an Unmade Adventure IV: Beyond the Mountains, Across the Main",
+      "releaseDate": "2026-08-15",
+      "linkcoreUrl": "https://linkco.re/qbFCzhtB",
+      "type": "album",
+      "trackCount": 5,
+      "artwork": "/images/releases/1897322-88c437043e6a.png",
+      "spotifyId": "5DAtXSPVpDaQMZPFzUgyPH"
+    },
+    {
+      "id": "1883677",
+      "title": "存在しない冒険の記録 III～表裏一体の天狼",
+      "titleEn": "Songs from an Unmade Adventure III : Sirius - Two Stars, One Name",
+      "releaseDate": "2026-08-07",
+      "linkcoreUrl": "https://linkco.re/HvTnsEXt",
+      "type": "album",
+      "trackCount": 5,
+      "artwork": "/images/releases/1883677-cb3211feaab1.png",
+      "spotifyId": "70rdt5W1Phs6cyd2j3UQK7"
+    },
+    {
+      "id": "1883400",
+      "title": "存在しない冒険の記録Ⅱ～月下の散歩道",
+      "titleEn": "Songs from an Unmade Adventure II : Moonlit Wanderings",
+      "releaseDate": "2026-08-06",
+      "linkcoreUrl": "https://linkco.re/NrvA5bff",
+      "type": "album",
+      "trackCount": 5,
+      "artwork": "/images/releases/1883400-cf249b37603b.png",
+      "spotifyId": "1uIj3WieryOUwdxML96FfH"
+    },
+    {
+      "id": "1883341",
+      "title": "存在しない冒険の記録",
+      "titleEn": "Songs from an Unmade Adventure",
+      "releaseDate": "2026-08-06",
+      "linkcoreUrl": "https://linkco.re/bB97NfME",
+      "type": "album",
+      "trackCount": 5,
+      "artwork": "/images/releases/1883341-6bf5056a50bf.png",
+      "spotifyId": "6EWAVWuJiQr5743OYIBbWo"
+    }
+  ]
+}

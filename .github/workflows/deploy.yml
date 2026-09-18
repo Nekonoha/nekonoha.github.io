@@ -3,6 +3,8 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches: ['main']
+  schedule:
+    - cron: '0 0 * * *'
   workflow_dispatch:
 
 permissions:
@@ -35,6 +37,18 @@ jobs:
         run: npm ci --prefer-offline --no-audit --no-progress
         working-directory: ./frontend
         
+      - name: Test release parser
+        run: npm test
+        working-directory: ./frontend
+
+      - name: Sync TuneCore releases
+        run: npm run sync:releases
+        working-directory: ./frontend
+
+      - name: Sync Pixiv illustrations
+        run: npm run sync:illustrations
+        working-directory: ./frontend
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
@@ -47,7 +61,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./frontend/dist
+          path: ./frontend/.output/public
           
   deploy:
     environment:
