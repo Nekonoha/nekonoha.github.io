@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { parseReleases } from '../scripts/sync-releases.mjs'
+import { cachedSpotifyId, parseReleases } from '../scripts/sync-releases.mjs'
 
 const item = (id, date, overrides = {}) => ({
   id, releaseDate: date, nameJa: `作品 ${id}`, nameEn: `Release ${id}`,
@@ -25,4 +25,11 @@ test('rejects partial records, invalid dates and unsafe URLs', () => {
   for (const change of [{ nameJa: '' }, { releaseDate: '2026-02-30' }, { linkcore: { url: 'javascript:alert(1)' } }, { image: { large: { url: 'https://example.com/cover.png' } } }]) {
     assert.throws(() => parseReleases(html([item(1, '2026-08-06', change)])))
   }
+})
+
+test('keeps a validated Spotify ID already stored for a release', () => {
+  const catalog = { releases: [{ id: '42', spotifyId: '4KEAM45gJ6S4j1v5Dp72wX' }] }
+  assert.equal(cachedSpotifyId(catalog, '42'), '4KEAM45gJ6S4j1v5Dp72wX')
+  assert.equal(cachedSpotifyId(catalog, '99'), undefined)
+  assert.equal(cachedSpotifyId({ releases: [{ id: '42', spotifyId: 'bad' }] }, '42'), undefined)
 })
