@@ -37,6 +37,11 @@ export function parseReleases(html, today = new Date().toLocaleDateString('sv-SE
   return [...releases.values()].sort((a, b) => b.releaseDate.localeCompare(a.releaseDate) || Number(b.id) - Number(a.id))
 }
 
+export function cachedSpotifyId(catalog, releaseId) {
+  const id = catalog?.releases?.find(item => item.id === releaseId)?.spotifyId
+  return /^[A-Za-z0-9]{22}$/.test(id || '') ? id : undefined
+}
+
 async function request(url, options = {}) {
   let lastError
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -75,14 +80,15 @@ export async function syncReleases() {
     await writeFile(path.join(artworkDir, filename), bytes)
     release.artwork = `/images/releases/${filename}`
     delete release.artworkSource
-    try {
-      const redirect = await request(`https://www.tunecore.co.jp/to/spotify/${release.id}`, { redirect: 'manual' })
-      const match = redirect.headers.get('location')?.match(/^https:\/\/open\.spotify\.com\/album\/([A-Za-z0-9]{22})(?:\?|$)/)
-      if (match) release.spotifyId = match[1]
-    } catch {
-      console.warn(`Spotify unavailable for ${release.id}; LinkCore remains available.`)
-      const cached = previous.releases.find(item => item.id === release.id)
-      if (cached?.spotifyId) release.spotifyId = cached.spotifyId
+    release.spotifyId = cachedSpotifyId(previous, release.id)
+    if (!release.spotifyId) {
+      try {
+        const redirect = await request(`https://www.tunecore.co.jp/to/spotify/${release.id}`, { redirect: 'manual' })
+        const match = redirect.headers.get('location')?.match(/^https:\/\/open\.spotify\.com\/album\/([A-Za-z0-9]{22})(?:\?|$)/)
+        if (match) release.spotifyId = match[1]
+      } catch {
+        console.warn(`Spotify unavailable for ${release.id}; LinkCore remains available.`)
+      }
     }
   }
   const catalog = { source, checkedAt: new Date().toISOString(), releases }
