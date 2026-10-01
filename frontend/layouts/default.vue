@@ -2,6 +2,7 @@
   <div class="site-shell">
     <a class="skip-link" href="#main-content">{{ locale === 'ja' ? '本文へ移動' : 'Skip to content' }}</a>
     <Header />
+    <InteractionLayer />
     <main id="main-content"><slot /></main>
     <Footer />
   </div>

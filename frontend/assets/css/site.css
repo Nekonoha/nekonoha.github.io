@@ -109,3 +109,47 @@ body { background-image: radial-gradient(ellipse at 95% 0%, color-mix(in srgb, v
 .outbound-list a:nth-child(1) .ui-icon { color: #4d9dcb; }
 .outbound-list a:nth-child(2) .ui-icon { color: #ce826e; }
 .outbound-list a:nth-child(3) .ui-icon { color: #a79ac0; }
+
+/* A warmer, more expressive palette for browsing the work. */
+.display-title, .home h1 { background: linear-gradient(115deg, var(--color-text) 12%, var(--color-accent) 63%, #ba739a 100%); background-clip: text; -webkit-text-fill-color: transparent; }
+.section-head h2::before { background: linear-gradient(180deg, #e6a275, var(--color-accent)); }
+.page-wrap > header .eyebrow, .hero-copy > .eyebrow { color: var(--color-accent); }
+.release-actions button, .release-actions a, .section-head > a { transition: color .2s, transform .2s; }
+.release-actions button:hover, .release-actions a:hover, .section-head > a:hover { color: var(--color-accent); transform: translateY(-2px); }
+.hero-nav a:hover .nav-arrow { transform: translateY(5px); }
+.nav-arrow { transition: transform .25s; }
+
+/* Tactile layer: the content remains still and readable until interacted with. */
+.site-header::after { content: ''; position: absolute; left: 0; bottom: -3px; width: var(--page-progress, 0%); height: 2px; background: linear-gradient(90deg, #d88e72, var(--color-accent), #a49bcf); transition: width .1s linear; pointer-events: none; }
+.hero-art, .artwork, .game-image { position: relative; isolation: isolate; transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s; }
+.hero-art::after, .artwork::after, .game-image::after { content: ''; position: absolute; inset: 0; z-index: 2; background: linear-gradient(110deg, transparent 38%, #ffffff44 50%, transparent 62%); transform: translateX(-120%); pointer-events: none; }
+.hero-art:hover, .artwork:hover, .game-tile:hover .game-image { transform: translateY(-7px); box-shadow: 0 22px 42px #101a3033; }
+.hero-art:hover::after, .artwork:hover::after, .game-tile:hover .game-image::after { animation: card-sheen .8s ease-out; }
+.hero-nav a, .works-nav a, .primary-nav a, .outbound-list a { transition: transform .25s cubic-bezier(.2,.8,.2,1), color .2s, background .2s, border-color .2s; }
+.hero-nav a:hover { transform: translateX(8px); }
+.works-nav a:hover, .primary-nav a:hover { transform: translateY(-2px); }
+.outbound-list a:hover { transform: translateX(6px); }
+.site-shell > main, .site-shell > footer { position: relative; z-index: 1; }
+.click-burst { position: fixed; z-index: 1000; left: 0; top: 0; width: 14px; height: 14px; border: 2px solid var(--color-accent); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); animation: burst-ring .55s cubic-bezier(.12,.76,.2,1) forwards; }
+.click-burst::after { content: ''; position: absolute; inset: -9px; border: 1px solid #d685a4; border-radius: inherit; animation: burst-ring-inner .55s ease-out forwards; }
+.click-burst i { position: absolute; top: 50%; left: 50%; width: 5px; height: 5px; border-radius: 50%; background: var(--color-accent); animation: burst-spark .55s ease-out forwards; }
+.click-burst i:nth-child(3n) { background: #e7a575; }
+.click-burst i:nth-child(3n + 1) { background: #a796d1; }
+@keyframes burst-ring { to { width: 64px; height: 64px; opacity: 0; } }
+@keyframes burst-ring-inner { to { inset: -18px; opacity: 0; } }
+@keyframes burst-spark { to { transform: translate(var(--dx), var(--dy)) scale(.35); opacity: 0; } }
+@keyframes card-sheen { to { transform: translateX(120%); } }
+
+/* Adapted from the staggered mask and panel transitions in yui540/css-animations (MIT). */
+.display-title, .home h1 { animation: title-unmask .85s cubic-bezier(.16,.82,.2,1) both; }
+.reveal-pending:not(.reveal-visible) { opacity: 0; }
+.reveal-pending.reveal-visible { animation: reveal-rise .7s cubic-bezier(.16,.82,.2,1) var(--reveal-delay, 0ms) both; }
+.reveal-pending.reveal-visible:is(.release, .game-tile, .illustration) { animation-name: card-unmask; }
+.section-head.reveal-visible { position: relative; }
+.section-head.reveal-visible::after { content: ''; position: absolute; top: -2px; left: 0; width: min(170px, 35%); height: 3px; border-radius: 99px; background: linear-gradient(90deg, #e6a275, var(--color-accent)); transform-origin: left; animation: line-draw .8s cubic-bezier(.16,.82,.2,1) var(--reveal-delay, 0ms) both; }
+@keyframes title-unmask { from { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); transform: translateY(12px); } to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translateY(0); } }
+@keyframes reveal-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes card-unmask { from { opacity: .3; clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); transform: translateY(16px); } to { opacity: 1; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translateY(0); } }
+@keyframes line-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+a:active, button:active { scale: .97; }
+@media(prefers-reduced-motion:reduce) { .hero-art:hover, .artwork:hover, .game-tile:hover .game-image, .hero-nav a:hover, .works-nav a:hover, .primary-nav a:hover, .outbound-list a:hover { transform: none; } .click-burst { display: none; } .reveal-pending { opacity: 1 !important; } a:active, button:active { scale: 1; } }
