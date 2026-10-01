@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { cachedSpotifyId, parseReleases } from '../scripts/sync-releases.mjs'
+import { cachedSpotifyId, matchesSpotifyAlbum, parseReleases } from '../scripts/sync-releases.mjs'
 
 const item = (id, date, overrides = {}) => ({
   id, releaseDate: date, nameJa: `作品 ${id}`, nameEn: `Release ${id}`,
@@ -32,4 +32,10 @@ test('keeps a validated Spotify ID already stored for a release', () => {
   assert.equal(cachedSpotifyId(catalog, '42'), '4KEAM45gJ6S4j1v5Dp72wX')
   assert.equal(cachedSpotifyId(catalog, '99'), undefined)
   assert.equal(cachedSpotifyId({ releases: [{ id: '42', spotifyId: 'bad' }] }, '42'), undefined)
+})
+
+test('rejects a regional Spotify album with a different title', () => {
+  const release = { title: '黒律機関' }
+  assert.equal(matchesSpotifyAlbum(release, { provider_name: 'Spotify', title: 'BLACK ORDER' }), false)
+  assert.equal(matchesSpotifyAlbum(release, { provider_name: 'Spotify', title: '黒律機関' }), true)
 })

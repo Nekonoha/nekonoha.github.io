@@ -1,7 +1,18 @@
 {
   "source": "https://www.tunecore.co.jp/artists/nekonoha?lang=ja",
-  "checkedAt": "2026-09-16T07:04:47.304Z",
+  "checkedAt": "2026-10-01T08:01:44.431Z",
   "releases": [
+    {
+      "id": "1968358",
+      "title": "黒律機関",
+      "titleEn": "BLACK ORDER",
+      "releaseDate": "2026-10-01",
+      "linkcoreUrl": "https://linkco.re/2dxg5d20",
+      "type": "album",
+      "trackCount": 5,
+      "artwork": "/images/releases/1968358-0e741e27c57b.png",
+      "spotifyId": "3m1e4jItCx6wEqwzt8GI6i"
+    },
     {
       "id": "1943510",
       "title": "存在しない冒険の記録 VI～永遠の探求",

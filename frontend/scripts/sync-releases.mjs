@@ -42,6 +42,10 @@ export function cachedSpotifyId(catalog, releaseId) {
   return /^[A-Za-z0-9]{22}$/.test(id || '') ? id : undefined
 }
 
+export function matchesSpotifyAlbum(release, metadata) {
+  return metadata?.provider_name === 'Spotify' && metadata.title === release.title
+}
+
 async function request(url, options = {}) {
   let lastError
   for (let attempt = 0; attempt < 3; attempt++) {
@@ -83,11 +87,15 @@ export async function syncReleases() {
     release.spotifyId = cachedSpotifyId(previous, release.id)
     if (!release.spotifyId) {
       try {
-        const redirect = await request(`https://www.tunecore.co.jp/to/spotify/${release.id}`, { redirect: 'manual' })
+        const redirect = await request(`https://www.tunecore.co.jp/to/spotify/${release.id}?lang=ja`, { redirect: 'manual' })
         const match = redirect.headers.get('location')?.match(/^https:\/\/open\.spotify\.com\/album\/([A-Za-z0-9]{22})(?:\?|$)/)
-        if (match) release.spotifyId = match[1]
-      } catch {
-        console.warn(`Spotify unavailable for ${release.id}; LinkCore remains available.`)
+        if (!match) throw new Error('TuneCore did not return a Spotify album URL.')
+        const metadataUrl = `https://open.spotify.com/oembed?url=${encodeURIComponent(`https://open.spotify.com/album/${match[1]}`)}`
+        const metadata = await (await request(metadataUrl)).json()
+        if (!matchesSpotifyAlbum(release, metadata)) throw new Error(`Spotify album title mismatch: ${metadata.title || 'missing'}`)
+        release.spotifyId = match[1]
+      } catch (error) {
+        console.warn(`Spotify preview unavailable for ${release.id}: ${error.message}; LinkCore remains available.`)
       }
     }
   }
