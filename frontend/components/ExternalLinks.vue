@@ -6,6 +6,7 @@
 <script setup lang="ts">
 const { locale } = useLocale()
 const links = [
+  { name: 'TuneCore', icon: 'fa-solid fa-music', ja: '音楽・配信', en: 'Music / Releases', url: 'https://www.tunecore.co.jp/artists/nekonoha' },
   { name: 'pixiv', icon: 'fa-brands fa-pixiv', ja: 'イラスト・漫画', en: 'Illustration / Manga', url: 'https://pixiv.me/tanfantazma' },
   { name: 'BOOTH', icon: 'fa-solid fa-bag-shopping', ja: '頒布物', en: 'Shop', url: 'https://tanfantazma.booth.pm/' },
   { name: 'Blog', icon: 'fa-solid fa-pen-to-square', ja: '日記・制作記録', en: 'Notes', url: 'https://nekonoha.hatenablog.com/' },
