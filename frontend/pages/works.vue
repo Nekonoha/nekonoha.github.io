@@ -5,7 +5,7 @@
       <a href="#music" :aria-current="activeSection === 'music' ? 'location' : undefined" @click="activeSection = 'music'"><i class="fa-solid fa-music" aria-hidden="true"></i>{{ locale === 'ja' ? '音楽' : 'Music' }}</a>
       <a href="#games" :aria-current="activeSection === 'games' ? 'location' : undefined" @click="activeSection = 'games'"><i class="fa-solid fa-gamepad" aria-hidden="true"></i>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</a>
       <a href="#art" :aria-current="activeSection === 'art' ? 'location' : undefined" @click="activeSection = 'art'"><i class="fa-solid fa-paintbrush" aria-hidden="true"></i>{{ locale === 'ja' ? 'イラスト' : 'Art' }}</a>
-      <a href="#links" :aria-current="activeSection === 'links' ? 'location' : undefined" @click="activeSection = 'links'"><i class="fa-solid fa-link" aria-hidden="true"></i>{{ locale === 'ja' ? 'リンク' : 'Links' }}</a>
+      <a v-if="novels.length" href="#novels" :aria-current="activeSection === 'novels' ? 'location' : undefined" @click="activeSection = 'novels'"><i class="fa-solid fa-book-open" aria-hidden="true"></i>{{ locale === 'ja' ? '小説' : 'Novels' }}</a>
     </nav>
     <section id="music" class="section">
       <header class="section-head"><h2>{{ locale === 'ja' ? '音楽' : 'Music' }}<small>{{ musicReleases.length }}{{ locale === 'ja' ? '作品' : ' releases' }}</small></h2><a :href="'https://www.tunecore.co.jp/artists/nekonoha?lang=' + locale" target="_blank" rel="noopener noreferrer">TuneCore<span class="ext" aria-hidden="true">↗</span></a></header>
@@ -13,22 +13,24 @@
     </section>
     <section id="games" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</h2></header><GameWorks /></section>
     <section id="art" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? 'イラスト' : 'Illustration' }}<small>{{ illustrations.length }}{{ locale === 'ja' ? '点' : ' works' }}</small></h2><a href="https://pixiv.me/tanfantazma" target="_blank" rel="noopener noreferrer">pixiv<span class="ext" aria-hidden="true">↗</span></a></header><LatestIllustrations :limit="illustrations.length" /></section>
-    <section id="links" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? 'リンク' : 'Links' }}</h2></header><ExternalLinks /></section>
+    <section v-if="novels.length" id="novels" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? '小説' : 'Novels' }}<small>{{ novels.length }}{{ locale === 'ja' ? '作品' : (novels.length === 1 ? ' title' : ' titles') }}</small></h2></header><NovelList /></section>
   </article>
 </template>
 <script setup lang="ts">
 import { musicReleases } from '~/data/releases'
 import { illustrations } from '~/data/illustrations'
 const { locale } = useLocale()
+const { novels } = useNovels()
+const sectionIds = ['music', 'games', 'art', 'novels']
 const activeSection = ref('music')
 let sectionObserver: IntersectionObserver | undefined
 onMounted(() => {
-  activeSection.value = ['music', 'games', 'art', 'links'].includes(location.hash.slice(1)) ? location.hash.slice(1) : 'music'
+  activeSection.value = sectionIds.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'music'
   sectionObserver = new IntersectionObserver(entries => {
     const visible = entries.filter(entry => entry.isIntersecting).sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top)
     if (visible[0]) activeSection.value = visible[0].target.id
   }, { rootMargin: '-150px 0px -55% 0px' })
-  for (const id of ['music', 'games', 'art', 'links']) {
+  for (const id of sectionIds) {
     const section = document.getElementById(id)
     if (section) sectionObserver.observe(section)
   }
@@ -36,7 +38,7 @@ onMounted(() => {
 onUnmounted(() => sectionObserver?.disconnect())
 useSeoMeta({
   title: () => (locale.value === 'ja' ? '作品' : 'Works') + ' — 針の筵',
-  description: () => locale.value === 'ja' ? 'ネコノハの音楽、ゲーム、イラストの一覧。' : 'Music, games and illustration by Nekonoha.',
+  description: () => locale.value === 'ja' ? 'ネコノハの音楽、ゲーム、イラスト、小説の一覧。' : 'Music, games, illustration and novels by Nekonoha.',
   ogUrl: 'https://nekonoha.github.io/works'
 })
 useHead({ link: [{ rel: 'canonical', href: 'https://nekonoha.github.io/works' }] })

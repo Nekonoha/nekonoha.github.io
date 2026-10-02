@@ -6,8 +6,7 @@
       </NuxtLink>
       <div class="nav-right">
         <div class="primary-nav">
-          <NuxtLink to="/works" :aria-label="locale === 'ja' ? '作品' : 'Works'" :title="locale === 'ja' ? '作品' : 'Works'"><i class="fa-solid fa-shapes" aria-hidden="true"></i><span>{{ locale === 'ja' ? '作品' : 'Works' }}</span></NuxtLink>
-          <NuxtLink v-if="novels.length" to="/novels" :aria-label="locale === 'ja' ? '小説' : 'Novels'" :title="locale === 'ja' ? '小説' : 'Novels'"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span>{{ locale === 'ja' ? '小説' : 'Novels' }}</span></NuxtLink>
+          <NuxtLink to="/works" :class="{ 'router-link-active': inWorks }" :aria-label="locale === 'ja' ? '作品' : 'Works'" :title="locale === 'ja' ? '作品' : 'Works'"><i class="fa-solid fa-shapes" aria-hidden="true"></i><span>{{ locale === 'ja' ? '作品' : 'Works' }}</span></NuxtLink>
           <NuxtLink to="/about" :aria-label="locale === 'ja' ? 'プロフィール' : 'About'" :title="locale === 'ja' ? 'プロフィール' : 'About'"><i class="fa-regular fa-user" aria-hidden="true"></i><span>{{ locale === 'ja' ? 'プロフィール' : 'About' }}</span></NuxtLink>
         </div>
         <div class="nav-tools">
@@ -20,7 +19,9 @@
 </template>
 <script setup lang="ts">
 const { locale, setLocale } = useLocale()
-const { novels } = useNovels()
+// 小説とゲームの個別ページも「作品」の中として示す。
+const route = useRoute()
+const inWorks = computed(() => /^\/(novels|trial|unrequited)(\/|$)/.test(route.path))
 </script>
 <style scoped>
 .site-header { position: sticky; top: 0; z-index: 100; padding: 16px 0 0; }

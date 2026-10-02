@@ -10,7 +10,7 @@
       <h3><a class="text-link" :href="link(release.linkcoreUrl)" target="_blank" rel="noopener noreferrer">{{ title(release) }}</a></h3>
       <div class="release-actions">
         <button v-if="release.spotifyId" class="pill pill-primary" :aria-expanded="playing === release.id" @click="togglePlayer(release.id, $event)"><i :class="['fa-solid', playing === release.id ? 'fa-xmark' : 'fa-play', 'ui-icon']" aria-hidden="true"></i>{{ playing === release.id ? (locale === 'ja' ? '閉じる' : 'Close') : (locale === 'ja' ? '試聴' : 'Preview') }}</button>
-        <a class="pill" :href="link(release.linkcoreUrl)" target="_blank" rel="noopener noreferrer">{{ locale === 'ja' ? '配信サービス' : 'Listen' }}<span class="ext" aria-hidden="true">↗</span></a>
+        <a class="pill" :href="link(release.linkcoreUrl)" target="_blank" rel="noopener noreferrer">{{ locale === 'ja' ? '配信で聴く' : 'Listen' }}<span class="ext" aria-hidden="true">↗</span></a>
       </div>
     </article>
     <section v-if="activeRelease" ref="playerPanel" class="player-panel" :style="playerOrder" :aria-label="locale === 'ja' ? '楽曲プレビュー' : 'Music preview'" tabindex="-1">

@@ -68,7 +68,7 @@ export default defineNuxtConfig({
         },
         {
           name: 'theme-color',
-          content: '#f2f3ee'
+          content: '#f5f6f8'
         },
         {
           name: 'twitter:card',

@@ -12,7 +12,6 @@
   --color-text: #14171c; --color-text-muted: #596270;
   --color-sub: #3d4551; --color-sub-strong: #14171c;
   --color-accent: #0c7479; --color-accent-strong: #095b60;
-  --color-straw: #8f6a26;
   --color-rgb-main: 245,246,248; --color-rgb-accent: 12,116,121;
   --line: #dde1e7; --container: 1200px;
   --shadow-subtle: none; --shadow-soft: 0 8px 28px #14171c12; --shadow-strong: 0 20px 50px #14171c24;
@@ -32,7 +31,6 @@
   --color-text: #eef0f3; --color-text-muted: #9ba6b3;
   --color-sub: #c4ccd6; --color-sub-strong: #eef0f3;
   --color-accent: #7fd6cb; --color-accent-strong: #aee8e0;
-  --color-straw: #d9b972;
   --color-rgb-main: 15,18,22; --color-rgb-accent: 127,214,203;
   --line: #2a323c; --selection: #1f5a5c;
   --shadow-soft: 0 8px 28px #00000040; --shadow-strong: 0 20px 50px #00000070;
@@ -45,7 +43,6 @@
   --color-text: #eef0f3; --color-text-muted: #9ba6b3;
   --color-sub: #c4ccd6; --color-sub-strong: #eef0f3;
   --color-accent: #7fd6cb; --color-accent-strong: #aee8e0;
-  --color-straw: #d9b972;
   --color-rgb-main: 15,18,22; --color-rgb-accent: 127,214,203;
   --line: #2a323c; --selection: #1f5a5c;
   --shadow-soft: 0 8px 28px #00000040; --shadow-strong: 0 20px 50px #00000070;
@@ -72,7 +69,7 @@ img { display: block; max-width: 100%; } ::selection { color: var(--color-text);
    Page frame and headings
 --------------------------------------------------------------------------- */
 .page-wrap { width: min(var(--container), calc(100% - 96px)); margin-inline: auto; padding-block: 64px 110px; }
-.mono, .eyebrow { font-family: var(--font-sans); font-weight: 500; font-size: .8125rem; letter-spacing: .04em; }
+.eyebrow { font-weight: 500; font-size: .8125rem; letter-spacing: .04em; }
 .eyebrow { color: var(--color-text-muted); }
 .display-title { margin-top: 8px; font-size: clamp(2.4rem, 5.5vw, 4rem); font-weight: 800; letter-spacing: -.01em; line-height: 1.25; }
 .section { margin-top: 104px; scroll-margin-top: 95px; }
@@ -117,7 +114,7 @@ a:hover > .ext, a:hover > * > .ext { transform: translate(2px, -2px); }
 --------------------------------------------------------------------------- */
 .game-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 32px; }
 .game-tile { text-decoration: none; }
-.game-tile .game-image { background: #11161a; aspect-ratio: 16/10; }
+.game-tile .game-image { background: #0f1216; aspect-ratio: 16/10; }
 .game-tile img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
 .game-caption { display: flex; justify-content: space-between; align-items: center; gap: 16px; border-bottom: 1px solid var(--line); padding-block: 18px 22px; transition: border-color var(--dur-fast); }
 .game-caption h3 { font-size: 1.4rem; font-weight: 700; line-height: 1.4; }

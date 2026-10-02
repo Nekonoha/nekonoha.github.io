@@ -9,6 +9,7 @@
           <a href="#music"><i class="fa-solid fa-music" aria-hidden="true"></i>{{ locale === 'ja' ? '音楽' : 'Music' }}</a>
           <a href="#games"><i class="fa-solid fa-gamepad" aria-hidden="true"></i>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</a>
           <a href="#art"><i class="fa-solid fa-paintbrush" aria-hidden="true"></i>{{ locale === 'ja' ? 'イラスト' : 'Art' }}</a>
+          <a v-if="novels.length" href="#novels"><i class="fa-solid fa-book-open" aria-hidden="true"></i>{{ locale === 'ja' ? '小説' : 'Novels' }}</a>
         </nav>
       </div>
       <div v-if="latest" class="hero-release">
@@ -20,12 +21,12 @@
             <p class="hero-caption">{{ locale === 'ja' ? '最新リリース' : 'Latest release' }}<time :datetime="latest.releaseDate">{{ latest.releaseDate.replaceAll('-', '.') }}</time></p>
             <h2>{{ releaseTitle }}</h2>
           </div>
-          <a class="pill pill-primary" :href="latest.linkcoreUrl + '?lang=' + locale" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-headphones ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? '聴く' : 'Listen' }}<span class="ext" aria-hidden="true">↗</span></a>
+          <a class="pill pill-primary" :href="latest.linkcoreUrl + '?lang=' + locale" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-headphones ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? '配信で聴く' : 'Listen' }}<span class="ext" aria-hidden="true">↗</span></a>
         </div>
       </div>
     </section>
     <section id="music" class="section">
-      <header class="section-head"><h2>{{ locale === 'ja' ? '音楽' : 'Music' }}<small>{{ locale === 'ja' ? '新しい順' : 'Newest first' }}</small></h2><NuxtLink to="/works#music">{{ locale === 'ja' ? 'すべてのリリース' : 'All releases' }}</NuxtLink></header>
+      <header class="section-head"><h2>{{ locale === 'ja' ? '音楽' : 'Music' }}<small>{{ locale === 'ja' ? '新しい順' : 'Newest first' }}</small></h2><NuxtLink to="/works#music">{{ locale === 'ja' ? 'すべて見る' : 'View all' }}</NuxtLink></header>
       <LatestReleases />
     </section>
     <section id="games" class="section">
@@ -36,6 +37,10 @@
       <header class="section-head"><h2>{{ locale === 'ja' ? 'イラスト' : 'Illustration' }}<small>{{ locale === 'ja' ? 'pixivの新着' : 'Latest on pixiv' }}</small></h2><NuxtLink to="/works#art">{{ locale === 'ja' ? 'すべて見る' : 'View all' }}</NuxtLink></header>
       <LatestIllustrations />
     </section>
+    <section v-if="novels.length" id="novels" class="section">
+      <header class="section-head"><h2>{{ locale === 'ja' ? '小説' : 'Novels' }}</h2><NuxtLink to="/novels">{{ locale === 'ja' ? 'すべて見る' : 'View all' }}</NuxtLink></header>
+      <NovelList />
+    </section>
     <section id="links" class="section links-section">
       <header class="section-head"><h2>{{ locale === 'ja' ? 'リンク' : 'Links' }}</h2></header>
       <ExternalLinks />
@@ -45,6 +50,7 @@
 <script setup lang="ts">
 import { musicReleases } from '~/data/releases'
 const { locale } = useLocale()
+const { novels } = useNovels()
 const latest = musicReleases[0]
 const releaseTitle = computed(() => latest ? (locale.value === 'ja' ? latest.title : latest.titleEn) : '')
 useSeoMeta({
@@ -86,6 +92,6 @@ h1 { font-size: clamp(4rem, 8.6vw, 7.6rem); font-weight: 800; line-height: 1.15;
   h1 { font-size: clamp(3.6rem, 18vw, 6rem); }
   .hero-description { margin-top: 22px; font-size: 1rem; }
   .hero-nav { gap: 8px; margin-top: 16px; }
-  .hero-nav a { flex: 1 1 0; justify-content: center; gap: 8px; padding-inline: 10px; white-space: nowrap; }
+  .hero-nav a { flex: 1 1 40%; justify-content: center; gap: 8px; padding-inline: 10px; white-space: nowrap; }
 }
 </style>

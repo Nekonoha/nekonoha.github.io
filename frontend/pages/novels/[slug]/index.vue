@@ -5,8 +5,9 @@
       <h1 class="display-title">{{ novel.title }}</h1>
       <p v-if="novel.description" class="novel-description">{{ novel.description }}</p>
       <div class="novel-start">
-        <NuxtLink v-if="resume" class="pill pill-primary" :to="episodeLink(resume.number)"><i class="fa-solid fa-bookmark ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? '続きから読む' : 'Continue reading' }}（{{ resume.title }}）</NuxtLink>
-        <NuxtLink :class="['pill', { 'pill-primary': !resume }]" :to="episodeLink(novel.episodes[0].number)">{{ locale === 'ja' ? '最初から読む' : 'Start from the beginning' }}</NuxtLink>
+        <NuxtLink v-if="marked" class="pill pill-primary" :to="episodeLink(marked.number) + '?bookmark=1'"><i class="fa-solid fa-bookmark ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? 'しおりから読む' : 'Open bookmark' }}（{{ marked.title }}）</NuxtLink>
+        <NuxtLink v-else-if="resume" class="pill pill-primary" :to="episodeLink(resume.number)"><i class="fa-solid fa-book-open ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? '続きから読む' : 'Continue reading' }}（{{ resume.title }}）</NuxtLink>
+        <NuxtLink :class="['pill', { 'pill-primary': !resume && !marked }]" :to="episodeLink(novel.episodes[0].number)">{{ locale === 'ja' ? '最初から読む' : 'Start from the beginning' }}</NuxtLink>
       </div>
     </header>
     <section class="section">
@@ -16,7 +17,8 @@
           <NuxtLink :to="episodeLink(episode.number)" :aria-current="resume?.number === episode.number ? 'true' : undefined">
             <span class="episode-number">{{ index + 1 }}</span>
             <span class="episode-title">{{ episode.title }}</span>
-            <span v-if="resume?.number === episode.number" class="episode-here">{{ locale === 'ja' ? '前回ここまで' : 'Last read' }}</span>
+            <span v-if="marked?.number === episode.number" class="episode-here"><i class="fa-solid fa-bookmark" aria-hidden="true"></i>{{ locale === 'ja' ? 'しおり' : 'Bookmark' }}</span>
+            <span v-else-if="resume?.number === episode.number" class="episode-here quiet">{{ locale === 'ja' ? '前回ここまで' : 'Last read' }}</span>
           </NuxtLink>
         </li>
       </ol>
@@ -34,17 +36,23 @@ const episodeLink = (number: number) => `/novels/${novel.slug}/${number}`
 // 最後に開いた話はこの端末のブラウザにだけ保存する。
 const lastRead = ref<number | null>(null)
 const resume = computed(() => novel.episodes.find(episode => episode.number === lastRead.value))
+const bookmarked = ref<number | null>(null)
+const marked = computed(() => novel.episodes.find(episode => episode.number === bookmarked.value))
 onMounted(() => {
   try {
     const saved = Number.parseInt(localStorage.getItem(`nekonoha-novel-last:${novel.slug}`) ?? '', 10)
     if (Number.isFinite(saved)) lastRead.value = saved
+    const mark = JSON.parse(localStorage.getItem(`nekonoha-novel-bookmark:${novel.slug}`) ?? 'null')
+    if (mark && Number.isInteger(mark.episode)) bookmarked.value = mark.episode
   } catch { /* 保存できない環境でも読める。 */ }
 })
 useSeoMeta({
   title: () => `${novel.title} — 針の筵`,
   description: () => novel.description ?? novel.title,
-  ogTitle: () => `${novel.title} — 針の筵`
+  ogTitle: () => `${novel.title} — 針の筵`,
+  ogUrl: `https://nekonoha.github.io/novels/${novel.slug}`
 })
+useHead({ link: [{ rel: 'canonical', href: `https://nekonoha.github.io/novels/${novel.slug}` }] })
 </script>
 <style scoped>
 .back-link i { margin-right: .6em; font-size: .85em; }
@@ -57,6 +65,7 @@ header { margin-top: 20px; }
 .episode-list a:hover { color: var(--color-accent); background: color-mix(in srgb, var(--color-surface) 70%, transparent); }
 .episode-number { flex-shrink: 0; min-width: 2.2em; color: var(--color-text-muted); font-size: .875rem; font-variant-numeric: tabular-nums; text-align: right; }
 .episode-title { flex: 1; font-weight: 500; }
-.episode-here { flex-shrink: 0; padding: 1px 10px; border-radius: var(--radius-pill); color: var(--color-main); background: var(--color-accent); font-size: .75rem; }
+.episode-here { display: inline-flex; flex-shrink: 0; align-items: center; gap: 6px; padding: 1px 10px; border: 1px solid var(--color-accent); border-radius: var(--radius-pill); color: var(--color-main); background: var(--color-accent); font-size: .75rem; }
+.episode-here.quiet { border-color: var(--line); color: var(--color-text-muted); background: transparent; }
 @media(max-width:600px) { .episode-list a { gap: 12px; padding-inline: 4px; } }
 </style>

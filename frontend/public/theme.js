@@ -8,5 +8,5 @@
   document.documentElement.dataset.colorMode = mode;
   var dark = mode === 'dark' || (mode === 'system' && window.matchMedia('(prefers-color-scheme: dark)').matches);
   var meta = document.querySelector('meta[name="theme-color"]');
-  if (meta) meta.content = dark ? '#11161a' : '#f2f3ee';
+  if (meta) meta.content = dark ? '#0f1216' : '#f5f6f8';
 })();

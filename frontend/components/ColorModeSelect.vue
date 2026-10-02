@@ -19,7 +19,7 @@ const applyMode = () => {
   document.documentElement.dataset.colorMode = mode.value
   const dark = mode.value === 'dark' || (mode.value === 'system' && media?.matches)
   const meta = document.querySelector<HTMLMetaElement>('meta[name="theme-color"]')
-  if (meta) meta.content = dark ? '#11161a' : '#f2f3ee'
+  if (meta) meta.content = dark ? '#0f1216' : '#f5f6f8'
 }
 const setMode = (value: ColorMode) => {
   mode.value = value
