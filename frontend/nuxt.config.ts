@@ -1,9 +1,33 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+import { existsSync, readdirSync, readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+
+// content/novels にある公開中の作品と各話を、静的生成の対象に加える。
+const novelRoutes = (): string[] => {
+  try {
+    const root = fileURLToPath(new URL('./content/novels', import.meta.url))
+    if (!existsSync(root)) return []
+    const routes = ['/novels']
+    for (const entry of readdirSync(root, { withFileTypes: true })) {
+      const metaPath = `${root}/${entry.name}/novel.json`
+      if (!entry.isDirectory() || !existsSync(metaPath)) continue
+      if (JSON.parse(readFileSync(metaPath, 'utf8')).draft) continue
+      const numbers = readdirSync(`${root}/${entry.name}`).map(file => /^(\d+).*\.txt$/i.exec(file)).filter(Boolean).map(match => Number.parseInt(match![1], 10))
+      if (!numbers.length) continue
+      routes.push(`/novels/${entry.name}`, ...numbers.map(number => `/novels/${entry.name}/${number}`))
+    }
+    return routes
+  } catch (error) {
+    console.warn('小説の一覧を読めませんでした:', error)
+    return []
+  }
+}
+
 export default defineNuxtConfig({
   ssr: true,
   nitro: {
     prerender: {
-      routes: ['/', '/about', '/works', '/trial', '/unrequited']
+      routes: ['/', '/about', '/works', '/trial', '/unrequited', ...novelRoutes()]
     }
   },
   devServer: {
