@@ -44,7 +44,7 @@ export default defineNuxtConfig({
         },
         {
           name: 'theme-color',
-          content: '#f5f0e9'
+          content: '#f2f3ee'
         },
         {
           name: 'twitter:card',
@@ -62,7 +62,7 @@ export default defineNuxtConfig({
       link: [
         { rel: 'preconnect', href: 'https://fonts.googleapis.com' },
         { rel: 'preconnect', href: 'https://fonts.gstatic.com', crossorigin: '' },
-        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap' },
+        { rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=M+PLUS+2:wght@400;500;700;800&display=swap' },
         {
           rel: 'canonical',
           href: 'https://nekonoha.github.io/'

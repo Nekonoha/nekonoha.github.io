@@ -1,5 +1,5 @@
 <template>
-  <NuxtLoadingIndicator color="var(--color-accent)" :height="3" />
+  <NuxtLoadingIndicator color="var(--color-accent)" :height="2" />
   <NuxtLayout>
     <NuxtPage />
   </NuxtLayout>
@@ -7,21 +7,16 @@
 
 <style>
 .page-enter-active {
-  transition: clip-path .68s cubic-bezier(.18,.86,.2,1), opacity .3s ease, transform .3s ease;
+  transition: opacity .32s cubic-bezier(.16,1,.3,1), transform .32s cubic-bezier(.16,1,.3,1);
 }
-.page-leave-active { transition: opacity .18s ease, transform .18s ease; }
+.page-leave-active { transition: opacity .14s ease; }
 
 .page-enter-from {
-  clip-path: polygon(-18% 0, 0 0, 0 100%, -18% 100%);
-  transform: translateY(12px);
-}
-
-.page-enter-to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); }
-
-.page-leave-to {
   opacity: 0;
-  transform: translateY(-8px);
+  transform: translateY(10px);
 }
+
+.page-leave-to { opacity: 0; }
 
 /* モーション削減プリファレンス対応 */
 @media (prefers-reduced-motion: reduce) {

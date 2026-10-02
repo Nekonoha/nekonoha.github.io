@@ -2,38 +2,42 @@
   <div class="home page-wrap">
     <section class="hero" aria-labelledby="site-title">
       <div class="hero-copy">
-        <p class="eyebrow">NEKONOHA</p>
-        <h1 id="site-title">針の筵<span>Hari no Mushiro</span></h1>
-        <p class="hero-description">{{ locale === 'ja' ? '音楽・ゲーム・イラスト' : 'Music, games & illustration' }}</p>
-        <div class="hero-nav">
-          <a href="#music"><span><i class="fa-solid fa-music ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? '音楽' : 'Music' }}</span><i class="fa-solid fa-arrow-down nav-arrow" aria-hidden="true"></i></a>
-          <a href="#games"><span><i class="fa-solid fa-gamepad ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</span><i class="fa-solid fa-arrow-down nav-arrow" aria-hidden="true"></i></a>
-          <a href="#art"><span><i class="fa-solid fa-paintbrush ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? 'イラスト' : 'Art' }}</span><i class="fa-solid fa-arrow-down nav-arrow" aria-hidden="true"></i></a>
-        </div>
+        <h1 id="site-title">針の筵</h1>
+        <p class="hero-romaji" lang="en">Hari no Mushiro</p>
+        <p class="hero-description">{{ locale === 'ja' ? 'ネコノハの音楽・ゲーム・イラスト' : 'Music, games and illustration by Nekonoha' }}</p>
+        <nav class="hero-nav" :aria-label="locale === 'ja' ? 'このページの目次' : 'On this page'">
+          <a href="#music"><i class="fa-solid fa-music" aria-hidden="true"></i>{{ locale === 'ja' ? '音楽' : 'Music' }}</a>
+          <a href="#games"><i class="fa-solid fa-gamepad" aria-hidden="true"></i>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</a>
+          <a href="#art"><i class="fa-solid fa-paintbrush" aria-hidden="true"></i>{{ locale === 'ja' ? 'イラスト' : 'Art' }}</a>
+        </nav>
       </div>
       <div v-if="latest" class="hero-release">
-        <a class="hero-art" :href="latest.linkcoreUrl + '?lang=' + locale" target="_blank" rel="noopener noreferrer">
+        <a class="hero-art" data-tilt :href="latest.linkcoreUrl + '?lang=' + locale" target="_blank" rel="noopener noreferrer" :aria-label="releaseTitle + (locale === 'ja' ? 'を聴く' : ' — Listen')">
           <img :src="latest.artwork" :alt="releaseTitle" width="800" height="800" fetchpriority="high">
-          <span class="listen-label"><i class="fa-solid fa-headphones ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? '聴く' : 'Listen' }} ↗</span>
         </a>
-        <div class="hero-caption"><p class="eyebrow">LATEST RELEASE</p><time :datetime="latest.releaseDate">{{ latest.releaseDate.replaceAll('-', '.') }}</time></div>
-        <h2><a :href="latest.linkcoreUrl + '?lang=' + locale" target="_blank" rel="noopener noreferrer">{{ releaseTitle }}</a></h2>
+        <div class="hero-release-info">
+          <div>
+            <p class="hero-caption">{{ locale === 'ja' ? '最新リリース' : 'Latest release' }}<time :datetime="latest.releaseDate">{{ latest.releaseDate.replaceAll('-', '.') }}</time></p>
+            <h2>{{ releaseTitle }}</h2>
+          </div>
+          <a class="pill pill-primary" :href="latest.linkcoreUrl + '?lang=' + locale" target="_blank" rel="noopener noreferrer"><i class="fa-solid fa-headphones ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? '聴く' : 'Listen' }}<span class="ext" aria-hidden="true">↗</span></a>
+        </div>
       </div>
     </section>
     <section id="music" class="section">
-      <header class="section-head"><h2><i class="fa-solid fa-music ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? '音楽' : 'Music' }}<small>Releases</small></h2><NuxtLink to="/works#music">{{ locale === 'ja' ? 'すべてのリリース' : 'All releases' }} ↗</NuxtLink></header>
+      <header class="section-head"><h2>{{ locale === 'ja' ? '音楽' : 'Music' }}<small>{{ locale === 'ja' ? '新しい順' : 'Newest first' }}</small></h2><NuxtLink to="/works#music">{{ locale === 'ja' ? 'すべてのリリース' : 'All releases' }}</NuxtLink></header>
       <LatestReleases />
     </section>
     <section id="games" class="section">
-      <header class="section-head"><h2><i class="fa-solid fa-gamepad ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}<small>Yume Nikki fan games</small></h2></header>
+      <header class="section-head"><h2>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}<small>{{ locale === 'ja' ? 'ゆめにっき二次創作' : 'Yume Nikki fan games' }}</small></h2></header>
       <GameWorks />
     </section>
     <section id="art" class="section">
-      <header class="section-head"><h2><i class="fa-solid fa-paintbrush ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? 'イラスト' : 'Illustration' }}<small>Latest on pixiv</small></h2><NuxtLink to="/works#art">{{ locale === 'ja' ? 'すべて見る' : 'View all' }} ↗</NuxtLink></header>
+      <header class="section-head"><h2>{{ locale === 'ja' ? 'イラスト' : 'Illustration' }}<small>{{ locale === 'ja' ? 'pixivの新着' : 'Latest on pixiv' }}</small></h2><NuxtLink to="/works#art">{{ locale === 'ja' ? 'すべて見る' : 'View all' }}</NuxtLink></header>
       <LatestIllustrations />
     </section>
     <section id="links" class="section links-section">
-      <header class="section-head"><h2><i class="fa-solid fa-link ui-icon" aria-hidden="true"></i>{{ locale === 'ja' ? 'リンク' : 'Links' }}</h2></header>
+      <header class="section-head"><h2>{{ locale === 'ja' ? 'リンク' : 'Links' }}</h2></header>
       <ExternalLinks />
     </section>
   </div>
@@ -51,25 +55,37 @@ useSeoMeta({
 })
 </script>
 <style scoped>
-.home { padding-top: 52px; }
-.hero { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(48px,8vw,120px); align-items: center; }
-.hero-copy { padding-block: 40px; }
-.hero-copy > .eyebrow { margin-bottom: 36px; color: var(--color-text); letter-spacing: .2em; }
-h1 { font-family: var(--font-sans); font-size: clamp(4.6rem,9vw,9rem); font-weight: 700; line-height: 1.25; letter-spacing: -.06em; white-space: nowrap; }
-h1 span { display: block; margin-top: 16px; font-family: var(--font-sans); font-weight: 500; font-size: clamp(1rem,2vw,1.7rem); line-height: 1.5; letter-spacing: -.015em; }
-.hero-description { margin-top: 48px; font-size: .9rem; color: var(--color-text-muted); }
-.hero-nav { max-width: 340px; margin-top: 36px; }
-.hero-nav a { display: flex; justify-content: space-between; gap: 20px; padding: 14px 0; border-bottom: 1px solid var(--line); font-size: .8rem; text-decoration: none; }
-.hero-nav a:hover { color: var(--color-accent); border-color: var(--color-accent); }
-.hero-art { position: relative; display: block; overflow: hidden; aspect-ratio: 1; background: var(--color-surface); }
-.hero-art img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s; }
-.hero-art:hover img { transform: scale(1.025); }
-.listen-label { position: absolute; bottom: 20px; right: 20px; padding: 12px 24px; background: var(--color-main); font-size: .8rem; }
-.hero-caption { display: flex; justify-content: space-between; gap: 16px; margin-top: 20px; }
-.hero-caption .eyebrow, time { font-size: .68rem; color: var(--color-text-muted); }
-h2 { margin-top: 8px; font-size: 1.05rem; font-weight: 500; line-height: 1.65; }
-h2 a { text-decoration: none; } h2 a:hover { text-decoration: underline; }
-@media(max-width:760px) { .home { padding-top: 28px; } .hero { grid-template-columns: 1fr; gap: 40px; } .hero-copy { padding-block: 10px 0; } .hero-copy > .eyebrow { margin-bottom: 18px; } h1 { font-size: clamp(4.8rem,19vw,8rem); } .hero-description { margin-top: 28px; } .hero-nav { display: flex; max-width: none; gap: 22px; margin-top: 16px; } .hero-nav a { flex: 1; gap: 12px; white-space: nowrap; font-size: .7rem; } }
-@media(max-width:360px) { .hero-nav { gap: 14px; } .hero-nav a { gap: 6px; } }
-@media(max-width:600px) { .hero-nav { gap: 12px; } .hero-nav a { gap: 0; } .nav-arrow { display: none; } .hero-nav .ui-icon { margin-inline-end: .35em; } }
+.home { padding-top: 56px; }
+.hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 480px); gap: clamp(40px, 7vw, 104px); align-items: center; }
+.hero-copy { animation: hero-in .7s var(--ease-out) both; }
+h1 { font-size: clamp(4rem, 8.6vw, 7.6rem); font-weight: 800; line-height: 1.15; letter-spacing: -.02em; white-space: nowrap; }
+.hero-romaji { margin-top: 10px; color: var(--color-text-muted); font-size: clamp(1rem, 1.6vw, 1.3rem); font-weight: 500; letter-spacing: .02em; }
+.hero-description { margin-top: 36px; color: var(--color-sub); font-size: 1.05rem; }
+/* Section shortcuts: large, obvious targets. */
+.hero-nav { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.hero-nav a { display: inline-flex; align-items: center; gap: 10px; min-height: 48px; padding: 10px 22px; border: 1px solid var(--line); border-radius: var(--radius-pill); background: var(--color-panel); font-size: .95rem; font-weight: 500; text-decoration: none; transition: border-color var(--dur-fast), color var(--dur-fast), background var(--dur-fast), transform var(--dur-base) var(--ease-out); }
+.hero-nav i { color: var(--color-accent); font-size: .9em; }
+.hero-nav a:hover { border-color: var(--color-accent); color: var(--color-accent); transform: translateY(-2px); }
+
+.hero-release { animation: hero-in .8s var(--ease-out) .12s both; }
+/* The jacket leans slightly toward the pointer and settles back. */
+.hero-art { display: block; aspect-ratio: 1; box-shadow: var(--shadow-strong); transform: perspective(1000px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)); transition: transform .5s var(--ease-out); }
+.hero-art.is-tilting { transition: transform .15s linear; }
+.hero-art img { width: 100%; height: 100%; object-fit: cover; }
+.hero-release-info { display: flex; justify-content: space-between; align-items: center; gap: 16px; margin-top: 18px; }
+.hero-caption { color: var(--color-text-muted); font-size: .8125rem; }
+.hero-caption time { margin-left: 12px; font-variant-numeric: tabular-nums; }
+.hero-release h2 { font-size: 1.25rem; font-weight: 700; line-height: 1.5; }
+.hero-release .pill { flex-shrink: 0; min-height: 46px; padding-inline: 22px; font-size: .9rem; }
+
+@keyframes hero-in { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+
+@media(max-width:860px) {
+  .home { padding-top: 28px; }
+  .hero { grid-template-columns: 1fr; gap: 36px; }
+  h1 { font-size: clamp(3.6rem, 18vw, 6rem); }
+  .hero-description { margin-top: 22px; font-size: 1rem; }
+  .hero-nav { gap: 8px; margin-top: 16px; }
+  .hero-nav a { flex: 1 1 0; justify-content: center; gap: 8px; padding-inline: 10px; white-space: nowrap; }
+}
 </style>

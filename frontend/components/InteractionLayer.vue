@@ -1,87 +1,109 @@
 <template>
-  <div class="ambient-scene" aria-hidden="true">
-    <span class="ambient-orb orb-one"></span>
-    <span class="ambient-orb orb-two"></span>
-    <span class="ambient-orb orb-three"></span>
-    <span class="ambient-grid"></span>
-  </div>
+  <div class="ambient-scene" aria-hidden="true"></div>
 </template>
 <script setup lang="ts">
+/*
+ * Pointer and scroll feedback for the whole site:
+ * - a gentle lean on [data-tilt] elements
+ * - the click ring on interactive targets
+ * - card entrances and the scroll progress bar
+ * All of it is skipped when the visitor prefers reduced motion.
+ */
 let reducedMotion: MediaQueryList | undefined
+let finePointer: MediaQueryList | undefined
 let revealObserver: IntersectionObserver | undefined
 let pageObserver: MutationObserver | undefined
 let revealFrame = 0
+let scrollFrame = 0
+let tilted: HTMLElement | null = null
+
+const releaseTilt = () => {
+  if (!tilted) return
+  tilted.classList.remove('is-tilting')
+  tilted.style.removeProperty('--rx')
+  tilted.style.removeProperty('--ry')
+  tilted = null
+}
+const onPointerMove = (event: PointerEvent) => {
+  if (event.pointerType !== 'mouse' || reducedMotion?.matches || !finePointer?.matches) return
+  const target = event.target instanceof Element ? event.target.closest<HTMLElement>('[data-tilt]') : null
+  if (target !== tilted) releaseTilt()
+  if (!target) return
+  const rect = target.getBoundingClientRect()
+  const px = (event.clientX - rect.left) / rect.width - .5
+  const py = (event.clientY - rect.top) / rect.height - .5
+  tilted = target
+  target.classList.add('is-tilting')
+  target.style.setProperty('--rx', `${(-py * 5).toFixed(2)}deg`)
+  target.style.setProperty('--ry', `${(px * 5).toFixed(2)}deg`)
+}
+const onPointerLeave = () => releaseTilt()
 const onClick = (event: MouseEvent) => {
   if (reducedMotion?.matches || !event.isTrusted) return
   const target = event.target
-  if (!(target instanceof Element) || target.closest('iframe')) return
-  const burst = document.createElement('span')
-  burst.className = 'click-burst'
-  burst.style.left = `${event.clientX}px`
-  burst.style.top = `${event.clientY}px`
-  for (let i = 0; i < 8; i++) {
-    const spark = document.createElement('i')
-    const angle = Math.PI * 2 * i / 8
-    const distance = 25 + Math.random() * 18
-    spark.style.setProperty('--dx', `${Math.cos(angle) * distance}px`)
-    spark.style.setProperty('--dy', `${Math.sin(angle) * distance}px`)
-    burst.append(spark)
-  }
-  document.body.append(burst)
-  burst.addEventListener('animationend', animation => { if (animation.target === burst) burst.remove() })
+  if (!(target instanceof Element) || !target.closest('a, button')) return
+  const ring = document.createElement('span')
+  ring.className = 'click-burst'
+  ring.style.left = `${event.clientX}px`
+  ring.style.top = `${event.clientY}px`
+  document.body.append(ring)
+  ring.addEventListener('animationend', () => ring.remove())
 }
 const setupReveals = () => {
   revealObserver?.disconnect()
   if (reducedMotion?.matches) return
   revealObserver = new IntersectionObserver(entries => {
     for (const entry of entries) {
-      if (!entry.isIntersecting) continue
+      // Anything already scrolled past is shown as well, so nothing can stay hidden.
+      if (!entry.isIntersecting && entry.boundingClientRect.top > 0) continue
       entry.target.classList.add('reveal-visible')
       revealObserver?.unobserve(entry.target)
     }
-  }, { rootMargin: '0px 0px -8% 0px' })
-  const items = document.querySelectorAll<HTMLElement>('#main-content .section-head, #main-content .release, #main-content .game-tile, #main-content .illustration')
+  }, { rootMargin: '0px 0px -6% 0px' })
+  const items = document.querySelectorAll<HTMLElement>('#main-content .release, #main-content .game-tile, #main-content .illustration')
   items.forEach((item, index) => {
-    if (item.getBoundingClientRect().top < window.innerHeight * .9) return
-    item.style.setProperty('--reveal-delay', `${index % 3 * 65}ms`)
+    if (item.classList.contains('reveal-pending') || item.getBoundingClientRect().top < window.innerHeight * .9) return
+    item.style.setProperty('--reveal-delay', `${index % 3 * 70}ms`)
     item.classList.add('reveal-pending')
     revealObserver?.observe(item)
   })
 }
-const onScroll = () => {
+const updateProgress = () => {
+  scrollFrame = 0
   const remaining = document.documentElement.scrollHeight - window.innerHeight
-  document.documentElement.style.setProperty('--page-progress', `${remaining > 0 ? window.scrollY / remaining * 100 : 0}%`)
+  document.querySelector<HTMLElement>('.site-header')?.style.setProperty('--page-progress', `${remaining > 0 ? Math.min(1, window.scrollY / remaining) : 0}`)
 }
+const onScroll = () => { if (!scrollFrame) scrollFrame = requestAnimationFrame(updateProgress) }
 onMounted(() => {
   reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+  finePointer = window.matchMedia('(hover: hover) and (pointer: fine)')
   document.addEventListener('click', onClick)
+  document.addEventListener('pointermove', onPointerMove, { passive: true })
+  document.documentElement.addEventListener('pointerleave', onPointerLeave)
   window.addEventListener('scroll', onScroll, { passive: true })
   const main = document.getElementById('main-content')
   if (main) {
     pageObserver = new MutationObserver(() => {
       cancelAnimationFrame(revealFrame)
-      revealFrame = requestAnimationFrame(setupReveals)
+      revealFrame = requestAnimationFrame(() => { releaseTilt(); setupReveals(); updateProgress() })
     })
     pageObserver.observe(main, { childList: true })
   }
   setupReveals()
-  onScroll()
+  updateProgress()
 })
 onUnmounted(() => {
   document.removeEventListener('click', onClick)
+  document.removeEventListener('pointermove', onPointerMove)
+  document.documentElement.removeEventListener('pointerleave', onPointerLeave)
   window.removeEventListener('scroll', onScroll)
   revealObserver?.disconnect()
   pageObserver?.disconnect()
   cancelAnimationFrame(revealFrame)
+  cancelAnimationFrame(scrollFrame)
 })
 </script>
 <style scoped>
-.ambient-scene { position: fixed; z-index: 0; inset: 0; overflow: hidden; pointer-events: none; }
-.ambient-orb { position: absolute; width: min(60vw, 720px); aspect-ratio: 1; border-radius: 50%; filter: blur(65px); opacity: .24; animation: drift 18s ease-in-out infinite alternate; }
-.orb-one { top: -20%; left: -16%; background: #f0ad79; }
-.orb-two { top: 28%; right: -20%; background: #66c4c6; animation-duration: 23s; animation-delay: -8s; }
-.orb-three { bottom: -38%; left: 18%; background: #b5a0de; animation-duration: 21s; animation-delay: -13s; }
-.ambient-grid { position: absolute; inset: 0; opacity: .14; background-image: radial-gradient(var(--color-accent) .65px, transparent .65px); background-size: 30px 30px; mask-image: linear-gradient(90deg, transparent, black 40%, transparent); }
-@keyframes drift { to { transform: translate(16%, 12%) scale(1.22); } }
-@media(prefers-reduced-motion:reduce) { .ambient-orb { animation: none; } }
+/* A still, soft tint behind the page. Nothing here moves. */
+.ambient-scene { position: fixed; z-index: 0; inset: 0; pointer-events: none; background: radial-gradient(ellipse 70% 55% at 85% -10%, color-mix(in srgb, var(--color-accent) 13%, transparent), transparent 70%); }
 </style>

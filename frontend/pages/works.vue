@@ -1,6 +1,6 @@
 <template>
   <article class="page-wrap">
-    <header><p class="eyebrow">Works</p><h1 class="display-title">{{ locale === 'ja' ? '作品' : 'Works' }}</h1></header>
+    <header><h1 class="display-title">{{ locale === 'ja' ? '作品' : 'Works' }}</h1></header>
     <nav class="works-nav" :aria-label="locale === 'ja' ? '作品ページの目次' : 'Works page sections'">
       <a href="#music" :aria-current="activeSection === 'music' ? 'location' : undefined" @click="activeSection = 'music'"><i class="fa-solid fa-music" aria-hidden="true"></i>{{ locale === 'ja' ? '音楽' : 'Music' }}</a>
       <a href="#games" :aria-current="activeSection === 'games' ? 'location' : undefined" @click="activeSection = 'games'"><i class="fa-solid fa-gamepad" aria-hidden="true"></i>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</a>
@@ -8,11 +8,11 @@
       <a href="#links" :aria-current="activeSection === 'links' ? 'location' : undefined" @click="activeSection = 'links'"><i class="fa-solid fa-link" aria-hidden="true"></i>{{ locale === 'ja' ? 'リンク' : 'Links' }}</a>
     </nav>
     <section id="music" class="section">
-      <header class="section-head"><h2>{{ locale === 'ja' ? '音楽' : 'Music' }}<small>{{ musicReleases.length }} releases</small></h2><a :href="'https://www.tunecore.co.jp/artists/nekonoha?lang=' + locale" target="_blank" rel="noopener noreferrer">TuneCore ↗</a></header>
+      <header class="section-head"><h2>{{ locale === 'ja' ? '音楽' : 'Music' }}<small>{{ musicReleases.length }}{{ locale === 'ja' ? '作品' : ' releases' }}</small></h2><a :href="'https://www.tunecore.co.jp/artists/nekonoha?lang=' + locale" target="_blank" rel="noopener noreferrer">TuneCore<span class="ext" aria-hidden="true">↗</span></a></header>
       <LatestReleases :limit="musicReleases.length" />
     </section>
     <section id="games" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</h2></header><GameWorks /></section>
-    <section id="art" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? 'イラスト' : 'Illustration' }}<small>{{ illustrations.length }} works</small></h2><a href="https://pixiv.me/tanfantazma" target="_blank" rel="noopener noreferrer">pixiv ↗</a></header><LatestIllustrations :limit="illustrations.length" /></section>
+    <section id="art" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? 'イラスト' : 'Illustration' }}<small>{{ illustrations.length }}{{ locale === 'ja' ? '点' : ' works' }}</small></h2><a href="https://pixiv.me/tanfantazma" target="_blank" rel="noopener noreferrer">pixiv<span class="ext" aria-hidden="true">↗</span></a></header><LatestIllustrations :limit="illustrations.length" /></section>
     <section id="links" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? 'リンク' : 'Links' }}</h2></header><ExternalLinks /></section>
   </article>
 </template>
@@ -42,15 +42,19 @@ useSeoMeta({
 useHead({ link: [{ rel: 'canonical', href: 'https://nekonoha.github.io/works' }] })
 </script>
 <style scoped>
-.works-nav { position: sticky; top: 100px; z-index: 30; display: flex; gap: 5px; width: max-content; max-width: 100%; margin-top: 48px; padding: 6px; overflow-x: auto; border: 1px solid var(--line); border-radius: 999px; background: color-mix(in srgb, var(--color-panel) 94%, transparent); backdrop-filter: blur(16px); box-shadow: 0 8px 24px #00000012; scrollbar-width: none; }
+.works-nav { position: sticky; top: 92px; z-index: 30; display: flex; gap: 4px; width: max-content; max-width: 100%; margin-top: 40px; padding: 5px; overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius-pill); background: color-mix(in srgb, var(--color-panel) 82%, transparent); backdrop-filter: blur(18px) saturate(1.3); -webkit-backdrop-filter: blur(18px) saturate(1.3); box-shadow: 0 6px 24px #0000000d; scrollbar-width: none; }
 .works-nav::-webkit-scrollbar { display: none; }
-.works-nav a { display: inline-flex; align-items: center; gap: 9px; min-height: 38px; padding: 7px 17px; border-radius: 999px; font-size: .8rem; text-decoration: none; white-space: nowrap; transition: background .2s, color .2s; }
-.works-nav a:hover, .works-nav a:focus-visible { color: var(--color-accent); background: var(--color-surface); }
-.works-nav a[aria-current="location"] { color: var(--color-panel); background: var(--color-accent); box-shadow: 0 3px 10px #00000016; }
-.works-nav a[aria-current="location"] i { color: inherit; }
-.works-nav i { color: var(--color-accent); font-size: .78rem; }
-.section { scroll-margin-top: 170px; }
-.works-nav + .section { margin-top: 48px; }
-@media(max-width:760px) { .works-nav { top: 84px; width: 100%; gap: 0; margin-top: 32px; border-radius: 16px; } .works-nav a { flex: 1 1 0; justify-content: center; gap: 5px; min-width: 0; padding-inline: 5px; font-size: .72rem; } .section { scroll-margin-top: 150px; } }
-@media(max-width:360px) { .works-nav i { display: none; } }
+.works-nav a { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: 9px; min-height: 40px; padding: 7px 18px; border-radius: var(--radius-pill); color: var(--color-text-muted); font-size: .875rem; font-weight: 500; text-decoration: none; white-space: nowrap; transition: background var(--dur-fast), color var(--dur-fast); }
+.works-nav a:hover, .works-nav a:focus-visible { color: var(--color-text); }
+.works-nav a[aria-current="location"] { color: var(--color-main); background: var(--color-accent); }
+.works-nav i { font-size: .8rem; }
+/* Where anchor positioning exists, a single pill glides between the tabs instead. */
+@supports (position-anchor: --a) and (left: anchor(left)) {
+  .works-nav a[aria-current="location"] { background: transparent; anchor-name: --works-current; }
+  .works-nav::before { content: ''; position: absolute; position-anchor: --works-current; top: anchor(top); left: anchor(left); width: anchor-size(width); height: anchor-size(height); border-radius: var(--radius-pill); background: var(--color-accent); transition: left .45s var(--ease-out), width .45s var(--ease-out); }
+}
+.section { scroll-margin-top: 165px; }
+.works-nav + .section { margin-top: 56px; }
+@media(max-width:760px) { .works-nav { top: 80px; width: 100%; gap: 0; margin-top: 28px; } .works-nav a { flex: 1 1 0; justify-content: center; gap: 6px; min-width: 0; padding-inline: 6px; font-size: .8125rem; } .section { scroll-margin-top: 150px; } }
+@media(max-width:380px) { .works-nav i { display: none; } }
 </style>

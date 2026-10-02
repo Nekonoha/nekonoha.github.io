@@ -1,155 +1,195 @@
+/* ---------------------------------------------------------------------------
+   Tokens
+   Cool neutrals and one teal accent; artwork supplies the colour.
+--------------------------------------------------------------------------- */
 :root {
-  --font-sans: 'Inter', 'Zen Kaku Gothic New', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
-  color-scheme: light; --selection: #d8dfc8;
-  --color-main: #f5f0e9; --color-main-strong: #f5f0e9;
-  --color-surface: #e5eceb; --color-panel: #fffaf3;
-  --color-text: #20221e; --color-text-muted: #626c72;
-  --color-sub: #51564b; --color-sub-strong: #20221e;
-  --color-accent: #277c80; --color-accent-strong: #175c68;
-  --color-rgb-main: 245,240,233; --color-rgb-accent: 60,88,60;
-  --line: #d3d9d6; --container: 1280px;
-  --shadow-subtle: none; --shadow-soft: none; --shadow-strong: 0 12px 40px #20221e20;
+  --font-display: 'M PLUS 2', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Noto Sans CJK JP', Meiryo, sans-serif;
+  --font-sans: 'M PLUS 2', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', 'Noto Sans CJK JP', Meiryo, sans-serif;
+
+  color-scheme: light; --selection: #c9ece7;
+  --color-main: #f5f6f8; --color-main-strong: #f5f6f8;
+  --color-surface: #e9ecf0; --color-panel: #ffffff;
+  --color-text: #14171c; --color-text-muted: #596270;
+  --color-sub: #3d4551; --color-sub-strong: #14171c;
+  --color-accent: #0c7479; --color-accent-strong: #095b60;
+  --color-straw: #8f6a26;
+  --color-rgb-main: 245,246,248; --color-rgb-accent: 12,116,121;
+  --line: #dde1e7; --container: 1200px;
+  --shadow-subtle: none; --shadow-soft: 0 8px 28px #14171c12; --shadow-strong: 0 20px 50px #14171c24;
+
+  --radius-media: 14px; --radius-panel: 18px; --radius-pill: 999px;
+
+  /* Motion: fast for feedback, slower only for large surfaces. */
+  --ease-out: cubic-bezier(.16, 1, .3, 1);
+  --ease-spring: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-standard: cubic-bezier(.4, 0, .2, 1);
+  --dur-press: 90ms; --dur-fast: 180ms; --dur-base: 280ms; --dur-slow: 620ms;
 }
 :root[data-color-mode="dark"] {
   color-scheme: dark;
-  --color-main: #171c29; --color-main-strong: #171c29;
-  --color-surface: #242e40; --color-panel: #1e2636;
-  --color-text: #f2eee7; --color-text-muted: #b4bfce;
-  --color-sub: #c5cabb; --color-sub-strong: #f2eee7;
-  --color-accent: #90d1c9; --color-accent-strong: #b9e5df;
-  --color-rgb-main: 23,28,41; --color-rgb-accent: 189,204,167;
-  --line: #39475a; --selection: #315f68;
-  --shadow-strong: 0 12px 40px #00000050;
+  --color-main: #0f1216; --color-main-strong: #0f1216;
+  --color-surface: #20262e; --color-panel: #171b21;
+  --color-text: #eef0f3; --color-text-muted: #9ba6b3;
+  --color-sub: #c4ccd6; --color-sub-strong: #eef0f3;
+  --color-accent: #7fd6cb; --color-accent-strong: #aee8e0;
+  --color-straw: #d9b972;
+  --color-rgb-main: 15,18,22; --color-rgb-accent: 127,214,203;
+  --line: #2a323c; --selection: #1f5a5c;
+  --shadow-soft: 0 8px 28px #00000040; --shadow-strong: 0 20px 50px #00000070;
 }
 @media(prefers-color-scheme:dark) {
   :root:not([data-color-mode="light"]):not([data-color-mode="dark"]) {
   color-scheme: dark;
-  --color-main: #171c29; --color-main-strong: #171c29;
-  --color-surface: #242e40; --color-panel: #1e2636;
-  --color-text: #f2eee7; --color-text-muted: #b4bfce;
-  --color-sub: #c5cabb; --color-sub-strong: #f2eee7;
-  --color-accent: #90d1c9; --color-accent-strong: #b9e5df;
-  --color-rgb-main: 23,28,41; --color-rgb-accent: 189,204,167;
-  --line: #39475a; --selection: #315f68;
-  --shadow-strong: 0 12px 40px #00000050;
+  --color-main: #0f1216; --color-main-strong: #0f1216;
+  --color-surface: #20262e; --color-panel: #171b21;
+  --color-text: #eef0f3; --color-text-muted: #9ba6b3;
+  --color-sub: #c4ccd6; --color-sub-strong: #eef0f3;
+  --color-accent: #7fd6cb; --color-accent-strong: #aee8e0;
+  --color-straw: #d9b972;
+  --color-rgb-main: 15,18,22; --color-rgb-accent: 127,214,203;
+  --line: #2a323c; --selection: #1f5a5c;
+  --shadow-soft: 0 8px 28px #00000040; --shadow-strong: 0 20px 50px #00000070;
   }
 }
+
+/* ---------------------------------------------------------------------------
+   Base
+--------------------------------------------------------------------------- */
 * { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; scroll-padding-top: 100px; }
-body { min-width: 280px; color: var(--color-text); background: var(--color-main); font-family: var(--font-sans); line-height: 1.7; -webkit-font-smoothing: antialiased; }
+html { scroll-behavior: smooth; scroll-padding-top: 100px; -webkit-text-size-adjust: 100%; }
+body { min-width: 280px; color: var(--color-text); background: var(--color-main); font-family: var(--font-sans); font-size: 1rem; line-height: 1.75; -webkit-font-smoothing: antialiased; }
 button, input { font: inherit; } button, a { -webkit-tap-highlight-color: transparent; }
 button { color: inherit; cursor: pointer; } a { color: inherit; text-underline-offset: 5px; }
 img { display: block; max-width: 100%; } ::selection { color: var(--color-text); background: var(--selection); }
-:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 5px; }
+:focus-visible { outline: 2px solid var(--color-accent); outline-offset: 3px; border-radius: 4px; }
 .skip-link { position: fixed; z-index: 200; top: 10px; left: 10px; padding: 10px 20px; background: var(--color-text); color: var(--color-main); transform: translateY(-160%); }
 .skip-link:focus { transform: none; }
-#main-content { min-height: 75vh; }
-.page-wrap { width: min(var(--container), calc(100% - 96px)); margin-inline: auto; padding-block: 64px 100px; }
-.mono, .eyebrow { font-family: var(--font-sans); font-weight: 600; font-size: .75rem; letter-spacing: .08em; }
-.eyebrow { color: var(--color-text-muted); text-transform: uppercase; }
-.display-title { font-size: clamp(3.2rem, 7vw, 6rem); font-weight: 500; letter-spacing: -.06em; line-height: 1.12; margin-top: 14px; }
-.section-head { display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding-top: 20px; margin-bottom: 32px; border-top: 1px solid var(--color-text); }
-.section-head h2 { font-size: clamp(1.65rem, 3vw, 2.4rem); font-weight: 500; letter-spacing: -.04em; }
-.section-head h2 small { margin-left: 16px; color: var(--color-text-muted); font-size: .75rem; font-weight: 400; letter-spacing: .04em; }
-.section-head a { font-size: .8rem; text-decoration: none; }
-.section-head a:hover { text-decoration: underline; }
-.section { margin-top: 90px; scroll-margin-top: 95px; }
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
+#main-content { min-height: 75vh; }
+.site-shell > main, .site-shell > footer { position: relative; z-index: 1; }
+
+/* ---------------------------------------------------------------------------
+   Page frame and headings
+--------------------------------------------------------------------------- */
+.page-wrap { width: min(var(--container), calc(100% - 96px)); margin-inline: auto; padding-block: 64px 110px; }
+.mono, .eyebrow { font-family: var(--font-sans); font-weight: 500; font-size: .8125rem; letter-spacing: .04em; }
+.eyebrow { color: var(--color-text-muted); }
+.display-title { margin-top: 8px; font-size: clamp(2.4rem, 5.5vw, 4rem); font-weight: 800; letter-spacing: -.01em; line-height: 1.25; }
+.section { margin-top: 104px; scroll-margin-top: 95px; }
+.section-head { position: relative; display: flex; justify-content: space-between; align-items: baseline; gap: 24px; padding-top: 22px; margin-bottom: 36px; border-top: 1px solid var(--line); }
+.section-head h2 { font-size: clamp(1.6rem, 2.6vw, 2.1rem); font-weight: 800; letter-spacing: 0; line-height: 1.3; }
+.section-head h2 small { margin-left: 14px; color: var(--color-text-muted); font-family: var(--font-sans); font-size: .8125rem; font-weight: 400; letter-spacing: .02em; }
+.section-head > a { flex-shrink: 0; font-size: .875rem; }
+
+/* Text links: the underline is drawn in from the left on hover. */
+.section-head > a, .text-link { padding-block: 6px; text-decoration: none; background: linear-gradient(currentColor, currentColor) 0 calc(100% - 3px) / 0 1px no-repeat; transition: background-size var(--dur-base) var(--ease-out), color var(--dur-fast); }
+.section-head > a:hover, .text-link:hover { color: var(--color-accent); background-size: 100% 1px; }
+.ext { display: inline-block; margin-left: .3em; font-size: .85em; transition: transform var(--dur-fast) var(--ease-out); }
+a:hover > .ext, a:hover > * > .ext { transform: translate(2px, -2px); }
+
+.ui-icon { width: 1.1em; margin-inline-end: .55em; text-align: center; }
+
+/* Pill control shared by "listen", "preview" and similar actions. */
+.pill { display: inline-flex; align-items: center; justify-content: center; min-height: 42px; padding: 6px 16px; font-weight: 500; border: 1px solid var(--line); border-radius: var(--radius-pill); background: transparent; font-size: .8125rem; line-height: 1.4; text-decoration: none; white-space: nowrap; transition: background var(--dur-fast), border-color var(--dur-fast), color var(--dur-fast), transform var(--dur-press); }
+.pill:hover { border-color: var(--color-accent); color: var(--color-accent); background: color-mix(in srgb, var(--color-accent) 8%, transparent); }
+/* Primary action: filled. */
+.pill-primary, .pill[aria-expanded="true"] { border-color: var(--color-accent); color: var(--color-main); background: var(--color-accent); }
+.pill-primary:hover { border-color: var(--color-accent-strong); color: var(--color-main); background: var(--color-accent-strong); }
+
+/* ---------------------------------------------------------------------------
+   Media frames (jackets, screenshots, illustrations)
+   Hover answers with a slow zoom; nothing lifts or flashes.
+--------------------------------------------------------------------------- */
+.hero-art, .artwork, .game-image, .illustration-image { position: relative; isolation: isolate; overflow: hidden; border-radius: var(--radius-media); background: var(--color-surface); }
+.hero-art::before, .artwork::before, .game-image::before, .illustration-image::before { content: ''; position: absolute; inset: 0; z-index: 2; border: 1px solid #ffffff14; border-radius: inherit; pointer-events: none; }
+.artwork img, .game-image img, .illustration-image img { transition: transform var(--dur-slow) var(--ease-out); }
+@media(hover:hover) {
+  .artwork:hover img, .game-tile:hover .game-image img, .illustration:hover .illustration-image img { transform: scale(1.045); }
+}
+.media-badge { position: absolute; z-index: 3; right: 12px; bottom: 12px; display: grid; width: 40px; height: 40px; place-items: center; border-radius: 50%; color: #fff; background: #11161acc; backdrop-filter: blur(8px); font-size: .9rem; transition: opacity var(--dur-fast), transform var(--dur-base) var(--ease-out); }
+@media(hover:hover) {
+  .media-badge { opacity: 0; transform: translate(-6px, 6px); }
+  a:hover > .media-badge, a:focus-visible > .media-badge, a:hover > * > .media-badge, a:focus-visible > * > .media-badge { opacity: 1; transform: none; }
+}
+
+/* ---------------------------------------------------------------------------
+   Games
+--------------------------------------------------------------------------- */
 .game-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 32px; }
 .game-tile { text-decoration: none; }
-.game-tile .game-image { overflow: hidden; background: #20221e; aspect-ratio: 16/10; }
-.game-tile img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; transition: transform .35s; }
-.game-tile:hover img { transform: scale(1.035); }
-.game-caption { display: flex; justify-content: space-between; gap: 16px; border-bottom: 1px solid var(--line); padding-block: 18px 22px; }
-.game-caption h3 { font-size: 1.7rem; font-weight: 500; letter-spacing: -.025em; }
-.game-caption p { color: var(--color-text-muted); font-size: .8rem; margin-top: 4px; }
-.game-caption > span { font-size: 1.7rem; }
-.outbound-list a { display: grid; grid-template-columns: 1fr 1fr auto; align-items: center; gap: 20px; padding-block: 24px; border-bottom: 1px solid var(--line); text-decoration: none; }
-.outbound-list a:hover { color: var(--color-accent); }
-.outbound-list strong { font-size: 1.5rem; font-weight: 500; }
-.outbound-list span { color: var(--color-text-muted); font-size: .85rem; }
-.game-page { background: none !important; max-width: var(--container); margin-inline: auto; padding-bottom: 100px !important; }
+.game-tile .game-image { background: #11161a; aspect-ratio: 16/10; }
+.game-tile img { width: 100%; height: 100%; object-fit: cover; image-rendering: pixelated; }
+.game-caption { display: flex; justify-content: space-between; align-items: center; gap: 16px; border-bottom: 1px solid var(--line); padding-block: 18px 22px; transition: border-color var(--dur-fast); }
+.game-caption h3 { font-size: 1.4rem; font-weight: 700; line-height: 1.4; }
+.game-caption p { color: var(--color-text-muted); font-size: .8125rem; margin-top: 2px; }
+.game-caption > span { font-size: 1.1rem; color: var(--color-text-muted); transition: transform var(--dur-base) var(--ease-out), color var(--dur-fast); }
+.game-tile:hover .game-caption { border-color: var(--color-accent); }
+.game-tile:hover .game-caption > span { color: var(--color-accent); transform: translateX(6px); }
+
+/* ---------------------------------------------------------------------------
+   Outbound links
+--------------------------------------------------------------------------- */
+.outbound-list a { display: grid; grid-template-columns: 1fr 1fr auto; align-items: center; gap: 20px; padding: 18px 14px; border-bottom: 1px solid var(--line); border-radius: 0; text-decoration: none; transition: background var(--dur-fast), color var(--dur-fast); }
+.outbound-list strong { display: flex; align-items: center; font-size: 1.25rem; font-weight: 500; letter-spacing: .02em; }
+.outbound-list strong .ui-icon { display: inline-grid; flex-shrink: 0; place-items: center; width: 40px; height: 40px; margin-inline-end: 16px; border: 1px solid var(--line); border-radius: 50%; color: var(--color-text-muted); font-size: .9rem; transition: border-color var(--dur-fast), color var(--dur-fast); }
+.outbound-list span { color: var(--color-text-muted); font-size: .875rem; }
+.outbound-list b { font-weight: 400; color: var(--color-text-muted); transition: transform var(--dur-base) var(--ease-out), color var(--dur-fast); }
+.outbound-list a:hover { background: color-mix(in srgb, var(--color-surface) 70%, transparent); }
+.outbound-list a:hover strong .ui-icon { border-color: var(--color-accent); color: var(--color-accent); }
+.outbound-list a:hover b { color: var(--color-accent); transform: translate(3px, -3px); }
+
+/* ---------------------------------------------------------------------------
+   Game detail pages (trial / unrequited keep their own scoped layout)
+--------------------------------------------------------------------------- */
+.game-page { background: none !important; max-width: var(--container); margin-inline: auto; padding-bottom: 100px !important; font-family: var(--font-sans) !important; }
 .header-section { text-align: left !important; padding: 64px 0 32px !important; max-width: 1000px; margin-inline: auto; }
-.game-title { font-family: inherit !important; font-size: clamp(3rem,8vw,6rem) !important; letter-spacing: -.06em !important; font-weight: 500 !important; max-width: 100% !important; }
+.game-title { font-family: var(--font-display) !important; font-size: clamp(2.6rem,7vw,4.6rem) !important; letter-spacing: -.01em !important; font-weight: 800 !important; max-width: 100% !important; text-shadow: none !important; }
 .game-description { margin: 0 !important; }
 .info-card { opacity: 1 !important; border: 0 !important; border-top: 1px solid var(--line) !important; border-radius: 0 !important; background: none !important; box-shadow: none !important; backdrop-filter: none !important; }
 .info-card:hover { transform: none !important; }
-.info-card h2 { font-family: inherit !important; font-size: 1.4rem !important; font-weight: 500 !important; }
-.download-btn { border-radius: 0 !important; background: var(--color-text) !important; color: var(--color-main) !important; box-shadow: none !important; }
-.lightbox-overlay { background: #171a16ee !important; }
-.lightbox-content { background: #171a16 !important; }
-.lightbox-nav { background: #171a16cc !important; }
-@media(max-width:760px) { .page-wrap { width: calc(100% - 40px); padding-block: 40px 64px; } .section { margin-top: 64px; } .game-grid { grid-template-columns: 1fr; gap: 28px; } .section-head h2 small { display: block; margin-left: 0; margin-top: 5px; } .outbound-list a { grid-template-columns: 1fr auto; } .outbound-list span { grid-column: 1; grid-row: 2; } .outbound-list b { grid-column: 2; grid-row: 1/3; } }
-@media(prefers-reduced-motion:reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; } }
+.info-card h2 { font-family: var(--font-display) !important; font-size: 1.4rem !important; font-weight: 700 !important; letter-spacing: 0 !important; }
+.info-card h3 { font-family: inherit !important; }
+.download-btn { border-radius: var(--radius-pill) !important; background: var(--color-text) !important; color: var(--color-main) !important; box-shadow: none !important; text-shadow: none !important; }
+.download-btn:hover { background: var(--color-accent) !important; }
+.lightbox-overlay { background: #0c1013ee !important; }
+.lightbox-content { background: #0c1013 !important; }
+.lightbox-nav { background: #0c1013cc !important; }
 
-.ui-icon { width: 1.1em; margin-inline-end: .55em; text-align: center; }
-.section-head h2 > .ui-icon { color: var(--color-accent); font-size: .65em; vertical-align: .08em; }
-.outbound-list strong .ui-icon { color: var(--color-text-muted); font-size: .8em; }
-.game-page { font-family: var(--font-sans) !important; }
+/* ---------------------------------------------------------------------------
+   Feedback
+--------------------------------------------------------------------------- */
+/* Press: every control gives a little under the finger. */
+a, button { transition: scale var(--dur-press); }
+a:active, button:active { scale: .97; transition: scale var(--dur-press); }
+.outbound-list a:active, .game-tile:active, .release .artwork:active, .illustration:active, .hero-art:active { scale: .99; }
 
-/* Shared edges and interaction details. */
-.hero-art, .artwork, .game-image { border-radius: 12px; }
-.listen-label { border: 1px solid var(--line); border-radius: 999px; box-shadow: 0 3px 12px #00000012; }
-.artwork > span { border: 1px solid var(--line); border-radius: 50%; }
-.release-actions button { border: 1px solid var(--line); border-radius: 999px; padding: 5px 12px; margin-block: -5px; transition: background .18s; }
-.release-actions button:hover { background: var(--color-surface); text-decoration: none; }
-.outbound-list a { padding-inline: 14px; border-radius: 10px; transition: background .18s; }
-.outbound-list a:hover { background: var(--color-surface); }
-.outbound-list strong .ui-icon { display: inline-grid; place-items: center; width: 36px; height: 36px; border: 1px solid var(--line); border-radius: 10px; margin-inline-end: 16px; }
+/* Click: a single quick ring on interactive targets. */
+.click-burst { position: fixed; z-index: 1000; left: 0; top: 0; width: 44px; height: 44px; margin: -22px 0 0 -22px; border: 1px solid var(--color-accent); border-radius: 50%; pointer-events: none; animation: prick 420ms var(--ease-out) forwards; }
+@keyframes prick { from { transform: scale(.2); opacity: .9; } to { transform: scale(1); opacity: 0; } }
 
-body { background-image: radial-gradient(ellipse at 95% 0%, color-mix(in srgb, var(--color-accent) 12%, transparent), transparent 48%), radial-gradient(ellipse at 0% 45%, #cf956a10, transparent 48%); background-attachment: fixed; }
-.section-head { border-top-color: var(--line); }
-.section-head h2 { position: relative; }
-.section-head h2::before { content: ''; display: inline-block; width: 5px; height: .8em; border-radius: 3px; margin-right: 14px; background: var(--color-accent); }
-#games .section-head h2::before { background: #ce976e; }
-#links .section-head h2::before { background: #a6a1c6; }
-.release-meta time { color: var(--color-accent); }
-.hero-art { box-shadow: 0 18px 55px #101a3020; }
-.hero-nav a:hover { background: color-mix(in srgb, var(--color-accent) 8%, transparent); }
-.outbound-list a:nth-child(1) .ui-icon { color: #4d9dcb; }
-.outbound-list a:nth-child(2) .ui-icon { color: #ce826e; }
-.outbound-list a:nth-child(3) .ui-icon { color: #a79ac0; }
+/* Scroll progress along the top edge. */
+.site-header::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 2px; background: var(--color-accent); transform: scaleX(var(--page-progress, 0)); transform-origin: left; pointer-events: none; }
 
-/* A warmer, more expressive palette for browsing the work. */
-.display-title, .home h1 { background: linear-gradient(115deg, var(--color-text) 12%, var(--color-accent) 63%, #ba739a 100%); background-clip: text; -webkit-text-fill-color: transparent; }
-.section-head h2::before { background: linear-gradient(180deg, #e6a275, var(--color-accent)); }
-.page-wrap > header .eyebrow, .hero-copy > .eyebrow { color: var(--color-accent); }
-.release-actions button, .release-actions a, .section-head > a { transition: color .2s, transform .2s; }
-.release-actions button:hover, .release-actions a:hover, .section-head > a:hover { color: var(--color-accent); transform: translateY(-2px); }
-.hero-nav a:hover .nav-arrow { transform: translateY(5px); }
-.nav-arrow { transition: transform .25s; }
+/* Entrance for cards that start below the fold. Content stays visible without JS. */
+.reveal-pending { transition: opacity var(--dur-slow) var(--ease-out) var(--reveal-delay, 0ms), transform var(--dur-slow) var(--ease-out) var(--reveal-delay, 0ms); }
+.reveal-pending:not(.reveal-visible) { opacity: 0; transform: translateY(18px); }
 
-/* Tactile layer: the content remains still and readable until interacted with. */
-.site-header::after { content: ''; position: absolute; left: 0; bottom: -3px; width: var(--page-progress, 0%); height: 2px; background: linear-gradient(90deg, #d88e72, var(--color-accent), #a49bcf); transition: width .1s linear; pointer-events: none; }
-.hero-art, .artwork, .game-image { position: relative; isolation: isolate; transition: transform .35s cubic-bezier(.2,.8,.2,1), box-shadow .35s; }
-.hero-art::after, .artwork::after, .game-image::after { content: ''; position: absolute; inset: 0; z-index: 2; background: linear-gradient(110deg, transparent 38%, #ffffff44 50%, transparent 62%); transform: translateX(-120%); pointer-events: none; }
-.hero-art:hover, .artwork:hover, .game-tile:hover .game-image { transform: translateY(-7px); box-shadow: 0 22px 42px #101a3033; }
-.hero-art:hover::after, .artwork:hover::after, .game-tile:hover .game-image::after { animation: card-sheen .8s ease-out; }
-.hero-nav a, .works-nav a, .primary-nav a, .outbound-list a { transition: transform .25s cubic-bezier(.2,.8,.2,1), color .2s, background .2s, border-color .2s; }
-.hero-nav a:hover { transform: translateX(8px); }
-.works-nav a:hover, .primary-nav a:hover { transform: translateY(-2px); }
-.outbound-list a:hover { transform: translateX(6px); }
-.site-shell > main, .site-shell > footer { position: relative; z-index: 1; }
-.click-burst { position: fixed; z-index: 1000; left: 0; top: 0; width: 14px; height: 14px; border: 2px solid var(--color-accent); border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); animation: burst-ring .55s cubic-bezier(.12,.76,.2,1) forwards; }
-.click-burst::after { content: ''; position: absolute; inset: -9px; border: 1px solid #d685a4; border-radius: inherit; animation: burst-ring-inner .55s ease-out forwards; }
-.click-burst i { position: absolute; top: 50%; left: 50%; width: 5px; height: 5px; border-radius: 50%; background: var(--color-accent); animation: burst-spark .55s ease-out forwards; }
-.click-burst i:nth-child(3n) { background: #e7a575; }
-.click-burst i:nth-child(3n + 1) { background: #a796d1; }
-@keyframes burst-ring { to { width: 64px; height: 64px; opacity: 0; } }
-@keyframes burst-ring-inner { to { inset: -18px; opacity: 0; } }
-@keyframes burst-spark { to { transform: translate(var(--dx), var(--dy)) scale(.35); opacity: 0; } }
-@keyframes card-sheen { to { transform: translateX(120%); } }
-
-/* Adapted from the staggered mask and panel transitions in yui540/css-animations (MIT). */
-.display-title, .home h1 { animation: title-unmask .85s cubic-bezier(.16,.82,.2,1) both; }
-.reveal-pending:not(.reveal-visible) { opacity: 0; }
-.reveal-pending.reveal-visible { animation: reveal-rise .7s cubic-bezier(.16,.82,.2,1) var(--reveal-delay, 0ms) both; }
-.reveal-pending.reveal-visible:is(.release, .game-tile, .illustration) { animation-name: card-unmask; }
-.section-head.reveal-visible { position: relative; }
-.section-head.reveal-visible::after { content: ''; position: absolute; top: -2px; left: 0; width: min(170px, 35%); height: 3px; border-radius: 99px; background: linear-gradient(90deg, #e6a275, var(--color-accent)); transform-origin: left; animation: line-draw .8s cubic-bezier(.16,.82,.2,1) var(--reveal-delay, 0ms) both; }
-@keyframes title-unmask { from { clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); transform: translateY(12px); } to { clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translateY(0); } }
-@keyframes reveal-rise { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes card-unmask { from { opacity: .3; clip-path: polygon(0 0, 0 0, 0 100%, 0 100%); transform: translateY(16px); } to { opacity: 1; clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%); transform: translateY(0); } }
-@keyframes line-draw { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-a:active, button:active { scale: .97; }
-@media(prefers-reduced-motion:reduce) { .hero-art:hover, .artwork:hover, .game-tile:hover .game-image, .hero-nav a:hover, .works-nav a:hover, .primary-nav a:hover, .outbound-list a:hover { transform: none; } .click-burst { display: none; } .reveal-pending { opacity: 1 !important; } a:active, button:active { scale: 1; } }
+/* ---------------------------------------------------------------------------
+   Responsive and reduced motion
+--------------------------------------------------------------------------- */
+@media(max-width:760px) {
+  .page-wrap { width: calc(100% - 40px); padding-block: 40px 72px; }
+  .section { margin-top: 72px; }
+  .section-head { margin-bottom: 28px; }
+  .game-grid { grid-template-columns: 1fr; gap: 28px; }
+  .section-head h2 small { display: block; margin-left: 0; margin-top: 4px; }
+  .outbound-list a { grid-template-columns: 1fr auto; gap: 4px 16px; padding-inline: 6px; }
+  .outbound-list span { grid-column: 1; grid-row: 2; padding-left: 56px; }
+  .outbound-list b { grid-column: 2; grid-row: 1/3; }
+}
+@media(prefers-reduced-motion:reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; animation: none !important; transition: none !important; }
+  .click-burst { display: none; }
+  .reveal-pending { opacity: 1 !important; transform: none !important; }
+  a:active, button:active { scale: 1; }
+}
