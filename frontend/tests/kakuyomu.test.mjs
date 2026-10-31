@@ -28,3 +28,17 @@ test('ファイル名から話数とタイトルを読む', () => {
   assert.deepEqual(parseEpisodeFile('3.txt'), { number: 3, title: '第3話' })
   assert.equal(parseEpisodeFile('メモ.txt'), null)
 })
+
+test('話数の入力を位置に直す', async () => {
+  const { resolveEpisodeInput } = await import('../utils/kakuyomu.mjs')
+  assert.deepEqual(resolveEpisodeInput('12', 29), { index: 11 })
+  assert.deepEqual(resolveEpisodeInput('１２', 29), { index: 11 })
+  assert.deepEqual(resolveEpisodeInput(' 第3話 ', 29), { index: 2 })
+  assert.deepEqual(resolveEpisodeInput('29', 29), { index: 28 })
+  assert.deepEqual(resolveEpisodeInput('0', 29), { error: 'range' })
+  assert.deepEqual(resolveEpisodeInput('30', 29), { error: 'range' })
+  assert.deepEqual(resolveEpisodeInput('', 29), { error: 'empty' })
+  assert.deepEqual(resolveEpisodeInput('abc', 29), { error: 'empty' })
+  assert.deepEqual(resolveEpisodeInput('1.5', 29), { error: 'empty' })
+  assert.deepEqual(resolveEpisodeInput('-2', 29), { error: 'empty' })
+})

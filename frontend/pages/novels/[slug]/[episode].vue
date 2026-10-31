@@ -10,7 +10,11 @@
   >
     <NuxtLink class="text-link reader-back" :to="tocLink"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i><span>{{ novel.title }}</span></NuxtLink>
     <header class="reader-head">
-      <p>{{ position + 1 }} / {{ novel.episodes.length }}<span>{{ locale === 'ja' ? `約${minutes}分` : `about ${minutes} min` }}</span></p>
+      <p>
+        <button v-if="novel.episodes.length > 1" type="button" class="head-jump" :aria-expanded="jumpOpen" aria-controls="reader-jump" :aria-label="jumpLabel" :title="locale === 'ja' ? '話を選ぶ' : 'Choose an episode'" @click="openJump">{{ position + 1 }} / {{ novel.episodes.length }}<i class="fa-solid fa-chevron-down" aria-hidden="true"></i></button>
+        <template v-else>{{ position + 1 }} / {{ novel.episodes.length }}</template>
+        <span>{{ locale === 'ja' ? `約${minutes}分` : `about ${minutes} min` }}</span>
+      </p>
       <h1>{{ episode.title }}</h1>
     </header>
     <div ref="body" class="reader-body" @click="onBodyClick" v-html="content?.html"></div>
@@ -35,19 +39,29 @@
     </div>
 
     <!-- 親指で届く位置の操作バー -->
-    <nav class="reader-toolbar" :class="{ hidden: !chrome && !settingsOpen }" :aria-label="locale === 'ja' ? '読書メニュー' : 'Reader menu'">
+    <nav class="reader-toolbar" :class="{ hidden: !chrome && !sheetOpen }" :aria-label="locale === 'ja' ? '読書メニュー' : 'Reader menu'">
       <NuxtLink v-if="previous" :to="episodeLink(previous)" :aria-label="locale === 'ja' ? '前の話' : 'Previous episode'" :title="locale === 'ja' ? '前の話' : 'Previous episode'"><i class="fa-solid fa-chevron-left" aria-hidden="true"></i></NuxtLink>
       <span v-else class="disabled" aria-hidden="true"><i class="fa-solid fa-chevron-left"></i></span>
       <NuxtLink :to="tocLink" :aria-label="locale === 'ja' ? '目次' : 'Contents'" :title="locale === 'ja' ? '目次' : 'Contents'"><i class="fa-solid fa-list" aria-hidden="true"></i></NuxtLink>
       <button type="button" :aria-pressed="bookmarkHere" :aria-label="locale === 'ja' ? 'ここにしおりを挟む' : 'Bookmark this spot'" :title="locale === 'ja' ? 'ここにしおりを挟む' : 'Bookmark this spot'" @click="placeBookmark"><i :class="[bookmarkHere ? 'fa-solid' : 'fa-regular', 'fa-bookmark']" aria-hidden="true"></i></button>
-      <span class="toolbar-progress" :aria-label="locale === 'ja' ? `この話の ${progress}% まで読みました` : `${progress}% of this episode read`">{{ progress }}%</span>
-      <button type="button" :aria-expanded="settingsOpen" aria-controls="reader-settings" :aria-label="locale === 'ja' ? '表示設定' : 'Display settings'" :title="locale === 'ja' ? '表示設定' : 'Display settings'" @click="settingsOpen = !settingsOpen"><span class="aa" aria-hidden="true">Aa</span></button>
+      <button type="button" class="toolbar-position" :disabled="novel.episodes.length < 2" :aria-expanded="jumpOpen" aria-controls="reader-jump" :aria-label="jumpLabel" :title="locale === 'ja' ? '話を選ぶ' : 'Choose an episode'" @click="openJump"><b>{{ position + 1 }}<span aria-hidden="true">/</span>{{ novel.episodes.length }}</b><small>{{ progress }}%</small></button>
+      <button type="button" :aria-expanded="settingsOpen" aria-controls="reader-settings" :aria-label="locale === 'ja' ? '表示設定' : 'Display settings'" :title="locale === 'ja' ? '表示設定' : 'Display settings'" @click="toggleSettings"><span class="aa" aria-hidden="true">Aa</span></button>
       <NuxtLink v-if="next" :to="episodeLink(next)" :aria-label="locale === 'ja' ? '次の話' : 'Next episode'" :title="locale === 'ja' ? '次の話' : 'Next episode'"><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></NuxtLink>
       <span v-else class="disabled" aria-hidden="true"><i class="fa-solid fa-chevron-right"></i></span>
     </nav>
 
     <!-- 表示設定 -->
-    <div v-if="settingsOpen" class="sheet-backdrop" @click="settingsOpen = false"></div>
+    <div v-if="sheetOpen" class="sheet-backdrop" @click="closeSheets"></div>
+
+    <!-- 話を選ぶ（入力時にキーボードで隠れないよう、画面の上側に出す） -->
+    <section v-if="jumpOpen" id="reader-jump" ref="jumpSheet" class="sheet from-top" role="dialog" tabindex="-1" :aria-label="locale === 'ja' ? '話を選ぶ' : 'Choose an episode'">
+      <div class="sheet-title">
+        <h2>{{ locale === 'ja' ? '話を選ぶ' : 'Choose an episode' }}</h2>
+        <button type="button" :aria-label="locale === 'ja' ? '閉じる' : 'Close'" @click="jumpOpen = false"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      </div>
+      <NovelJump ref="jump" :novel="novel" :current="position" list @go="jumpOpen = false" />
+    </section>
+
     <section v-if="settingsOpen" id="reader-settings" ref="sheet" class="sheet" role="dialog" tabindex="-1" :aria-label="locale === 'ja' ? '表示設定' : 'Display settings'">
       <div class="sheet-row">
         <span>{{ locale === 'ja' ? '文字サイズ' : 'Text size' }}</span>
@@ -135,6 +149,28 @@ const settings = reactive<{ size: number; leading: number; font: FontKey; theme:
 const settingsKey = 'nekonoha-reader'
 const settingsOpen = ref(false)
 const sheet = ref<HTMLElement | null>(null)
+// 話を選ぶシート。表示設定とは同時に開かない。
+const jumpOpen = ref(false)
+const jumpSheet = ref<HTMLElement | null>(null)
+const jump = ref<{ focus: () => void } | null>(null)
+const sheetOpen = computed(() => settingsOpen.value || jumpOpen.value)
+const closeSheets = () => { settingsOpen.value = false; jumpOpen.value = false }
+const toggleSettings = () => { jumpOpen.value = false; settingsOpen.value = !settingsOpen.value }
+const openJump = () => {
+  settingsOpen.value = false
+  jumpOpen.value = !jumpOpen.value
+  if (jumpOpen.value) setChrome(true)
+}
+const jumpLabel = computed(() => locale.value === 'ja'
+  ? `話を選ぶ（いま ${position + 1} 話目、全 ${novel.episodes.length} 話）`
+  : `Choose an episode (now ${position + 1} of ${novel.episodes.length})`)
+watch(jumpOpen, async open => {
+  if (!open) return
+  await nextTick()
+  // マウスとキーボードの環境ではすぐ入力できるように。タッチ端末では、キーボードが勝手に出ないようシート側に置く。
+  if (window.matchMedia('(hover: hover) and (pointer: fine)').matches) jump.value?.focus()
+  else jumpSheet.value?.focus({ preventScroll: true })
+})
 let settingsLoaded = false
 const isColor = (value: unknown): value is string => typeof value === 'string' && /^#[0-9a-f]{6}$/i.test(value)
 const palette = computed(() => settings.theme === 'custom' ? { bg: settings.bg, fg: settings.fg } : themes[settings.theme])
@@ -302,7 +338,7 @@ const resetSwipe = () => {
 }
 const onTouchStart = (event: TouchEvent) => {
   resetSwipe()
-  if (event.touches.length !== 1 || settingsOpen.value) return
+  if (event.touches.length !== 1 || sheetOpen.value) return
   const point = event.touches[0]
   // 画面の端は、ブラウザの「戻る／進む」ジェスチャーに譲る。
   if (point.clientX < 24 || point.clientX > window.innerWidth - 24) return
@@ -336,7 +372,8 @@ const onTouchEnd = () => {
 /* ---- キーボード ---- */
 const onKeydown = (event: KeyboardEvent) => {
   if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return
-  if (event.key === 'Escape' && settingsOpen.value) { settingsOpen.value = false; return }
+  if (event.key === 'Escape' && sheetOpen.value) { closeSheets(); return }
+  if (sheetOpen.value) return
   if ((event.target as Element | null)?.closest('input, textarea, select, [contenteditable]')) return
   if (event.key === 'ArrowRight' && next) navigateTo(episodeLink(next))
   else if (event.key === 'ArrowLeft' && previous) navigateTo(episodeLink(previous))
@@ -395,7 +432,10 @@ useHead({ link: [{ rel: 'canonical', href: `https://nekonoha.github.io/novels/${
 .reader-back i { font-size: .85em; color: var(--color-text-muted); }
 .reader-head { margin-top: 40px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
 .reader-head p { color: var(--color-text-muted); font-size: .8125rem; font-variant-numeric: tabular-nums; }
-.reader-head p span { margin-left: 14px; }
+.reader-head p { display: flex; align-items: center; gap: 14px; }
+.head-jump { display: inline-flex; align-items: center; gap: 8px; min-height: 36px; margin-left: -12px; padding: 4px 12px; border: 1px solid transparent; border-radius: var(--radius-pill); background: transparent; color: inherit; font: inherit; font-variant-numeric: tabular-nums; transition: border-color var(--dur-fast), color var(--dur-fast), background var(--dur-fast); }
+.head-jump i { font-size: .65rem; }
+.head-jump:hover, .head-jump[aria-expanded="true"] { border-color: var(--line); color: var(--color-text); background: var(--color-surface); }
 h1 { margin-top: 6px; font-size: clamp(1.5rem, 4.5vw, 2rem); font-weight: 800; line-height: 1.5; }
 .reader-body { margin-top: 40px; font-family: var(--reader-font, inherit); font-size: var(--reader-size, 1.06rem); line-height: var(--reader-leading, 2.1); overflow-wrap: anywhere; transform: translateX(var(--swipe-x, 0px)); transition: transform .35s var(--ease-out); }
 .is-swiping .reader-body { transition: none; }
@@ -434,11 +474,23 @@ h1 { margin-top: 6px; font-size: clamp(1.5rem, 4.5vw, 2rem); font-weight: 800; l
 .reader-toolbar a:hover, .reader-toolbar button:hover, .reader-toolbar button[aria-expanded="true"], .reader-toolbar button[aria-pressed="true"] { color: var(--color-accent); background: var(--color-surface); }
 .reader-toolbar .disabled { color: var(--color-text-muted); opacity: .35; }
 .aa { font-weight: 800; letter-spacing: .02em; }
-.toolbar-progress { min-width: 48px; padding-inline: 2px; color: var(--color-text-muted); font-size: .8125rem; font-variant-numeric: tabular-nums; text-align: center; }
+/* いま何話目か（上段）と、この話の進み具合（下段）。押すと話を選べる。 */
+.reader-toolbar .toolbar-position { display: flex; flex-direction: column; justify-content: center; gap: 1px; width: auto; min-width: 58px; padding-inline: 8px; font-variant-numeric: tabular-nums; line-height: 1.15; }
+.toolbar-position b { font-size: .8125rem; font-weight: 700; }
+.toolbar-position b span { margin-inline: 2px; color: var(--color-text-muted); font-weight: 400; }
+.toolbar-position small { color: var(--color-text-muted); font-size: .6875rem; }
+.toolbar-position:disabled { cursor: default; }
+.reader-toolbar .toolbar-position:disabled:hover { color: var(--color-text); background: transparent; }
 
 .sheet-backdrop { position: fixed; z-index: 105; inset: 0; background: #0000004d; animation: fade-in .2s both; }
 .sheet { position: fixed; z-index: 108; left: 50%; bottom: calc(82px + env(safe-area-inset-bottom)); width: min(420px, calc(100% - 24px)); max-height: calc(100dvh - 110px - env(safe-area-inset-bottom)); overflow-y: auto; overscroll-behavior: contain; padding: 10px 18px 16px; border: 1px solid var(--line); border-radius: var(--radius-panel); background: var(--color-panel); box-shadow: var(--shadow-strong); translate: -50% 0; animation: sheet-in .32s var(--ease-out) both; }
 .sheet:focus { outline: none; }
+/* サイトのヘッダーのすぐ下に出す。 */
+.sheet.from-top { top: 92px; bottom: auto; max-height: calc(100dvh - 104px); padding-top: 12px; animation-name: sheet-in-top; }
+.sheet-title { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 14px; }
+.sheet-title h2 { font-size: 1rem; font-weight: 700; }
+.sheet-title button { display: grid; place-items: center; width: 44px; height: 44px; margin-right: -8px; border: 0; border-radius: 50%; background: transparent; color: var(--color-text-muted); transition: background var(--dur-fast), color var(--dur-fast); }
+.sheet-title button:hover { color: var(--color-text); background: var(--color-surface); }
 .sheet-row { display: flex; justify-content: space-between; align-items: center; gap: 16px; min-height: 64px; border-bottom: 1px solid var(--line); font-size: .9rem; }
 .stepper, .segmented { display: flex; align-items: center; gap: 2px; padding: 3px; border-radius: var(--radius-pill); background: var(--color-surface); }
 .stepper button, .segmented button { display: grid; place-items: center; min-width: 44px; height: 40px; padding-inline: 14px; border: 0; border-radius: var(--radius-pill); background: transparent; color: var(--color-text); font-size: .875rem; transition: background var(--dur-fast), color var(--dur-fast); }
@@ -458,6 +510,7 @@ h1 { margin-top: 6px; font-size: clamp(1.5rem, 4.5vw, 2rem); font-weight: 800; l
 .contrast-note { width: 100%; color: var(--color-text-muted); font-size: .8125rem; text-align: right; }
 .sheet-close { width: 100%; margin-top: 14px; }
 @keyframes sheet-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+@keyframes sheet-in-top { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: none; } }
 @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
 
 @media(max-width:600px) {
@@ -468,6 +521,8 @@ h1 { margin-top: 6px; font-size: clamp(1.5rem, 4.5vw, 2rem); font-weight: 800; l
   .pager-next { order: -1; }
   .reader-toolbar { gap: 0; }
 }
+@media(max-width:760px) { .sheet.from-top { top: 80px; max-height: calc(100dvh - 92px); } }
+@media(max-width:350px) { .reader-toolbar a, .reader-toolbar button, .reader-toolbar .disabled { width: 42px; } }
 </style>
 <style>
 /* 読書中は、下へ読み進めるとサイトのヘッダーも一緒に隠れる。 */

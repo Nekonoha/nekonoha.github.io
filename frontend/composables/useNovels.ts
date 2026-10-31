@@ -1,7 +1,9 @@
 import { parseEpisodeFile, renderKakuyomu } from '~/utils/kakuyomu.mjs'
 
 // content/novels/<作品フォルダ>/novel.json と NNN タイトル.txt をビルド時に読み込む。
-export type NovelMeta = { title: string; description?: string; draft?: boolean }
+// chapters は目次の章の見出し。from は、その章が始まる話の番号。
+export type NovelChapter = { from: number; title: string }
+export type NovelMeta = { title: string; description?: string; draft?: boolean; chapters?: NovelChapter[] }
 export type NovelEpisode = { number: number; title: string; path: string }
 export type Novel = NovelMeta & { slug: string; episodes: NovelEpisode[] }
 

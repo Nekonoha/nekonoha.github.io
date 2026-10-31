@@ -27,3 +27,13 @@ export const parseEpisodeFile = fileName => {
   const number = Number.parseInt(match[1], 10)
   return { number, title: match[2].trim() || `第${number}話` }
 }
+
+// 「話数へ移動」の入力を、0始まりの位置に直す。全角数字や「12話」「第12話」も受け付ける。
+// 戻り値: { index } か、{ error: 'empty' | 'range' }
+export const resolveEpisodeInput = (text, total) => {
+  const digits = String(text ?? '').normalize('NFKC').replace(/[\s,第話]/g, '')
+  if (!/^\d+$/.test(digits)) return { error: 'empty' }
+  const number = Number.parseInt(digits, 10)
+  if (number < 1 || number > total) return { error: 'range' }
+  return { index: number - 1 }
+}

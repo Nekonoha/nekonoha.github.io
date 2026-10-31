@@ -11,21 +11,30 @@
       </div>
     </header>
     <section class="section">
-      <header class="section-head"><h2>{{ locale === 'ja' ? '目次' : 'Contents' }}<small>{{ novel.episodes.length }}{{ locale === 'ja' ? '話' : ' episodes' }}</small></h2></header>
-      <ol class="episode-list">
-        <li v-for="(episode, index) in novel.episodes" :key="episode.number">
-          <NuxtLink :to="episodeLink(episode.number)" :aria-current="resume?.number === episode.number ? 'true' : undefined">
-            <span class="episode-number">{{ index + 1 }}</span>
-            <span class="episode-title">{{ episode.title }}</span>
-            <span v-if="marked?.number === episode.number" class="episode-here"><i class="fa-solid fa-bookmark" aria-hidden="true"></i>{{ locale === 'ja' ? 'しおり' : 'Bookmark' }}</span>
-            <span v-else-if="resume?.number === episode.number" class="episode-here quiet">{{ locale === 'ja' ? '前回ここまで' : 'Last read' }}</span>
-          </NuxtLink>
-        </li>
-      </ol>
+      <header class="section-head toc-head">
+        <h2>{{ locale === 'ja' ? '目次' : 'Contents' }}<small>{{ novel.episodes.length }}{{ locale === 'ja' ? '話' : ' episodes' }}</small></h2>
+        <NovelJump v-if="novel.episodes.length > 1" :novel="novel" />
+      </header>
+      <!-- novel.json に chapters があれば、章ごとに見出しを出す。なければ今までどおり一つの一覧。 -->
+      <template v-for="(group, groupIndex) in groups" :key="groupIndex">
+        <h3 v-if="group.title" class="chapter-title">{{ group.title }}<small>{{ group.items.length }}{{ locale === 'ja' ? '話' : (group.items.length === 1 ? ' episode' : ' episodes') }}</small></h3>
+        <ol class="episode-list" :start="group.items[0].index + 1">
+          <li v-for="{ episode, index } in group.items" :key="episode.number">
+            <NuxtLink :to="episodeLink(episode.number)" :aria-current="resume?.number === episode.number ? 'true' : undefined">
+              <span class="episode-number">{{ index + 1 }}</span>
+              <span class="episode-title">{{ episode.title }}</span>
+              <span v-if="marked?.number === episode.number" class="episode-here"><i class="fa-solid fa-bookmark" aria-hidden="true"></i>{{ locale === 'ja' ? 'しおり' : 'Bookmark' }}</span>
+              <span v-else-if="resume?.number === episode.number" class="episode-here quiet">{{ locale === 'ja' ? '前回ここまで' : 'Last read' }}</span>
+            </NuxtLink>
+          </li>
+        </ol>
+      </template>
     </section>
   </article>
 </template>
 <script setup lang="ts">
+import { groupByChapter } from '~/utils/chapters.mjs'
+
 const { locale } = useLocale()
 const route = useRoute()
 const { findNovel } = useNovels()
@@ -33,6 +42,7 @@ const found = findNovel(String(route.params.slug))
 if (!found) throw createError({ statusCode: 404, statusMessage: 'Novel not found', fatal: true })
 const novel = found
 const episodeLink = (number: number) => `/novels/${novel.slug}/${number}`
+const groups = groupByChapter(novel.episodes, novel.chapters)
 // 最後に開いた話はこの端末のブラウザにだけ保存する。
 const lastRead = ref<number | null>(null)
 const resume = computed(() => novel.episodes.find(episode => episode.number === lastRead.value))
@@ -60,6 +70,10 @@ header { margin-top: 20px; }
 .novel-description { max-width: 44em; margin-top: 20px; color: var(--color-sub); white-space: pre-line; }
 .novel-start { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 28px; }
 .novel-start .pill { min-height: 48px; padding-inline: 22px; font-size: .9rem; white-space: normal; }
+.toc-head { flex-wrap: wrap; align-items: center; }
+.chapter-title { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; margin-top: 44px; padding: 0 14px 12px; border-bottom: 1px solid var(--line); color: var(--color-sub-strong); font-size: 1.125rem; font-weight: 700; line-height: 1.5; }
+.chapter-title:first-of-type { margin-top: 0; }
+.chapter-title small { flex-shrink: 0; color: var(--color-text-muted); font-size: .8125rem; font-weight: 400; }
 .episode-list { list-style: none; }
 .episode-list a { display: flex; align-items: baseline; gap: 18px; min-height: 56px; padding: 15px 14px; border-bottom: 1px solid var(--line); text-decoration: none; transition: background var(--dur-fast), color var(--dur-fast); }
 .episode-list a:hover { color: var(--color-accent); background: color-mix(in srgb, var(--color-surface) 70%, transparent); }
@@ -67,5 +81,5 @@ header { margin-top: 20px; }
 .episode-title { flex: 1; font-weight: 500; }
 .episode-here { display: inline-flex; flex-shrink: 0; align-items: center; gap: 6px; padding: 1px 10px; border: 1px solid var(--color-accent); border-radius: var(--radius-pill); color: var(--color-main); background: var(--color-accent); font-size: .75rem; }
 .episode-here.quiet { border-color: var(--line); color: var(--color-text-muted); background: transparent; }
-@media(max-width:600px) { .episode-list a { gap: 12px; padding-inline: 4px; } }
+@media(max-width:600px) { .episode-list a { gap: 12px; padding-inline: 4px; } .chapter-title { margin-top: 36px; padding-inline: 4px; } }
 </style>

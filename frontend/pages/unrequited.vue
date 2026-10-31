@@ -91,10 +91,10 @@
         <p>{{ t('unrequited.downloadTextEn') }} <strong>{{ t('unrequited.versionEn') }}</strong>{{ t('unrequited.versionSuffix') }}</p>
         <p>{{ t('unrequited.downloadLink') }}</p>
         <div class="download-buttons">
-          <a href="http://www1.axfc.net/u/3511483" target="_blank" rel="noopener noreferrer" class="download-btn">
+          <a href="https://www1.axfc.net/u/3925394" target="_blank" rel="noopener noreferrer" class="download-btn">
             <i class="fas fa-download" aria-hidden="true"></i> {{ t('unrequited.downloadButtonJp') }}
           </a>
-          <a href="http://www1.axfc.net/u/3511484" target="_blank" rel="noopener noreferrer" class="download-btn">
+          <a href="https://www1.axfc.net/u/3892973" target="_blank" rel="noopener noreferrer" class="download-btn">
             <i class="fas fa-download" aria-hidden="true"></i> {{ t('unrequited.downloadButtonEn') }}
           </a>
         </div>
