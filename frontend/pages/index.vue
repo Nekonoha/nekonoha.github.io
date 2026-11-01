@@ -37,6 +37,10 @@
       <header class="section-head"><h2>{{ locale === 'ja' ? 'イラスト' : 'Illustration' }}<small>{{ locale === 'ja' ? 'pixivの新着' : 'Latest on pixiv' }}</small></h2><NuxtLink to="/works#art">{{ locale === 'ja' ? 'すべて見る' : 'View all' }}</NuxtLink></header>
       <LatestIllustrations />
     </section>
+    <section v-if="boothItems.length" id="shop" class="section">
+      <header class="section-head"><h2>{{ locale === 'ja' ? '頒布物' : 'Shop' }}<small>{{ locale === 'ja' ? 'BOOTHの新着' : 'Latest on BOOTH' }}</small></h2><NuxtLink to="/works#shop">{{ locale === 'ja' ? 'すべて見る' : 'View all' }}</NuxtLink></header>
+      <LatestGoods />
+    </section>
     <section v-if="novels.length" id="novels" class="section">
       <header class="section-head"><h2>{{ locale === 'ja' ? '小説' : 'Novels' }}</h2><NuxtLink to="/novels">{{ locale === 'ja' ? 'すべて見る' : 'View all' }}</NuxtLink></header>
       <NovelList />
@@ -49,6 +53,7 @@
 </template>
 <script setup lang="ts">
 import { musicReleases } from '~/data/releases'
+import { boothItems } from '~/data/booth'
 const { locale } = useLocale()
 const { novels } = useNovels()
 const latest = musicReleases[0]

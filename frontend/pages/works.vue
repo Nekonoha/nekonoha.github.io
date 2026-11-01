@@ -5,6 +5,7 @@
       <a href="#music" :aria-current="activeSection === 'music' ? 'location' : undefined" @click="activeSection = 'music'"><i class="fa-solid fa-music" aria-hidden="true"></i>{{ locale === 'ja' ? '音楽' : 'Music' }}</a>
       <a href="#games" :aria-current="activeSection === 'games' ? 'location' : undefined" @click="activeSection = 'games'"><i class="fa-solid fa-gamepad" aria-hidden="true"></i>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</a>
       <a href="#art" :aria-current="activeSection === 'art' ? 'location' : undefined" @click="activeSection = 'art'"><i class="fa-solid fa-paintbrush" aria-hidden="true"></i>{{ locale === 'ja' ? 'イラスト' : 'Art' }}</a>
+      <a v-if="boothItems.length" href="#shop" :aria-current="activeSection === 'shop' ? 'location' : undefined" @click="activeSection = 'shop'"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>{{ locale === 'ja' ? '頒布物' : 'Shop' }}</a>
       <a v-if="novels.length" href="#novels" :aria-current="activeSection === 'novels' ? 'location' : undefined" @click="activeSection = 'novels'"><i class="fa-solid fa-book-open" aria-hidden="true"></i>{{ locale === 'ja' ? '小説' : 'Novels' }}</a>
     </nav>
     <section id="music" class="section">
@@ -13,15 +14,17 @@
     </section>
     <section id="games" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</h2></header><GameWorks /></section>
     <section id="art" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? 'イラスト' : 'Illustration' }}<small>{{ illustrations.length }}{{ locale === 'ja' ? '点' : ' works' }}</small></h2><a href="https://pixiv.me/tanfantazma" target="_blank" rel="noopener noreferrer">pixiv<span class="ext" aria-hidden="true">↗</span></a></header><LatestIllustrations :limit="illustrations.length" /></section>
+    <section v-if="boothItems.length" id="shop" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? '頒布物' : 'Shop' }}<small>{{ boothItems.length }}{{ locale === 'ja' ? '点' : ' items' }}</small></h2><a href="https://tanfantazma.booth.pm/" target="_blank" rel="noopener noreferrer">BOOTH<span class="ext" aria-hidden="true">↗</span></a></header><LatestGoods :limit="boothItems.length" /></section>
     <section v-if="novels.length" id="novels" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? '小説' : 'Novels' }}<small>{{ novels.length }}{{ locale === 'ja' ? '作品' : (novels.length === 1 ? ' title' : ' titles') }}</small></h2></header><NovelList /></section>
   </article>
 </template>
 <script setup lang="ts">
 import { musicReleases } from '~/data/releases'
 import { illustrations } from '~/data/illustrations'
+import { boothItems } from '~/data/booth'
 const { locale } = useLocale()
 const { novels } = useNovels()
-const sectionIds = ['music', 'games', 'art', 'novels']
+const sectionIds = ['music', 'games', 'art', 'shop', 'novels']
 const activeSection = ref('music')
 let sectionObserver: IntersectionObserver | undefined
 onMounted(() => {
@@ -38,7 +41,7 @@ onMounted(() => {
 onUnmounted(() => sectionObserver?.disconnect())
 useSeoMeta({
   title: () => (locale.value === 'ja' ? '作品' : 'Works') + ' — 針の筵',
-  description: () => locale.value === 'ja' ? 'ネコノハの音楽、ゲーム、イラスト、小説の一覧。' : 'Music, games, illustration and novels by Nekonoha.',
+  description: () => locale.value === 'ja' ? 'ネコノハの音楽、ゲーム、イラスト、頒布物、小説の一覧。' : 'Music, games, illustration, shop items and novels by Nekonoha.',
   ogUrl: 'https://nekonoha.github.io/works'
 })
 useHead({ link: [{ rel: 'canonical', href: 'https://nekonoha.github.io/works' }] })
@@ -58,5 +61,6 @@ useHead({ link: [{ rel: 'canonical', href: 'https://nekonoha.github.io/works' }]
 .section { scroll-margin-top: 165px; }
 .works-nav + .section { margin-top: 56px; }
 @media(max-width:760px) { .works-nav { top: 80px; width: 100%; gap: 0; margin-top: 28px; } .works-nav a { flex: 1 1 0; justify-content: center; gap: 6px; min-width: 0; padding-inline: 6px; font-size: .8125rem; } .section { scroll-margin-top: 150px; } }
-@media(max-width:380px) { .works-nav i { display: none; } }
+/* タブが5つになっても1行に収まるよう、狭い画面ではアイコンを省く。 */
+@media(max-width:480px) { .works-nav i { display: none; } }
 </style>

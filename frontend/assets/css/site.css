@@ -97,8 +97,8 @@ a:hover > .ext, a:hover > * > .ext { transform: translate(2px, -2px); }
    Media frames (jackets, screenshots, illustrations)
    Hover answers with a slow zoom; nothing lifts or flashes.
 --------------------------------------------------------------------------- */
-.hero-art, .artwork, .game-image, .illustration-image { position: relative; isolation: isolate; overflow: hidden; border-radius: var(--radius-media); background: var(--color-surface); }
-.hero-art::before, .artwork::before, .game-image::before, .illustration-image::before { content: ''; position: absolute; inset: 0; z-index: 2; border: 1px solid #ffffff14; border-radius: inherit; pointer-events: none; }
+.hero-art, .artwork, .game-image, .illustration-image, .goods-image { position: relative; isolation: isolate; overflow: hidden; border-radius: var(--radius-media); background: var(--color-surface); }
+.hero-art::before, .artwork::before, .game-image::before, .illustration-image::before, .goods-image::before { content: ''; position: absolute; inset: 0; z-index: 2; border: 1px solid #ffffff14; border-radius: inherit; pointer-events: none; }
 .artwork img, .game-image img, .illustration-image img { transition: transform var(--dur-slow) var(--ease-out); }
 @media(hover:hover) {
   .artwork:hover img, .game-tile:hover .game-image img, .illustration:hover .illustration-image img { transform: scale(1.045); }

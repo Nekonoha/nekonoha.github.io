@@ -10,7 +10,8 @@
     "start": "nuxt start",
     "sync:releases": "node scripts/sync-releases.mjs",
     "sync:illustrations": "node scripts/sync-illustrations.mjs",
-    "sync:content": "npm run sync:releases && npm run sync:illustrations",
+    "sync:booth": "node scripts/sync-booth.mjs",
+    "sync:content": "npm run sync:releases && npm run sync:illustrations && npm run sync:booth",
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {

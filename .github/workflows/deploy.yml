@@ -49,6 +49,12 @@ jobs:
         run: npm run sync:illustrations
         working-directory: ./frontend
 
+      # BOOTH は取得に失敗しても、音楽やイラストの更新は止めずに公開する（前回コミットのデータのまま）。
+      - name: Sync BOOTH items
+        run: npm run sync:booth
+        working-directory: ./frontend
+        continue-on-error: true
+
       - name: Setup Pages
         uses: actions/configure-pages@v4
         
