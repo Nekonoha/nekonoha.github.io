@@ -19,14 +19,17 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      failed: ${{ steps.summary.outputs.failed }}
+      deployable: ${{ steps.summary.outputs.deployable }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v5
         with:
-          node-version: '20.19.0'
+          node-version: '22'
           cache: 'npm'
           cache-dependency-path: frontend/package-lock.json
 
@@ -36,46 +39,97 @@ jobs:
       - name: Install frontend dependencies
         run: npm ci --prefer-offline --no-audit --no-progress
         working-directory: ./frontend
-        
-      - name: Test release parser
+
+      - name: Run tests
         run: npm test
         working-directory: ./frontend
 
+      # 外部サイトからの取り込み。どれかが失敗しても、残りの取り込みは続ける。
+      # 失敗したものは、前回コミットしたデータのままになる。
       - name: Sync TuneCore releases
+        id: tunecore
         run: npm run sync:releases
         working-directory: ./frontend
+        continue-on-error: true
 
       - name: Sync Pixiv illustrations
+        id: pixiv
         run: npm run sync:illustrations
         working-directory: ./frontend
+        continue-on-error: true
 
-      # BOOTH は取得に失敗しても、音楽やイラストの更新は止めずに公開する（前回コミットのデータのまま）。
       - name: Sync BOOTH items
+        id: booth
         run: npm run sync:booth
         working-directory: ./frontend
         continue-on-error: true
 
+      # 取り込みに失敗した回の扱い:
+      # - 定期実行: 前回コミットした古いデータで公開中のサイトを上書きしないよう、公開を見送る。
+      # - push と手動実行: 作者の変更を止めないよう、公開は続ける。
+      # どちらの場合も、最後の report ジョブで実行を「失敗」にして通知が届くようにする。
+      - name: Summarize sync results
+        id: summary
+        env:
+          TUNECORE: ${{ steps.tunecore.outcome }}
+          PIXIV: ${{ steps.pixiv.outcome }}
+          BOOTH: ${{ steps.booth.outcome }}
+          EVENT: ${{ github.event_name }}
+        run: |
+          failed=""
+          if [ "$TUNECORE" != "success" ]; then failed="$failed TuneCore"; fi
+          if [ "$PIXIV" != "success" ]; then failed="$failed pixiv"; fi
+          if [ "$BOOTH" != "success" ]; then failed="$failed BOOTH"; fi
+          failed="${failed# }"
+          deployable=true
+          if [ -n "$failed" ] && [ "$EVENT" = "schedule" ]; then deployable=false; fi
+          echo "failed=$failed" >> "$GITHUB_OUTPUT"
+          echo "deployable=$deployable" >> "$GITHUB_OUTPUT"
+          if [ -n "$failed" ]; then echo "::warning::取り込みに失敗: $failed"; fi
+
       - name: Setup Pages
+        if: steps.summary.outputs.deployable == 'true'
         uses: actions/configure-pages@v4
-        
+
       - name: Generate frontend static site
+        if: steps.summary.outputs.deployable == 'true'
         run: npm run generate
         working-directory: ./frontend
         env:
           NODE_ENV: production
-          
+
       - name: Upload artifact
+        if: steps.summary.outputs.deployable == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./frontend/.output/public
-          
+
   deploy:
+    needs: build
+    if: needs.build.outputs.deployable == 'true'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    needs: build
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  # 取り込みに失敗した回は、公開したかどうかにかかわらず、この実行を「失敗」として終える。
+  report:
+    needs: [build, deploy]
+    if: always() && needs.build.result == 'success' && needs.build.outputs.failed != ''
+    runs-on: ubuntu-latest
+    steps:
+      - name: Report failed syncs
+        env:
+          FAILED: ${{ needs.build.outputs.failed }}
+          DEPLOYABLE: ${{ needs.build.outputs.deployable }}
+        run: |
+          if [ "$DEPLOYABLE" = "true" ]; then
+            echo "::error::取り込みに失敗しました: $FAILED（この分は前回コミットしたデータのまま公開しました）"
+          else
+            echo "::error::取り込みに失敗しました: $FAILED（定期実行のため公開を見送りました。公開中のサイトはそのままです）"
+          fi
+          exit 1
