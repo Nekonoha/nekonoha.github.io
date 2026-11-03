@@ -3,18 +3,18 @@
     <header><h1 class="display-title">{{ locale === 'ja' ? '作品' : 'Works' }}</h1></header>
     <nav class="works-nav" :aria-label="locale === 'ja' ? '作品ページの目次' : 'Works page sections'">
       <a href="#music" :aria-current="activeSection === 'music' ? 'location' : undefined" @click="activeSection = 'music'"><i class="fa-solid fa-music" aria-hidden="true"></i>{{ locale === 'ja' ? '音楽' : 'Music' }}</a>
+      <a v-if="boothItems.length" href="#shop" :aria-current="activeSection === 'shop' ? 'location' : undefined" @click="activeSection = 'shop'"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>{{ locale === 'ja' ? 'ショップ' : 'Shop' }}</a>
       <a href="#games" :aria-current="activeSection === 'games' ? 'location' : undefined" @click="activeSection = 'games'"><i class="fa-solid fa-gamepad" aria-hidden="true"></i>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</a>
       <a href="#art" :aria-current="activeSection === 'art' ? 'location' : undefined" @click="activeSection = 'art'"><i class="fa-solid fa-paintbrush" aria-hidden="true"></i>{{ locale === 'ja' ? 'イラスト' : 'Art' }}</a>
-      <a v-if="boothItems.length" href="#shop" :aria-current="activeSection === 'shop' ? 'location' : undefined" @click="activeSection = 'shop'"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>{{ locale === 'ja' ? '頒布物' : 'Shop' }}</a>
       <a v-if="novels.length" href="#novels" :aria-current="activeSection === 'novels' ? 'location' : undefined" @click="activeSection = 'novels'"><i class="fa-solid fa-book-open" aria-hidden="true"></i>{{ locale === 'ja' ? '小説' : 'Novels' }}</a>
     </nav>
     <section id="music" class="section">
       <header class="section-head"><h2>{{ locale === 'ja' ? '音楽' : 'Music' }}<small>{{ musicReleases.length }}{{ locale === 'ja' ? '作品' : ' releases' }}</small></h2><a :href="'https://www.tunecore.co.jp/artists/nekonoha?lang=' + locale" target="_blank" rel="noopener noreferrer">TuneCore<span class="ext" aria-hidden="true">↗</span></a></header>
       <LatestReleases :limit="musicReleases.length" />
     </section>
+    <section v-if="boothItems.length" id="shop" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? 'ショップ' : 'Shop' }}<small>{{ boothItems.length }}{{ locale === 'ja' ? '点' : ' items' }}</small></h2><a href="https://tanfantazma.booth.pm/" target="_blank" rel="noopener noreferrer">BOOTH<span class="ext" aria-hidden="true">↗</span></a></header><LatestGoods :limit="boothItems.length" /></section>
     <section id="games" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</h2></header><GameWorks /></section>
     <section id="art" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? 'イラスト' : 'Illustration' }}<small>{{ illustrations.length }}{{ locale === 'ja' ? '点' : ' works' }}</small></h2><a href="https://pixiv.me/tanfantazma" target="_blank" rel="noopener noreferrer">pixiv<span class="ext" aria-hidden="true">↗</span></a></header><LatestIllustrations :limit="illustrations.length" /></section>
-    <section v-if="boothItems.length" id="shop" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? '頒布物' : 'Shop' }}<small>{{ boothItems.length }}{{ locale === 'ja' ? '点' : ' items' }}</small></h2><a href="https://tanfantazma.booth.pm/" target="_blank" rel="noopener noreferrer">BOOTH<span class="ext" aria-hidden="true">↗</span></a></header><LatestGoods :limit="boothItems.length" /></section>
     <section v-if="novels.length" id="novels" class="section"><header class="section-head"><h2>{{ locale === 'ja' ? '小説' : 'Novels' }}<small>{{ novels.length }}{{ locale === 'ja' ? '作品' : (novels.length === 1 ? ' title' : ' titles') }}</small></h2></header><NovelList /></section>
   </article>
 </template>
@@ -24,7 +24,7 @@ import { illustrations } from '~/data/illustrations'
 import { boothItems } from '~/data/booth'
 const { locale } = useLocale()
 const { novels } = useNovels()
-const sectionIds = ['music', 'games', 'art', 'shop', 'novels']
+const sectionIds = ['music', 'shop', 'games', 'art', 'novels']
 const activeSection = ref('music')
 let sectionObserver: IntersectionObserver | undefined
 onMounted(() => {
@@ -41,7 +41,7 @@ onMounted(() => {
 onUnmounted(() => sectionObserver?.disconnect())
 useSeoMeta({
   title: () => (locale.value === 'ja' ? '作品' : 'Works') + ' — 針の筵',
-  description: () => locale.value === 'ja' ? 'ネコノハの音楽、ゲーム、イラスト、頒布物、小説の一覧。' : 'Music, games, illustration, shop items and novels by Nekonoha.',
+  description: () => locale.value === 'ja' ? 'ネコノハの音楽、ショップ、ゲーム、イラスト、小説の一覧。' : 'Music, games, illustration, shop items and novels by Nekonoha.',
   ogUrl: 'https://nekonoha.github.io/works'
 })
 useHead({ link: [{ rel: 'canonical', href: 'https://nekonoha.github.io/works' }] })

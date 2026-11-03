@@ -7,6 +7,7 @@
         <p class="hero-description">{{ locale === 'ja' ? 'ネコノハの音楽・ゲーム・イラスト' : 'Music, games and illustration by Nekonoha' }}</p>
         <nav class="hero-nav" :aria-label="locale === 'ja' ? 'このページの目次' : 'On this page'">
           <a href="#music"><i class="fa-solid fa-music" aria-hidden="true"></i>{{ locale === 'ja' ? '音楽' : 'Music' }}</a>
+          <a v-if="boothItems.length" href="#shop"><i class="fa-solid fa-bag-shopping" aria-hidden="true"></i>{{ locale === 'ja' ? 'ショップ' : 'Shop' }}</a>
           <a href="#games"><i class="fa-solid fa-gamepad" aria-hidden="true"></i>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}</a>
           <a href="#art"><i class="fa-solid fa-paintbrush" aria-hidden="true"></i>{{ locale === 'ja' ? 'イラスト' : 'Art' }}</a>
           <a v-if="novels.length" href="#novels"><i class="fa-solid fa-book-open" aria-hidden="true"></i>{{ locale === 'ja' ? '小説' : 'Novels' }}</a>
@@ -29,6 +30,10 @@
       <header class="section-head"><h2>{{ locale === 'ja' ? '音楽' : 'Music' }}<small>{{ locale === 'ja' ? '新しい順' : 'Newest first' }}</small></h2><NuxtLink to="/works#music">{{ locale === 'ja' ? 'すべて見る' : 'View all' }}</NuxtLink></header>
       <LatestReleases />
     </section>
+    <section v-if="boothItems.length" id="shop" class="section">
+      <header class="section-head"><h2>{{ locale === 'ja' ? 'ショップ' : 'Shop' }}<small>{{ locale === 'ja' ? 'BOOTHの新着' : 'Latest on BOOTH' }}</small></h2><NuxtLink to="/works#shop">{{ locale === 'ja' ? 'すべて見る' : 'View all' }}</NuxtLink></header>
+      <LatestGoods />
+    </section>
     <section id="games" class="section">
       <header class="section-head"><h2>{{ locale === 'ja' ? 'ゲーム' : 'Games' }}<small>{{ locale === 'ja' ? 'ゆめにっき二次創作' : 'Yume Nikki fan games' }}</small></h2></header>
       <GameWorks />
@@ -36,10 +41,6 @@
     <section id="art" class="section">
       <header class="section-head"><h2>{{ locale === 'ja' ? 'イラスト' : 'Illustration' }}<small>{{ locale === 'ja' ? 'pixivの新着' : 'Latest on pixiv' }}</small></h2><NuxtLink to="/works#art">{{ locale === 'ja' ? 'すべて見る' : 'View all' }}</NuxtLink></header>
       <LatestIllustrations />
-    </section>
-    <section v-if="boothItems.length" id="shop" class="section">
-      <header class="section-head"><h2>{{ locale === 'ja' ? '頒布物' : 'Shop' }}<small>{{ locale === 'ja' ? 'BOOTHの新着' : 'Latest on BOOTH' }}</small></h2><NuxtLink to="/works#shop">{{ locale === 'ja' ? 'すべて見る' : 'View all' }}</NuxtLink></header>
-      <LatestGoods />
     </section>
     <section v-if="novels.length" id="novels" class="section">
       <header class="section-head"><h2>{{ locale === 'ja' ? '小説' : 'Novels' }}</h2><NuxtLink to="/novels">{{ locale === 'ja' ? 'すべて見る' : 'View all' }}</NuxtLink></header>
@@ -97,6 +98,6 @@ h1 { font-size: clamp(4rem, 8.6vw, 7.6rem); font-weight: 800; line-height: 1.15;
   h1 { font-size: clamp(3.6rem, 18vw, 6rem); }
   .hero-description { margin-top: 22px; font-size: 1rem; }
   .hero-nav { gap: 8px; margin-top: 16px; }
-  .hero-nav a { flex: 1 1 40%; justify-content: center; gap: 8px; padding-inline: 10px; white-space: nowrap; }
+  .hero-nav a { flex: 1 1 30%; justify-content: center; gap: 8px; padding-inline: 10px; white-space: nowrap; }
 }
 </style>

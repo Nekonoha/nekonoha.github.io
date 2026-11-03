@@ -4,7 +4,8 @@ on:
   push:
     branches: ['main']
   schedule:
-    - cron: '0 0 * * *'
+    # 毎日 8:23（日本時間）。毎時0分は GitHub 側が混んで数時間遅れやすいので、半端な分にしている。
+    - cron: '23 23 * * *'
   workflow_dispatch:
 
 permissions:
