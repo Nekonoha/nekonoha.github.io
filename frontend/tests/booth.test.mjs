@@ -1,6 +1,6 @@
 import test from 'node:test'
 import assert from 'node:assert/strict'
-import { parseShopItems, largerImage } from '../scripts/sync-booth.mjs'
+import { parseShopItems, largerImage, pickPublishedAt } from '../scripts/sync-booth.mjs'
 
 // BOOTH のショップページと同じ形（商品データを HTML エスケープして data-item 属性に入れる）。
 const escape = value => value.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -44,4 +44,11 @@ test('別のショップの商品や、こわれたデータ・別のページ�
 })
 test('表示用に大きい画像の URL を作る', () => {
   assert.equal(largerImage('https://booth.pximg.net/c/300x300_a2_g5/u/i/1/a.jpg'), 'https://booth.pximg.net/c/620x620/u/i/1/a.jpg')
+})
+
+test('商品ページのデータから公開日時を取り出す', () => {
+  assert.equal(pickPublishedAt({ id: 9087420, published_at: '2026-11-02T20:14:09.000+09:00' }, '9087420'), '2026-11-02T20:14:09.000+09:00')
+  assert.throws(() => pickPublishedAt({ id: 1, published_at: '2026-11-02T20:14:09.000+09:00' }, '2'))
+  assert.throws(() => pickPublishedAt({ id: 2, published_at: null }, '2'))
+  assert.throws(() => pickPublishedAt({ id: 2, published_at: 'yesterday' }, '2'))
 })

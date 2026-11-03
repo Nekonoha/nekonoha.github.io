@@ -1,6 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
+import { execFileSync } from 'node:child_process'
+import { parseEpisodeFile } from './utils/kakuyomu.mjs'
 
 // content/novels にある公開中の作品と各話を、静的生成の対象に加える。
 const novelRoutes = (): string[] => {
@@ -23,6 +25,39 @@ const novelRoutes = (): string[] => {
   }
 }
 
+// 小説ごとに、いちばん新しい話のファイルがリポジトリに入った日時を git の記録から調べる。トップの「新着」に使う。
+// novel.json に "updates": false がある作品（使い方の案内など）は対象外。
+// 浅い clone では日付が正しく取れないので何も返さない（Actions は fetch-depth: 0 で取得している）。
+type NovelUpdate = { date: string; number: number; title: string }
+const novelUpdates = (): Record<string, NovelUpdate> => {
+  try {
+    const root = fileURLToPath(new URL('./content/novels', import.meta.url))
+    if (!existsSync(root)) return {}
+    const git = (...args: string[]) => execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] }).trim()
+    if (git('rev-parse', '--is-shallow-repository') !== 'false') return {}
+    const result: Record<string, NovelUpdate> = {}
+    for (const entry of readdirSync(root, { withFileTypes: true })) {
+      const metaPath = `${root}/${entry.name}/novel.json`
+      if (!entry.isDirectory() || !existsSync(metaPath)) continue
+      const meta = JSON.parse(readFileSync(metaPath, 'utf8'))
+      if (meta.draft || meta.updates === false) continue
+      const newest = readdirSync(`${root}/${entry.name}`)
+        .map(file => ({ file, episode: parseEpisodeFile(file) }))
+        .filter(item => item.episode)
+        .sort((a, b) => b.episode!.number - a.episode!.number)[0]
+      if (!newest) continue
+      const file = `${entry.name}/${newest.file}`
+      // ファイルが追加された日時。名前を変えたファイルなどで見つからなければ、最後に変更された日時。
+      const date = git('log', '-1', '--diff-filter=A', '--format=%cI', '--', file) || git('log', '-1', '--format=%cI', '--', file)
+      if (date) result[entry.name] = { date, number: newest.episode!.number, title: newest.episode!.title }
+    }
+    return result
+  } catch (error) {
+    console.warn('小説の更新日を読めませんでした:', error)
+    return {}
+  }
+}
+
 export default defineNuxtConfig({
   ssr: true,
   nitro: {
@@ -32,6 +67,11 @@ export default defineNuxtConfig({
   },
   devServer: {
     port: 3000
+  },
+  runtimeConfig: {
+    public: {
+      novelUpdates: novelUpdates()
+    }
   },
   app: {
     baseURL: '/',

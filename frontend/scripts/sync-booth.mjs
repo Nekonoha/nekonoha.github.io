@@ -65,6 +65,15 @@ export function parseShopItems(html, limit = 6) {
   return items
 }
 
+// 商品ページのデータ（https://booth.pm/ja/items/<id>.json）から公開日時を取り出す。トップの「新着」の並びに使う。
+export function pickPublishedAt(detail, id) {
+  const value = detail?.published_at
+  if (String(detail?.id) !== String(id) || typeof value !== 'string' || !/^\d{4}-\d{2}-\d{2}T/.test(value) || Number.isNaN(Date.parse(value))) {
+    throw new Error(`BOOTH item ${id} has no valid published date.`)
+  }
+  return value
+}
+
 // 一覧の画像は 300px の正方形。表示用には、同じ画像の 620px 版を優先して使う。
 export const largerImage = url => url.replace(/\/c\/300x300_a2_g5\//, '/c/620x620/')
 
@@ -85,6 +94,18 @@ export async function syncBooth() {
   const items = parseShopItems(html)
   // 前回は商品があったのに急に0件になったときは、ページの形が変わった可能性が高いので更新しない。
   if (!items.length && previous.items?.length) throw new Error('BOOTH returned no items although some were listed before.')
+
+  // 公開日時は商品ごとに取りに行く。取れなかったときは前回の値を使い、それもなければ空にする（新着には出ない）。
+  const knownDates = new Map((previous.items ?? []).map(entry => [entry.id, entry.publishedAt ?? null]))
+  for (const item of items) {
+    try {
+      const detail = await (await request(`https://booth.pm/ja/items/${item.id}.json`, 'application/json')).json()
+      item.publishedAt = pickPublishedAt(detail, item.id)
+    } catch (error) {
+      item.publishedAt = knownDates.get(item.id) ?? null
+      console.warn(`${error.message} Using ${item.publishedAt ?? 'no date'}.`)
+    }
+  }
 
   const imageDir = path.join(root, 'public/images/booth')
   await mkdir(imageDir, { recursive: true })

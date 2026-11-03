@@ -1,5 +1,17 @@
 {
   "source": "https://tanfantazma.booth.pm/",
-  "checkedAt": null,
-  "items": []
+  "checkedAt": "2026-11-03T03:55:52.329Z",
+  "items": [
+    {
+      "id": "9087420",
+      "name": "【オリジナル3Dモデル】ルピカ・ルベライト / Lupika Rubellite",
+      "price": "¥ 3,500",
+      "category": "3Dキャラクター",
+      "soldOut": false,
+      "endOfSale": false,
+      "url": "https://tanfantazma.booth.pm/items/9087420",
+      "publishedAt": "2026-11-02T20:14:09.000+09:00",
+      "image": "/images/booth/9087420-b95c8ebee40a.jpg"
+    }
+  ]
 }
