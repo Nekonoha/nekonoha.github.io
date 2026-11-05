@@ -17,6 +17,14 @@ concurrency:
   group: 'pages'
   cancel-in-progress: false
 
+env:
+  # 公開するデザイン。
+  #   redesign … 新しいデザイン（redesign/）。くわしくは redesign/README.md
+  #   nuxt     … 前のサイト（frontend/）
+  # 'redesign' を書き換えるか、GitHub の Settings → Secrets and variables → Actions → Variables に
+  # SITE という変数を作ると切り替わる（変数があれば、そちらが優先）。
+  SITE: ${{ vars.SITE || 'redesign' }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -96,17 +104,24 @@ jobs:
         uses: actions/configure-pages@v4
 
       - name: Generate frontend static site
-        if: steps.summary.outputs.deployable == 'true'
+        if: steps.summary.outputs.deployable == 'true' && env.SITE != 'redesign'
         run: npm run generate
         working-directory: ./frontend
         env:
           NODE_ENV: production
 
+      # 新しいデザインは毎回書き出して、壊れていないか確かめる。
+      # 今までのサイトを公開している間は、ここで失敗しても公開は止めない。
+      - name: Build redesign static site
+        if: steps.summary.outputs.deployable == 'true'
+        run: node redesign/build.mjs
+        continue-on-error: ${{ env.SITE != 'redesign' }}
+
       - name: Upload artifact
         if: steps.summary.outputs.deployable == 'true'
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./frontend/.output/public
+          path: ${{ env.SITE == 'redesign' && './redesign/dist' || './frontend/.output/public' }}
 
   deploy:
     needs: build

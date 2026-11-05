@@ -72,7 +72,7 @@ frontend/content/novels/
 - 本文はカクヨム記法のまま置けます（`｜漢字《かんじ》`、`漢字《かんじ》`、`《《傍点》》`、`｜《` で《をそのまま表示）。文字コードは UTF-8。
 - `novel.json` に `"chapters": [{ "from": 1, "title": "第一章　…" }, { "from": 22, "title": "第二章　…" }]` を入れると、目次が章ごとに分かれて見出しが出ます。`from` は、その章が始まる話の番号（ファイル名の先頭の数字）です。入れなければ、今までどおり一つの一覧です。
 - `novel.json` に `"draft": true` を入れると、`npm run dev` では見えますが公開サイトには出ません。書きかけの作品に使えます。
-- `guide` フォルダは、ビューワーの操作を説明する公開中の案内です。不要なら、フォルダごと削除してください。
+- `guide` フォルダは、ビューワーの操作を説明する案内です。いまは `"draft": true` で非公開にしています（`npm run dev` では見えます）。不要なら、フォルダごと削除してください。
 - トップの「最新の更新」と「新着」には、作品ごとにいちばん新しい話が、そのファイルをコミットした日時で出ます（git の記録から読みます）。`novel.json` に `"updates": false` を入れた作品は出ません（`guide` はこの設定）。
 - 公開中の作品が1つ以上あると、トップと作品ページに「小説」の一覧が出ます。
 - 記法の変換は `frontend/utils/kakuyomu.mjs`、検証は `npm test`。
@@ -87,3 +87,8 @@ npm run generate
 ```
 
 生成物は `frontend/.output/public/`。トップ、作品一覧、プロフィール、2つのゲーム詳細を静的生成します。`build-all.ps1` でも実行できます。
+
+## 新デザイン（redesign/）
+
+公開しているサイトは `redesign/` の新デザインです（Actions が `node redesign/build.mjs` で書き出して公開）。手元では `node redesign/serve.mjs` で http://localhost:5180 に開きます（npm の準備は不要）。
+`frontend/` の Nuxt のサイトは、データの取り込み（`frontend/scripts/`・`frontend/data/`）と小説の置き場（`frontend/content/novels/`）として使い続けています。前のサイトに戻すときは、`deploy.yml` の `SITE` を `nuxt` にします。くわしくは `redesign/README.md`。
