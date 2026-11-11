@@ -38,3 +38,6 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.temp
+
+# 手元だけのメモ（公開しない）
+.local-notes/

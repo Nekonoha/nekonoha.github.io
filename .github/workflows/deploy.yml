@@ -19,7 +19,7 @@ concurrency:
 
 env:
   # 公開するデザイン。
-  #   redesign … 新しいデザイン（redesign/）。くわしくは redesign/README.md
+  #   redesign … 新しいデザイン（redesign/）
   #   nuxt     … 前のサイト（frontend/）
   # 'redesign' を書き換えるか、GitHub の Settings → Secrets and variables → Actions → Variables に
   # SITE という変数を作ると切り替わる（変数があれば、そちらが優先）。
